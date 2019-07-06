@@ -1,11 +1,16 @@
+#include "./../tower/tower.h"
 #include "shop.h"
 
 using namespace std;
 
-pair<bool, Tower*> Shop::buy(Tower *tower) {
-	// change this
-	return make_pair(true, tower);
+Shop::Shop(){}
+Shop::~Shop(){}
+
+bool Shop::buy(int money, Tower* tower) {
+    if(money >= tower->getCost()) return true;
+    return false;
 }
 
-void Shop::sell(Tower *tower) {
+void Shop::sell(int& money, Tower* tower) {
+    money += tower->getCost();
 }

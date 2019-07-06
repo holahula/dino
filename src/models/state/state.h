@@ -1,23 +1,40 @@
 #ifndef STATE_H_
 #define STATE_H_
 
+#include "./../enemy/enemy.h"
+#include "./../tower/tower.h"
+#include "./../shop/shop.h"
+
 #include <vector>
-#include "../enemy/enemy.h"
-#include "../tower/tower.h"
 
 class State {
-  int money;
-  int hp;
-  std::vector<Tower*> towers;
-  std::vector<Enemy*> enemies;
+    int hp, money, round;
 
- public:
-  State(int money = 100, int hp = 100);
-  ~State();
-  void earn(int);
-  void spend(int);
-  void loseHP(int);
-  void addTower(Tower *);
+    Shop * shop;
+    std::vector<Tower*> towers;
+    std::vector<Enemy*> enemies;
+
+    public:
+        static const int MAX_LEVEL = 10;
+
+        State();
+        ~State();
+
+
+        bool loseHP(int);
+        void incrementMoney(int);
+        // void spend(int);
+
+        void addTower(Tower*);
+
+        void start();
+
+        // LEVEL FUNCTIONS
+        void startRound();
+        void constructEnemies(int);
+        void nextFrame();
+        void updateState(int, int);
+
 };
 
 #endif
