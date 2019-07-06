@@ -31,7 +31,7 @@ class State {
 
         // LEVEL FUNCTIONS
         void startRound();
-        void constructEnemies(int);
+        int constructEnemies(int);
         void nextFrame();
         void updateState(int, int);
 

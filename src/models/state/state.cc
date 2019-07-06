@@ -6,6 +6,8 @@ State::State() : money(10), hp(100), shop(){}
 State::~State() {
     for(int i = 0; i < towers.size(); i++) delete towers[i];
     for(int i = 0; i < enemies.size(); i++) delete enemies[i];
+    towers.clear();
+    enemies.clear();
 }  
 
 void State::incrementMoney(int amount) {
@@ -27,8 +29,8 @@ void State::addTower(Tower* tower) {
     towers.push_back(tower);
 }
 
-void State::constructEnemies(int round) {
-
+int State::constructEnemies(int round) {
+    return 1;
 }
 
 void State::nextFrame(){}
@@ -36,9 +38,14 @@ void State::nextFrame(){}
 void State::updateState(int hp, int round){}
 
 void State::startRound(){
-    State::constructEnemies(round);
+    int sz = State::constructEnemies(round);
     // how to push enemies into the map
+    int frame = 1;
     while(enemies.size() != 0){
+        if(frame <= sz){
+            map.enterEnemy();
+        }
+        frame++;
         State::nextFrame();
     }
 
