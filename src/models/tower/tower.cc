@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Tower::Tower() {}
+Tower::Tower() : range(3) {}
 Tower::~Tower() {}
 
 void Tower::attack() {

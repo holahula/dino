@@ -4,6 +4,8 @@
 #include "./../subject/subject.h"
 
 class Tower : public Subject {
+    protected:
+        int range;
     public:
         Tower();
         ~Tower();
