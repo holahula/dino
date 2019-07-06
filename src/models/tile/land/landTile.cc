@@ -9,7 +9,7 @@ LandTile::~LandTile(){}
 
 char LandTile::getType() const {
     if (isOccupied()) {
-        return tower->getType();
+        return tower->getType().first;
     }
     return ' ';
 }
