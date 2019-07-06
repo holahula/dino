@@ -1,6 +1,7 @@
 #ifndef ENEMY_H_
 #define ENEMY_H_
 
+<<<<<<< HEAD
 #include <vector>
 #include <iostream>
 
@@ -51,6 +52,11 @@ class InvisibleEnemy : public Enemy {
     public:
         InvisibleEnemy(int, int, int);
         void updateVisibility();
+=======
+
+class Enemy {
+    // TODO
+>>>>>>> 1f6623240002e6dfad9835f7cada00dc7fbf157d
 };
 
 #endif
