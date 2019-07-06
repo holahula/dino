@@ -16,6 +16,10 @@ std::pair<char, int> DamageTower::getType() const {
     return make_pair('D', dmg);
 }
 
+int DamageTower::getCost() const {
+    return cost;
+}
+
 void DamageTower::upgrade() {
     dmg *= 2;
     upCost *= 2;

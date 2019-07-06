@@ -21,6 +21,9 @@ std::pair<char, int> MoneyTower::getType() const {
     return make_pair('M', income);
 }
 
+int MoneyTower::getCost() const {
+    return cost;
+}
 void MoneyTower::upgrade() {
     income += 5;
     upCost += 5;

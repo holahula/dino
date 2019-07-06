@@ -17,6 +17,10 @@ std::pair<char, int> FreezeTower::getType() const {
     return make_pair('D', duration);
 }
 
+int FreezeTower::getCost() const {
+    return cost;
+}
+
 void FreezeTower::upgrade() {
     range++; 
     duration++;

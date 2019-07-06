@@ -11,6 +11,8 @@ class Tower : public Subject {
         ~Tower();
 
         virtual std::pair<char, int> getType() const = 0;
+        virtual int getCost() const = 0;
+        
         virtual void upgrade() = 0;
 
         void attack();
