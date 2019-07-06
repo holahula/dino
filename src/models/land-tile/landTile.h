@@ -2,7 +2,6 @@
 #define LAND_TILE_H_
 
 #include "../tile/tile.h"
-#include <string>
 
 class Tower;
 
@@ -11,8 +10,9 @@ class LandTile : public Tile {
     public:
         LandTile(int, int);
         ~LandTile();
-        void addTower(Tower *);
+        virtual char print() override;
         bool isOccupied();
+        void addTower(Tower *);
 };
 
 #endif
