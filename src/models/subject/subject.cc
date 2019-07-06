@@ -4,7 +4,7 @@ Subject::Subject() {}
 Subject::~Subject() {}
 
 void Subject::attach(Observer *o) {
-    observers.emplace_back(o);
+    observers.push_back(o);
 }
 
 void Subject::detach(Observer *o) {

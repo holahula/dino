@@ -4,36 +4,49 @@
 #include "./../enemy/enemy.h"
 #include "./../tower/tower.h"
 #include "./../shop/shop.h"
+#include "./../map/map.h"
 
 #include <vector>
 
+/*
+TODO: money management functions,
+    creating towers + enemies
+
+ game functionality is done?
+
+ */
 class State {
     int hp, money, round;
 
     Shop * shop;
+    Map * map;
+
     std::vector<Tower*> towers;
     std::vector<Enemy*> enemies;
 
+    bool loseHP(int);
+    void incrementMoney(int);
+    // void spend(int);
+    void addTower(Tower *);
+    void addEnemy(Enemy *);
+    void removeEnemy(Enemy *);
+
+    int constructEnemies(int);
+
+    int totalHPLost(std::vector<Enemy*>);
+    bool moveEnemies(int, int);
+    
+    void processFrame();
+
+    void updateState(int, int);
+
     public:
-        static const int MAX_LEVEL = 10;
+        static const int MAX_ROUND = 10;
 
         State();
         ~State();
 
-
-        bool loseHP(int);
-        void incrementMoney(int);
-        // void spend(int);
-
-        void addTower(Tower*);
-
-        void start();
-
-        // LEVEL FUNCTIONS
         void startRound();
-        int constructEnemies(int);
-        void nextFrame();
-        void updateState(int, int);
 
 };
 
