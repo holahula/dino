@@ -20,6 +20,8 @@ class Enemy : public Observer {
     public:
         Enemy(int);
 
+        int getHP() const;
+        
         void decFrozen();
         int getFrozen() const;
 

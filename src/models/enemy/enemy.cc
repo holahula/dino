@@ -7,6 +7,10 @@ using namespace std;
 
 Enemy::Enemy(int hp) : hp(hp), isFrozen(0) {}
 
+int Enemy::getHP() const {
+    return hp;
+}
+
 void Enemy::decFrozen() {
     isFrozen = max(isFrozen--, 0);
 }
