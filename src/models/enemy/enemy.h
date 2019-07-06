@@ -1,56 +1,32 @@
 #ifndef ENEMY_H_
 #define ENEMY_H_
 
+#include "./../observer/observer.h"
+#include "./../tower/tower.h"
+#include "./../subject/subject.h"
+
 #include <vector>
 #include <iostream>
 
-#include "./../observer/observer.h"
-#include "./../tower/tower.h"
-
 class Enemy : public Observer {        
     private:
-        Tower *subject;
+        std::vector<Tower*> subjects;
 
     protected:
         int hp;
-        int x, y;
+        bool isSlowed;
 
     public:
-        Enemy(int, int, int);
+        Enemy(int);
 
-        void notify() override;
+        void notify(Tower * tower) override;
 
-        void updatePos(int, int);
-        virtual char GetType() const = 0;
+        virtual char getType() const = 0;
+
+        void observeTowers(std::vector<Tower*>);
+        void removeTowers();
 
         virtual ~Enemy();
-};
-
-class BasicEnemy : public Enemy {
-
-    public:
-        BasicEnemy(int, int, int);
-
-};
-
-class RegenerativeEnemy : public Enemy {
-    private:
-        int regen;
-
-    public:
-        RegenerativeEnemy(int, int, int);
-
-        void heal();
-
-};
-
-class InvisibleEnemy : public Enemy {
-    private:
-        bool visibility;
-        
-    public:
-        InvisibleEnemy(int, int, int);
-        void updateVisibility();
 };
 
 #endif

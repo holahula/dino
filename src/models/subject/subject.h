@@ -1,10 +1,10 @@
 #ifndef _SUBJECT_H_
 #define _SUBJECT_H_
+
 #include <vector>
 #include "./../observer/observer.h"
 
-class Subject
-{
+class Subject {
     std::vector<Observer *> observers;
 
 public:
