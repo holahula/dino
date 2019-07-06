@@ -10,7 +10,7 @@ LandTile::~LandTile(){}
 
 char LandTile::print() {
     if (isOccupied()) {
-        return tower->print();
+        return tower->getType();
     }
     return ' ';
 }
