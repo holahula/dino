@@ -17,7 +17,7 @@ int main() {
 
   while (cin >> cmd && cmd != 'q') {
     switch (cmd) {
-        // Start a new game
+      // Start a new game
       case 'n':
         break;
       // Buy a tower
@@ -35,7 +35,7 @@ int main() {
             break;
         }
         break;
-      // Next turn
+        // Next turn
       case 't':
         break;
       default:
