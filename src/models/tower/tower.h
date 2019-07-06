@@ -3,7 +3,10 @@
 
 
 class Tower {
-    // TODO
+    public:
+        Tower();
+        virtual char getType() = 0;
+        ~Tower();
 };
 
 #endif

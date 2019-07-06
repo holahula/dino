@@ -4,11 +4,13 @@
 #include <utility>
 
 class Tile {
-    int x;
-    int y;
+    protected:
+        int x;
+        int y;
     public:
         Tile(int x, int y);
         std::pair<int,int> location();
+        virtual char print() = 0;
         virtual ~Tile() = 0;
 };
 
