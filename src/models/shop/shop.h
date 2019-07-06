@@ -9,13 +9,12 @@
 class Shop {
     bool buy(int, Tower *);
     void sell(int &, Tower *);
-
+    
     public:
-
         Shop();
         ~Shop();
 
-
+ 
 };
 
 #endif
