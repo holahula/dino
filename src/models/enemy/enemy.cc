@@ -6,10 +6,10 @@ using namespace std;
 Enemy::Enemy(int hp) : hp(hp), isSlowed(false) {}
 
 void Enemy::notify(Tower * tower){
-    char type = tower->getType();
+    pair<char, int> type = tower->getType();
 
-    if(type == 'D') hp -= tower->dmg;
-    else isSlowed = true;
+    if(type.first == 'D') hp -= type.second;
+    else if (type.first == 'F') isSlowed = type.second;
 }
 
 void Enemy::observeTowers(vector<Tower*> towers){
