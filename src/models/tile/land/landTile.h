@@ -10,8 +10,8 @@ class LandTile : public Tile {
     public:
         LandTile(int, int);
         ~LandTile();
-        virtual char print() override;
-        bool isOccupied();
+        char getType() const override;
+        bool isOccupied() const;
         void addTower(Tower *);
 };
 

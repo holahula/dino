@@ -8,7 +8,7 @@ PathTile::PathTile(int x, int y, vector<PathTile*> next, vector<PathTile*> prev)
 
 PathTile::~PathTile(){}
 
-bool PathTile::endOfPath() {
+bool PathTile::endOfPath() const {
     return next.empty() ? true : false;
 }
 
@@ -22,10 +22,10 @@ void PathTile::moveEnemies() {
     enemies.clear();
 }
 
-char PathTile::print(){
+char PathTile::getType() const {
     return 'P';
 }
 
-vector<Enemy *> PathTile::getEnemies() {
+vector<Enemy *> PathTile::getEnemies() const {
     return enemies;
 }

@@ -13,10 +13,10 @@ class PathTile : public Tile {
     public:
         PathTile(int, int, std::vector<PathTile*>, std::vector<PathTile*>);
         ~PathTile();
-        bool endOfPath();
+        bool endOfPath() const;
         void moveEnemies();
-        virtual char print() override;
-        std::vector<Enemy*> getEnemies();
+        char getType() const override;
+        std::vector<Enemy*> getEnemies() const ;
 };
 
 #endif
