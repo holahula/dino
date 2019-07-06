@@ -9,8 +9,8 @@ class Tile {
         int y;
     public:
         Tile(int x, int y);
-        std::pair<int,int> location();
-        virtual char print() = 0;
+        std::pair<int,int> location() const;
+        virtual char getType() const = 0;
         virtual ~Tile() = 0;
 };
 

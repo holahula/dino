@@ -1,7 +1,7 @@
 #ifndef LAND_TILE_H_
 #define LAND_TILE_H_
 
-#include "../tile/tile.h"
+#include "../tile.h"
 
 class Tower;
 
@@ -10,8 +10,8 @@ class LandTile : public Tile {
     public:
         LandTile(int, int);
         ~LandTile();
-        virtual char print() override;
-        bool isOccupied();
+        char getType() const override;
+        bool isOccupied() const;
         void addTower(Tower *);
 };
 
