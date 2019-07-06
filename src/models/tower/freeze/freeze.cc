@@ -18,6 +18,7 @@ std::pair<char, int> FreezeTower::getType() const {
 }
 
 void FreezeTower::upgrade() {
+    range++; 
     duration++;
     upCost += 5;
 }

@@ -17,7 +17,8 @@ std::pair<char, int> DamageTower::getType() const {
 }
 
 void DamageTower::upgrade() {
-    dmg*=2;
+    dmg *= 2;
     upCost *= 2;
+    range++;
 }
 
