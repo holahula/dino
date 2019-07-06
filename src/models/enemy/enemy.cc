@@ -1,15 +1,25 @@
 #include "enemy.h"
 #include "./../tower/tower.h"
 
+#include <algorithm>
+
 using namespace std;
 
-Enemy::Enemy(int hp) : hp(hp), isSlowed(false) {}
+Enemy::Enemy(int hp) : hp(hp), isFrozen(0) {}
+
+void Enemy::decFrozen() {
+    isFrozen = max(isFrozen--, 0);
+}
+
+int Enemy::getFrozen() const {
+    return isFrozen;
+}
 
 void Enemy::notify(Tower * tower){
-    char type = tower->getType();
+    pair<char, int> type = tower->getType();
 
-    if(type == 'D') hp -= tower->dmg;
-    else isSlowed = true;
+    if(type.first == 'D') hp -= type.second;
+    else if (type.first == 'F') isFrozen = type.second;
 }
 
 void Enemy::observeTowers(vector<Tower*> towers){

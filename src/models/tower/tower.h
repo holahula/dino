@@ -1,12 +1,21 @@
 #ifndef TOWER_H_
 #define TOWER_H_
 
+#include "./../subject/subject.h"
 
-class Tower {
+class Tower : public Subject {
+    protected:
+        int range;
     public:
         Tower();
-        virtual char getType() = 0;
         ~Tower();
+
+        virtual std::pair<char, int> getType() const = 0;
+        virtual int getCost() const = 0;
+        
+        virtual void upgrade() = 0;
+
+        void attack();
 };
 
 #endif

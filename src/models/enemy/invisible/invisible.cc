@@ -12,3 +12,5 @@ void InvisibleEnemy::updateVisibility(){
 char InvisibleEnemy::getType() const {
     return 'I';
 }
+
+InvisibleEnemy::~InvisibleEnemy(){}

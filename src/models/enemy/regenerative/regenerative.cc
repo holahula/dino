@@ -13,3 +13,5 @@ void RegenerativeEnemy::heal(){
 char RegenerativeEnemy::getType() const {
     return 'R';
 }
+
+RegenerativeEnemy::~RegenerativeEnemy(){}
