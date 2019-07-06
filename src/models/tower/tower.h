@@ -4,16 +4,14 @@
 #include "./../subject/subject.h"
 
 class Tower : public Subject {
-    private:
-        int cost;
-
     public:
         Tower();
-
-        virtual char getType() = 0;
-        virtual void attack() = 0;
-
         ~Tower();
+
+        virtual std::pair<char, int> getType() const = 0;
+        virtual void upgrade() = 0;
+
+        void attack();
 };
 
 #endif
