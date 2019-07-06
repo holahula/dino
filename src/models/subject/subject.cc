@@ -20,8 +20,8 @@ void Subject::detach(Observer *o)
     }
 }
 
-void Subject::notifyObservers()
+void Subject::notifyObservers(Tower * tower)
 {
     for (auto ob : observers)
-        ob->notify();
+        ob->notify(tower);
 }
