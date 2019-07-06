@@ -11,18 +11,21 @@
 class Enemy : public Observer {        
     private:
         std::vector<Tower*> subjects;
+        // private b/c movement is controlled by game state
+        int isFrozen;
 
     protected:
         int hp;
-        bool isSlowed;
 
     public:
         Enemy(int);
 
-        void notify(Tower * tower) override;
+        void decFrozen();
+        int getFrozen() const;
 
         virtual char getType() const = 0;
-
+        
+        void notify(Tower *tower) override;
         void observeTowers(std::vector<Tower*>);
         void removeTowers();
 
