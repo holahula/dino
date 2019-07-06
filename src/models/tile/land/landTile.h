@@ -1,7 +1,7 @@
 #ifndef LAND_TILE_H_
 #define LAND_TILE_H_
 
-#include "../tile/tile.h"
+#include "../tile.h"
 
 class Tower;
 
