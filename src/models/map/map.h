@@ -19,11 +19,18 @@ class Map {
     std::unordered_map<PathTile*, std::unordered_set<Tower*> > insideRange;
     bool checkSquare(std::vector<std::vector<bool> >& visited, std::pair<int,int> x, std::pair<int,int> y);
     bool isSquare(std::vector<std::vector<bool> >& visited, std::pair<int,int> curr);
-    bool createPathHelper(
+    bool smallMapPathBuilder(
         std::vector<std::vector<bool> >&,
         std::pair<int,int>,
         std::pair<int,int>,
-        std::vector<std::pair<int,int> >&);
+        std::vector<std::pair<int,int> >&
+    );
+    void bigMapPathBuilder (
+        std::pair<int,int> from,
+        std::pair<int,int> to,
+        std::vector<std::pair<int,int> >& path
+    );
+
         void initPath();
         void initMap();
     public:
