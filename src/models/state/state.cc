@@ -40,8 +40,11 @@ void State::addEnemy(Enemy* e){
 }
 
 void State::removeEnemy(Enemy* enemy){
+    cout << "pre removeEnemy()" << endl;
     enemies.erase(remove(enemies.begin(), enemies.end(), enemy), enemies.end());
+    cout << "enemy erased from enemies vector" << endl;
     delete enemy;
+    cout << "post removeEnemy()" << endl;
 }
 
 /******************************
@@ -52,10 +55,13 @@ bool State::buyTower(char type, int x, int y){
     if (!map->inMap(x, y) || map->isOccupied(x, y) || !shop->buy(money, type)) {
         return false;
     }
-
+    
     Tower* t = shop->newTower(money, type);
-
     addTower(t);
+
+    // if(type == 'D'){
+    //     t = shop->newDamageTower(money);
+    // }
 
     map->insertTower(t, x, y);
 
@@ -125,6 +131,8 @@ bool State::preFrame(int frame, int size){
 
 void State::processFrame(){
     // shoot enemies
+    cout << "-- PROCESS FRAME START --" << endl;
+    cout << "pre shoot towers" << endl;
     for(auto &tower : towers){
         pair<int, int> type = tower->getType();
         if(type.first == 'D'){
@@ -132,15 +140,19 @@ void State::processFrame(){
         }
         tower->notifyObservers(tower);
     }
-    
-    for (auto &enemy : map->removeDeadEnemies()) {
+    cout << "post shoot towers / pre kill dead enemies" << endl;
+
+    vector<Enemy*> dead =  map->removeDeadEnemies();
+    for (auto enemy : dead) {
         removeEnemy(enemy);
     }
+    // cout << "post enemies killed" << endl;
+    cout << "-- PROCESS FRAME COMPLETED --" << endl;
 }
 
 // prepares for the next frame, detachs all the enemies from their respective towers
 void State::postFrame(){
-    displayMap();
+    // displayMap();
     map->detachAllEnemies();
 }
 
@@ -177,10 +189,18 @@ void State::startRound(){
     bool status;
     // round while loop 
     while(enemies.size() != 0){
+        cout << "Frame: " << frame << endl;
         status = preFrame(frame, size);
-        if(!status) break;
+        if(!status) {
+            cout << "pre-frame status error" << endl;
+            break;
+        }
+        cout << "pre frame complete" << endl;
         processFrame();
+
         postFrame();
+        cout << "post frame complete"  << endl;
+
         frame++;
     }
     updateState(hp, round);
