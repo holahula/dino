@@ -88,7 +88,7 @@ bool State::upgradeTower(int x, int y){
 // based on round, construct enemies -> insert them into state enemy vector
 int State::constructEnemies(int round) {
     for(int i = 0; i < 10; i++){
-        addEnemy(new BasicEnemy(1));
+        addEnemy(new BasicEnemy(2));
     }
     return 10;
 }
@@ -104,12 +104,12 @@ int State::totalHPLost(vector<Enemy*> enemies){
 bool State::moveEnemies(int frame, int size){
     vector<Enemy*> escaped = map->nextFrame();
 
-    for(Enemy* enemy: escaped){
-        removeEnemy(enemy);
-    }
-
     if(!surviveDmg(totalHPLost(escaped))){
         return false;
+    }
+
+    for(Enemy* enemy: escaped){
+        removeEnemy(enemy);
     }
 
     if (!pendingEnemies.empty()){
@@ -146,7 +146,7 @@ void State::processFrame(){
 
 // prepares for the next frame, detachs all the enemies from their respective towers
 void State::postFrame(){
-    // displayMap();
+    displayMap();
     map->detachAllEnemies();
 }
 
