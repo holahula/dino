@@ -161,10 +161,16 @@ void State::updateState(int hp, int round){
     }
 
     getMoneyTowerIncome();
+
+    cout << "You have " << hp << " HP" << endl;
+    cout << "You have $" << money << endl;
+    
     round++;
 }
 
 void State::startRound(){
+    cout << "Round " << round << "!" << endl;
+
     int frame = 1;
     int size = constructEnemies(round);
     bool status;
