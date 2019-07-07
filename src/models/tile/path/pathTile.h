@@ -7,16 +7,18 @@
 
 class PathTile : public Tile {
     std::vector<Enemy*> enemies;
-    const std::vector<PathTile*> next;
-    const std::vector<PathTile*> prev;
     
     public:
-        PathTile(int, int, std::vector<PathTile*>, std::vector<PathTile*>);
+        std::vector<PathTile*> next;
+        std::vector<PathTile*> prev;
+
+        PathTile(int, int);
         ~PathTile();
         bool endOfPath() const;
         void moveEnemies();
+        void insertEnemy(Enemy *);
         char getType() const override;
-        std::vector<Enemy*> getEnemies() const ;
+        std::vector<Enemy*> getEnemies() const;
 };
 
 #endif
