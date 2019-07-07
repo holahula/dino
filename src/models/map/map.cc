@@ -110,10 +110,12 @@ vector<pair<int,int> > Map::createPath(pair<int,int> from, pair<int,int> to) {
     return path;
 }
 
-vector<Enemy*> Map::nextFrame() {
+pair<vector<Enemy*>, vector<Enemy*> > Map::nextFrame() {
     vector<Enemy*> before = path[path.size()-1]->getEnemies();
+    vector<Enemy*> deadEnemies;
     for (int i=path.size()-1; i>=0; --i) {
-        path[i]->moveEnemies();
+        vector<Enemy*> enemyToRemove = path[i]->moveEnemies();
+        deadEnemies.insert(deadEnemies.begin(), enemyToRemove.begin(), enemyToRemove.end());
     }
     vector<Enemy*> after = path[path.size()-1]->getEnemies();
 
@@ -121,7 +123,7 @@ vector<Enemy*> Map::nextFrame() {
     for (int i=0; i<after.size(); ++i) {
         beforeSet.erase(after[i]);
     }
-    return vector<Enemy*>(beforeSet.begin(), beforeSet.end());
+    return make_pair(deadEnemies, vector<Enemy*>(beforeSet.begin(), beforeSet.end()));
 }
 
 vector<PathTile*> Map::getPath() const {

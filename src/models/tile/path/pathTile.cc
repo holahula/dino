@@ -12,10 +12,15 @@ bool PathTile::endOfPath() const {
     return next.empty() ? true : false;
 }
 
-void PathTile::moveEnemies() {
+vector<Enemy*> PathTile::moveEnemies() {
     srand(chrono::system_clock::now().time_since_epoch().count());
     vector<Enemy*> frozen;
+    vector<Enemy*> killed;
+
     for (int i=0; i<enemies.size(); ++i) {
+        if (enemies[i]->getHP() <= 0) {
+            killed.push_back(enemies[i]);
+        }
         if (enemies[i]->getFrozen() > 0) {
             enemies[i]->decFrozen();
             frozen.push_back(enemies[i]);
@@ -27,6 +32,7 @@ void PathTile::moveEnemies() {
     }
     enemies.clear();
     enemies = frozen;
+    return killed;
 }
 
 char PathTile::getType() const {

@@ -25,7 +25,8 @@ class Map {
         Map();
         ~Map();
 
-        std::vector<Enemy*> nextFrame();
+        // 1st: dead, 2nd: completed
+        std::pair<std::vector<Enemy*>,std::vector<Enemy*> > nextFrame();
         void insertEnemy(Enemy*);
         std::vector<PathTile*> getPath() const;
         friend std::ostream& operator<<(std::ostream&, Map &);
