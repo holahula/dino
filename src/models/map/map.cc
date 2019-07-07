@@ -172,11 +172,11 @@ void Map::bigMapPathBuilder (
         pair<int,int> curr = from;
         while (curr.first != to.first || curr.second != to.second) {
             pair<int,int> minLoc = make_pair(curr.first + dir[0].first, curr.second + dir[0].second);
-            int minDist = distance(minLoc, to);
+            int minDist = square(minLoc.first-to.first) + square(minLoc.second-to.second);
 
             for (int i=1; i<dir.size(); ++i) {
                 pair<int, int> nextLoc = make_pair(curr.first + dir[i].first, curr.second + dir[i].second);
-                int nextDist = distance(nextLoc, to);
+                int nextDist = square(nextLoc.first-to.first) + square(nextLoc.second-to.second);
                 if (minDist > nextDist) {
                     minDist = nextDist;
                     minLoc = nextLoc;
@@ -191,7 +191,7 @@ vector<pair<int,int> > Map::createPath(pair<int,int> from, pair<int,int> to) {
     vector<pair<int,int> > path;
     path.push_back(from);
 
-    if (width >= 10 || height >= 10) {
+    if (width > 10 || height > 10) {
         bigMapPathBuilder(from, to, path);
     } else {
         vector<vector<bool> > visited = vector<vector<bool> >(width, vector<bool>(height, false));
