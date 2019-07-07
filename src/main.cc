@@ -8,8 +8,6 @@ using namespace std;
 
 int main() {
   stringstream ss;
-  vector<Enemy *> enemies;
-  vector<Tower *> towers;
   State state;
 
   char cmd, cmd2;
