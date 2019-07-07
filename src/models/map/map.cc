@@ -28,6 +28,14 @@ int Map::getHeight() {
     return height;
 }
 
+int square(int x) {
+    return x*x;
+}
+
+int distance(pair<int,int> lhs, pair<int,int> rhs) {
+    return sqrt(square(lhs.first - rhs.first) + square(lhs.second - rhs.second));
+}
+
 ostream& operator<<(ostream& out, Map & currFrame) {
     for (int j=currFrame.getHeight()-1; j>=0; --j) {
         out << j << " ";
@@ -50,8 +58,8 @@ void Map::insertEnemy(Enemy* newEnemy) {
 
 Map::Map() {
     srand(chrono::system_clock::now().time_since_epoch().count());
-    width = rand()%3 + 7;
-    height = rand()%3 + 7;
+    width = rand()%4 + 8;
+    height = rand()%4 + 8;
 
     this->map = vector<vector<Tile*> >(width, vector<Tile*>(height, nullptr));
     initPath();
@@ -107,7 +115,7 @@ bool Map::isSquare(vector<vector<bool> >& visited, pair<int,int> curr) {
     return false;
 }
 
-bool Map::createPathHelper (
+bool Map::smallMapPathBuilder (
     vector<vector<bool> >& visited,
     pair<int,int> curr,
     pair<int,int> dest,
@@ -141,7 +149,7 @@ bool Map::createPathHelper (
 
             visited[next.first][next.second] = true;
             path.push_back(next);
-            if(createPathHelper(visited, next, dest, path)){
+            if(smallMapPathBuilder(visited, next, dest, path)){
                 return true;
             }
             path.pop_back();
@@ -150,13 +158,46 @@ bool Map::createPathHelper (
         return false;
 }
 
+void Map::bigMapPathBuilder (
+    pair<int,int> from,
+    pair<int,int> to,
+    vector<pair<int,int> >& path) {
+        // create directions
+        vector<pair<int,int> > dir;
+        dir.push_back(make_pair(0,1));
+        dir.push_back(make_pair(1,0));
+        dir.push_back(make_pair(0,-1));
+        dir.push_back(make_pair(-1,0));
+
+        pair<int,int> curr = from;
+        while (curr.first != to.first || curr.second != to.second) {
+            pair<int,int> minLoc = make_pair(curr.first + dir[0].first, curr.second + dir[0].second);
+            int minDist = distance(minLoc, to);
+
+            for (int i=1; i<dir.size(); ++i) {
+                pair<int, int> nextLoc = make_pair(curr.first + dir[i].first, curr.second + dir[i].second);
+                int nextDist = distance(nextLoc, to);
+                if (minDist > nextDist) {
+                    minDist = nextDist;
+                    minLoc = nextLoc;
+                }
+            }
+            curr = minLoc;
+            path.push_back(curr);
+        }
+}
+
 vector<pair<int,int> > Map::createPath(pair<int,int> from, pair<int,int> to) {
-    vector<vector<bool> > visited = vector<vector<bool> >(width, vector<bool>(height, false));
     vector<pair<int,int> > path;
-    visited[from.first][from.second] = true;
     path.push_back(from);
 
-    createPathHelper(visited, from, to, path);
+    if (width >= 10 || height >= 10) {
+        bigMapPathBuilder(from, to, path);
+    } else {
+        vector<vector<bool> > visited = vector<vector<bool> >(width, vector<bool>(height, false));
+        visited[from.first][from.second] = true;
+        smallMapPathBuilder(visited, from, to, path);
+    }
     return path;
 }
 
@@ -209,14 +250,6 @@ Tower* Map::getTower(int x, int y) {
         throw NoTowerException("There is no tower at this location");
     }
     return ((LandTile*) map[x][y])->getTower();
-}
-
-int square(int x) {
-    return x*x;
-}
-
-int distance(pair<int,int> lhs, pair<int,int> rhs) {
-    return sqrt(square(lhs.first - rhs.first) + square(lhs.second - rhs.second));
 }
 
 void Map::insertTower(Tower* tower, int x, int y) {
