@@ -17,7 +17,7 @@ State::~State() {
 }  
 
 void State::displayMap(){
-    cout << map << endl;
+    cout << *map << endl;
 }
 
 void State::incrementMoney(int amount) {
@@ -52,13 +52,10 @@ bool State::buyTower(char type, int x, int y){
     if (!map->inMap(x, y) || map->isOccupied(x, y) || !shop->buy(money, type)) {
         return false;
     }
-    
-    Tower* t = shop->newTower(money, type);
-    addTower(t);
 
-    // if(type == 'D'){
-    //     t = shop->newDamageTower(money);
-    // }
+    Tower* t = shop->newTower(money, type);
+
+    addTower(t);
 
     map->insertTower(t, x, y);
 

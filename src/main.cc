@@ -30,7 +30,7 @@ int main() {
                 switch (cmd2) {
                     // damage tower
                     case 'd':
-                        if(!game->buyTower(cmd2, x, y)){
+                        if(!game->buyTower('D', x, y)){
                             cout << "Invalid Purchase! Damage tower @ (" << x << ", " << y << ") could not be bought" << endl;
                         } else {
                             cout << "Damage tower purchase successful!" << endl;
@@ -38,7 +38,7 @@ int main() {
                         break;
                     // freeze tower
                     case 'f':
-                        if(!game->buyTower(cmd2, x, y)){
+                        if(!game->buyTower('F', x, y)){
                             cout << "Invalid Purchase! Freeze tower @ (" << x << ", " << y << ") could not be bought" << endl;
                         } else {
                             cout << "Freeze tower purchase successful!" << endl;
@@ -46,7 +46,7 @@ int main() {
                         break;
                     // money tower
                     case 'm':
-                        if(!game->buyTower(cmd2, x, y)){
+                        if(!game->buyTower('M', x, y)){
                             cout << "Invalid Purchase! Money tower @ (" << x << ", " << y << ") could not be bought" << endl;
                         } else {
                             cout << "Money tower purchase successful!" << endl;
@@ -67,10 +67,11 @@ int main() {
             case 'r':
                 game->startRound();
                 break;
-
+            // Print map
             case 'p':
                 game->displayMap();
                 break;
+
             default:
                 cout << "Invalid command: " << cmd << endl;
                 break;
