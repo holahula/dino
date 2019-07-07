@@ -74,6 +74,13 @@ bool State::moveEnemies(int frame, int size){
     return true;
 }
 
+bool State::preFrame(int frame, int size){
+    if(!moveEnemies(frame, size)){ 
+        return false;
+    }
+    return true;
+}
+
 void State::processFrame(){
     // shoot enemies
     map->attachAllEnemies();
@@ -83,17 +90,16 @@ void State::processFrame(){
         if(type.first == 'D'){
             incrementMoney(type.second);
         }
-
         tower->notifyObservers(tower);
     }
-
+    
     for (auto &enemy : map->removeDeadEnemies()) {
         removeEnemy(enemy);
     }
 }
 
 // prepares for the next frame, detachs all the enemies from their respective towers
-void State::nextFrame(){
+void State::postFrame(){
     map->detachAllEnemies();
 }
 
@@ -109,15 +115,13 @@ void State::updateState(int hp, int round){
 void State::startRound(){
     int frame = 1;
     int size = constructEnemies(round);
-
+    bool status;
     // round while loop 
     while(enemies.size() != 0){
-        // dead
-        if(!moveEnemies(frame, size)){ 
-            break;
-        }
+        status = preFrame(frame, size);
+        if(!status) break;
         processFrame();
-        nextFrame();
+        postFrame();
         frame++;
     }
     updateState(hp, round);

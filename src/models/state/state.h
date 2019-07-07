@@ -39,9 +39,9 @@ class State {
     int totalHPLost(std::vector<Enemy*>);
     bool moveEnemies(int, int);
     
-    
+    bool preFrame(int, int);
     void processFrame();
-    void nextFrame();
+    void postFrame();
 
     void updateState(int, int);
 
