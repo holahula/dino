@@ -29,25 +29,25 @@ int main() {
                     // damage tower
                     case 'd':
                         if(!game->buyTower(cmd2, x, y)){
-                            cout << "Invalid Purchase! Tower @ (" << x << ", " << y << ") could not be bought" << endl;
+                            cout << "Invalid Purchase! Damage tower @ (" << x << ", " << y << ") could not be bought" << endl;
                         } else {
-                            cout << "Purchase successful!" << endl;
+                            cout << "Damage tower purchase successful!" << endl;
                         }
                         break;
                     // freeze tower
                     case 'f':
                         if(!game->buyTower(cmd2, x, y)){
-                            cout << "Invalid Purchase! Tower @ (" << x << ", " << y << ") could not be bought" << endl;
+                            cout << "Invalid Purchase! Freeze tower @ (" << x << ", " << y << ") could not be bought" << endl;
                         } else {
-                            cout << "Purchase successful!" << endl;
+                            cout << "Freeze tower purchase successful!" << endl;
                         }
                         break;
                     // money tower
                     case 'm':
                         if(!game->buyTower(cmd2, x, y)){
-                            cout << "Invalid Purchase! Tower @ (" << x << ", " << y << ") could not be bought" << endl;
+                            cout << "Invalid Purchase! Money tower @ (" << x << ", " << y << ") could not be bought" << endl;
                         } else {
-                            cout << "Purchase successful!" << endl;
+                            cout << "Money tower purchase successful!" << endl;
                         }
                         break;
                 }
