@@ -99,12 +99,12 @@ void State::updateState(int hp, int round){
 
 void State::startRound(){
     int frame = 1;
-    int sz = constructEnemies(round);
+    int size = constructEnemies(round);
 
     // round while loop 
     while(enemies.size() != 0){
         // dead
-        if(!moveEnemies(frame, sz)){
+        if(!moveEnemies(frame, size)){
             break;
         }
 
