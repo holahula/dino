@@ -88,8 +88,8 @@ bool Map::checkSquare(vector<vector<bool> >& visited, pair<int,int> x, pair<int,
 
 bool Map::isSquare(vector<vector<bool> >& visited, pair<int,int> curr) {
     if (checkSquare(visited, make_pair(curr.first-1, curr.first), make_pair(curr.second, curr.second+1))
-        || checkSquare(visited, make_pair(curr.first, curr.first+1), make_pair(curr.second, curr.second+1)) 
-        || checkSquare(visited, make_pair(curr.first-1, curr.first), make_pair(curr.second-1, curr.second)) 
+        || checkSquare(visited, make_pair(curr.first, curr.first+1), make_pair(curr.second, curr.second+1))
+        || checkSquare(visited, make_pair(curr.first-1, curr.first), make_pair(curr.second-1, curr.second))
         || checkSquare(visited, make_pair(curr.first, curr.first+1), make_pair(curr.second-1, curr.second))) {
         return true;
     }
