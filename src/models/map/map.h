@@ -7,6 +7,8 @@
 #include <vector>
 #include <utility>
 #include <iostream>
+#include <unordered_map>
+#include <unordered_set>
 
 class Map {
     int width;
@@ -14,6 +16,7 @@ class Map {
     std::vector<std::vector<Tile*> > map;
     std::vector<PathTile*> path;
     std::vector<std::pair<int,int> > createPath(std::pair<int,int> from, std::pair<int,int> to);
+    std::unordered_map<PathTile*, std::unordered_set<Tower*> > insideRange;
     bool checkSquare(std::vector<std::vector<bool> >& visited, std::pair<int,int> x, std::pair<int,int> y);
     bool isSquare(std::vector<std::vector<bool> >& visited, std::pair<int,int> curr);
     bool createPathHelper(
@@ -28,6 +31,14 @@ class Map {
         ~Map();
         std::vector<Enemy*> nextFrame();
         std::vector<Enemy*> removeDeadEnemies();
+        void attachAllEnemies();
+        void detachAllEnemies();
+        bool isOccupied(int x, int y);
+        bool isTower(int x, int y);
+        bool inMap(int x, int y);
+        Tower *getTower(int x, int y);
+        void insertTower(Tower*, int x, int y);
+        void increaseTowerRange(Tower*, int x, int y);
         void insertEnemy(Enemy*);
         int getWidth();
         int getHeight();

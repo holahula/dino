@@ -18,6 +18,10 @@ bool LandTile::isOccupied() const {
     return tower ? true : false;
 }
 
+Tower* LandTile::getTower() {
+    return tower;
+}
+
 void LandTile::addTower(Tower * addedTower) {
     if (isOccupied()) {
         throw LandTileOccupiedException("There is already a tower on this land tile");
