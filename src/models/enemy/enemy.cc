@@ -21,10 +21,10 @@ int Enemy::getFrozen() const {
 
 void Enemy::notify(Tower * tower){
     pair<char, int> type = tower->getType();
-
     if(type.first == 'D') {
         hp -= type.second;
         cout << "Enemy hit for " << type.second << " dmg!" << endl;
+        if(hp <= 0) cout << "Enemy dead!" << endl;
     }
     else if (type.first == 'F') {
         isFrozen = type.second;

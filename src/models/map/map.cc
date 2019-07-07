@@ -30,11 +30,17 @@ int Map::getHeight() {
 
 ostream& operator<<(ostream& out, Map & currFrame) {
     for (int j=currFrame.getHeight()-1; j>=0; --j) {
+        out << j << " ";
         for (int i=0; i<currFrame.getWidth(); ++i) {
             out << currFrame.map[i][j]->getType() << " ";
         }
         out << endl;
     }
+    out << "  ";
+    for (int i=0; i<currFrame.getWidth(); ++i) {
+        out << i << " ";
+    }
+    out << endl;
     return out;
 }
 

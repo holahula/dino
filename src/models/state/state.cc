@@ -12,9 +12,13 @@ using namespace std;
 State::State(): hp(100), money(10), round(1), shop(new Shop()), map(new Map()){}
 
 State::~State() {
-    for(auto &tower : towers) delete tower;
-    for(auto &enemy : enemies) delete enemy;
+    for(Tower* tower : towers) delete tower;
+    for(Enemy* enemy : enemies) delete enemy;
 }  
+
+void State::displayMap(){
+    cout << *map << endl;
+}
 
 void State::incrementMoney(int amount) {
     money += amount;
@@ -32,6 +36,7 @@ void State::addTower(Tower* t) {
 }
 
 void State::addEnemy(Enemy* e){
+    pendingEnemies.push(e);
     enemies.push_back(e);
 }
 
@@ -99,16 +104,17 @@ int State::totalHPLost(vector<Enemy*> enemies){
 bool State::moveEnemies(int frame, int size){
     vector<Enemy*> escaped = map->nextFrame();
 
+    for(Enemy* enemy: escaped){
+        removeEnemy(enemy);
+    }
+
     if(!surviveDmg(totalHPLost(escaped))){
         return false;
     }
 
-    for(auto & enemy: escaped){
-        removeEnemy(enemy);
-    }
-
-    if (frame <= size){
-        map->insertEnemy(enemies[frame - 1]);
+    if (!pendingEnemies.empty()){
+        map->insertEnemy(pendingEnemies.top());
+        pendingEnemies.pop();
     }
 
     return true;
@@ -124,22 +130,23 @@ bool State::preFrame(int frame, int size){
 
 void State::processFrame(){
     // shoot enemies
-    for(auto &tower : towers){
+    for(Tower* tower : towers){
         pair<int, int> type = tower->getType();
         if(type.first == 'D'){
             incrementMoney(type.second);
         }
         tower->notifyObservers(tower);
     }
-    
-    for (auto &enemy : map->removeDeadEnemies()) {
+
+    vector<Enemy*> dead =  map->removeDeadEnemies();
+    for (auto enemy : dead) {
         removeEnemy(enemy);
     }
 }
 
 // prepares for the next frame, detachs all the enemies from their respective towers
 void State::postFrame(){
-    cout << map << endl;
+    // displayMap();
     map->detachAllEnemies();
 }
 
@@ -176,10 +183,16 @@ void State::startRound(){
     bool status;
     // round while loop 
     while(enemies.size() != 0){
+        cout << "Frame: " << frame << endl;
         status = preFrame(frame, size);
-        if(!status) break;
+        if(!status) {
+            cout << "pre-frame status error" << endl;
+            break;
+        }
         processFrame();
+
         postFrame();
+
         frame++;
     }
     updateState(hp, round);
