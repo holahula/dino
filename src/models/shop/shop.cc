@@ -17,7 +17,7 @@ bool Shop::buy(int money, char type) {
 }
 
 Tower* Shop::newTower(int& money, char type){
-    Tower* t;
+    Tower* t = nullptr;
 
     if(type == 'D'){
         money -= DamageTower::cost;
