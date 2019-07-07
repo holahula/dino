@@ -82,12 +82,17 @@ void State::processFrame(){
         tower->notifyObservers(tower);
     }
 
+    vector<Enemy*> toDelete = map->
     // delete dead enemies
     for(auto&enemy : enemies) {
         if(enemy->getHP() <= 0) {
             removeEnemy(enemy);
         }
     }
+}
+
+void State::nextFrame(){
+
 }
 
 void State::updateState(int hp, int round){
@@ -109,7 +114,7 @@ void State::startRound(){
         }
 
         processFrame();
-        // nextFrame();
+        nextFrame();
         frame++;
     }
     // round over -> either all enemies killed, or died

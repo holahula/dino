@@ -38,7 +38,8 @@ class State {
     bool moveEnemies(int, int);
     
     void processFrame();
-
+    void nextFrame();
+    
     void updateState(int, int);
 
     public:
