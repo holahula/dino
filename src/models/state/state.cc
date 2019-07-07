@@ -1,6 +1,7 @@
 #include "./../shop/shop.h"
 #include "./../map/map.h"
 #include "./../tile/path/pathTile.h"
+#include "./../enemy/basic/basic.h"
 #include "state.h"
 
 #include <vector>
@@ -19,9 +20,7 @@ void State::incrementMoney(int amount) {
     money += amount;
 }
 
-// void State::spend(int amount) {
-//     money -= amount;
-// }
+
 
 bool State::loseHP(int amount) {
     if(hp-amount <= 0) return false;
@@ -45,7 +44,10 @@ void State::removeEnemy(Enemy* enemy){
 
 // based on round, construct enemies -> insert them into state enemy vector
 int State::constructEnemies(int round) {
-    return 1;
+    for(int i = 0; i < 10; i++){
+        addEnemy(new BasicEnemy(1));
+    }
+    return 10;
 }
 
 int State::totalHPLost(vector<Enemy*> enemies){
@@ -76,24 +78,33 @@ bool State::moveEnemies(int frame, int size){
 
 void State::processFrame(){
     // shoot enemies
+    map->attachAllEnemies();
+
     for(auto &tower : towers){
-        // TODO: currently shoots all towers in vicinity, need to only shoot 1
-        // TODO: NEED TO GAIN MONEY WHEN SHOOTING TOWERS
+        pair<int, int> type = tower->getType();
+        if(type.first == 'D'){
+            incrementMoney(type.second);
+        }
+        
         tower->notifyObservers(tower);
     }
 
-    // delete dead enemies
-    for(auto&enemy : enemies) {
-        if(enemy->getHP() <= 0) {
-            removeEnemy(enemy);
-        }
+    for (auto &enemy : map->removeDeadEnemies()) {
+        removeEnemy(enemy);
     }
+}
+
+// prepares for the next frame, detachs all the enemies from their respective towers
+void State::nextFrame(){
+    map->detachAllEnemies();
 }
 
 void State::updateState(int hp, int round){
     if(hp <= 0) {
-        // TODO: handle death
+        // TODO: handle death, clean up everything
         cout << "dead on round " << round << endl;
+    } else if(round == MAX_ROUND){
+        cout << "winner winner chicken dinner" << endl;
     }
 }
 
@@ -104,15 +115,13 @@ void State::startRound(){
     // round while loop 
     while(enemies.size() != 0){
         // dead
-        if(!moveEnemies(frame, size)){
+        if(!moveEnemies(frame, size)){ 
             break;
         }
-
         processFrame();
-        // nextFrame();
+        nextFrame();
         frame++;
     }
-    // round over -> either all enemies killed, or died
     updateState(hp, round);
 }
 
