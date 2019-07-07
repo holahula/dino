@@ -42,7 +42,7 @@ void State::addEnemy(Enemy* e){
 void State::removeEnemy(Enemy* enemy){
     cout << "pre removeEnemy()" << endl;
     enemies.erase(remove(enemies.begin(), enemies.end(), enemy), enemies.end());
-    cout << "enemy erased from enemies vector" << endl;
+    cout << "enemy erased from enemies vector, time to delete" << endl;
     delete enemy;
     cout << "post removeEnemy()" << endl;
 }
