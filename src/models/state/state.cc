@@ -16,6 +16,10 @@ State::~State() {
     for(auto &enemy : enemies) delete enemy;
 }  
 
+void State::displayMap(){
+    cout << map << endl;
+}
+
 void State::incrementMoney(int amount) {
     money += amount;
 }
@@ -139,7 +143,7 @@ void State::processFrame(){
 
 // prepares for the next frame, detachs all the enemies from their respective towers
 void State::postFrame(){
-    cout << map << endl;
+    displayMap();
     map->detachAllEnemies();
 }
 

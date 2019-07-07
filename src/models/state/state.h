@@ -53,6 +53,7 @@ class State {
         State();
         ~State();
 
+        void displayMap();
         bool buyTower(char, int, int);
         bool upgradeTower(int, int);
 
