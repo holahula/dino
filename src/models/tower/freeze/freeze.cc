@@ -14,7 +14,7 @@ int FreezeTower::getUpgradeCost() const {
 }
 
 std::pair<char, int> FreezeTower::getType() const {
-    return make_pair('D', duration);
+    return make_pair('F', duration);
 }
 
 int FreezeTower::getCost() const {
