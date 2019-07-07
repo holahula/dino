@@ -1,5 +1,9 @@
 #include "subject.h"
 
+#include <iostream>
+
+using namespace std;
+
 Subject::Subject() {}
 Subject::~Subject() {}
 
@@ -25,7 +29,10 @@ void Subject::notifyObservers(Tower * tower) {
     // only notify the 1st enemy (closest to the exit)
 
     // TODO: if increase the # of enemies shooting, simply increase the # of notified enemies
+    cout << "- notifyObserver execution - " << endl;
+
     if(observers.size() > 0) {
+        cout << "shooting [0]th enemy" << endl;
         observers[0]->notify(tower);
     }
 }

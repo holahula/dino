@@ -21,7 +21,7 @@ int Enemy::getFrozen() const {
 
 void Enemy::notify(Tower * tower){
     pair<char, int> type = tower->getType();
-
+    cout << "enemy->notify execution" << endl;
     if(type.first == 'D') {
         hp -= type.second;
         cout << "Enemy hit for " << type.second << " dmg!" << endl;
