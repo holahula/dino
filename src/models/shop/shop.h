@@ -10,8 +10,6 @@
 #include <utility>
 
 class Shop {
-
-
     public:
         Shop();
         ~Shop();

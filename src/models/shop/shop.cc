@@ -1,5 +1,3 @@
-
-
 #include "shop.h"
 
 using namespace std;
@@ -14,7 +12,7 @@ bool Shop::buy(int money, char type) {
     ) {
         return true;
     }
-
+    
     return false;
 }
 
