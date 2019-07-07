@@ -6,8 +6,8 @@
 
 class Shop {
  public:
-  std::pair<bool, Tower> buy(Tower);
-  void sell(Tower);
+  std::pair<bool, Tower*> buy(Tower *);
+  void sell(Tower *);
 };
 
 #endif

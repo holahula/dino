@@ -1,6 +1,6 @@
 #include "state.h"
 
-State::State(int money, int HP) : money{money}, HP{HP} {}
+State::State(int money, int hp) : money{money}, hp{hp} {}
 
 void State::earn(int amount) {
   money += amount;
@@ -13,7 +13,7 @@ void State::loseHP(int amount) {
   hp -= amount;
 }
 
-void State::addTower(Tower tower) {
+void State::addTower(Tower *tower) {
   towers.emplace_back(tower);
 }
 
