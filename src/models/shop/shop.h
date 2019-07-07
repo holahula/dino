@@ -2,7 +2,6 @@
 #define SHOP_H_
 
 #include <utility>
-#include <vector>
 
 #include "../tower/tower.h"
 

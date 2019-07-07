@@ -13,8 +13,6 @@ State::State() : money(10), hp(100), shop(new Shop()), map(new Map()){}
 State::~State() {
     for(auto &tower : towers) delete tower;
     for(auto &enemy : enemies) delete enemy;
-    towers.clear();
-    enemies.clear();
 }  
 
 void State::incrementMoney(int amount) {

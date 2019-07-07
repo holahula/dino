@@ -12,5 +12,3 @@ int Tower::getRange() const {
 void Tower::attack() {
     notifyObservers(this);
 }
-
-
