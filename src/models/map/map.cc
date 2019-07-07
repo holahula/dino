@@ -1,9 +1,14 @@
 #include "map.h"
 #include "../tile/land/landTile.h"
 #include "../tile/path/pathTile.h"
+#include "../../exceptions/land-tile-occupied-exception/landTileOccupiedException.h"
+#include "../../exceptions/no-tower-exception/noTowerException.h"
 #include <vector>
 #include <utility>
 #include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <cmath>
 
 using namespace std;
 
@@ -33,7 +38,7 @@ ostream& operator<<(ostream& out, Map & currFrame) {
     return out;
 }
 
-void Map::insertEnemy(Enemy * newEnemy) {
+void Map::insertEnemy(Enemy* newEnemy) {
     path[0]->insertEnemy(newEnemy);
 }
 
@@ -121,8 +126,12 @@ bool Map::createPathHelper (
         do {
             pair<int,int> next = make_pair(curr.first+dir[currIdx].first, curr.second+dir[currIdx].second);
             currIdx = (currIdx + 1) % dir.size();
-            if (next.first < 0 || next.first >= width || next.second < 0 || next.second >= height) continue;
-            if (visited[next.first][next.second]) continue;
+            if (next.first < 0 || next.first >= width || next.second < 0 || next.second >= height){
+                continue;
+            };
+            if (visited[next.first][next.second]){
+                continue;
+            };
 
             visited[next.first][next.second] = true;
             path.push_back(next);
@@ -171,4 +180,80 @@ vector<Enemy*> Map::removeDeadEnemies() {
         }
     }
     return deadEnemies;
+}
+
+bool isPathTile(char c) {
+    return c == 'P' || c == 'F' || c == 'S';
+}
+
+bool Map::inMap(int x, int y) {
+    return x >=0 && x<width && y>=0 && y<height;
+}
+
+bool Map::isOccupied(int x, int y) {
+    return isPathTile(map[x][y]->getType()) || ((LandTile*) map[x][y])->isOccupied();
+}
+
+bool Map::isTower(int x, int y) {
+    return !isPathTile(map[x][y]->getType()) && ((LandTile*) map[x][y])->isOccupied();
+}
+
+Tower* Map::getTower(int x, int y) {
+    if (!isTower(x,y)) {
+        throw NoTowerException("There is no tower at this location");
+    }
+    return ((LandTile*) map[x][y])->getTower();
+}
+
+int square(int x) {
+    return x*x;
+}
+
+int distance(pair<int,int> lhs, pair<int,int> rhs) {
+    return sqrt(square(lhs.first - rhs.first) + square(lhs.second - rhs.second));
+}
+
+void Map::insertTower(Tower* tower, int x, int y) {
+    // can throw a LandTileOccupiedException
+    if (isOccupied(x,y)) {
+        throw LandTileOccupiedException("Cannot place a tower here");
+    }
+
+    ((LandTile*) map[x][y])->addTower(tower);
+    for (int i=0; i<path.size(); ++i) {
+        int dist = distance(path[i]->location(), make_pair(x,y));
+        if (dist <= tower->getRange()) {
+            insideRange[path[i]].insert(tower);
+        }
+    }
+}
+
+void Map::increaseTowerRange(Tower* tower, int x, int y) {
+    for (int i=0; i<path.size(); ++i) {
+        if (!insideRange[path[i]].count(tower)) {
+            int dist = distance(path[i]->location(), make_pair(x,y));
+            if (dist <= tower->getRange()) {
+                insideRange[path[i]].insert(tower);
+            }
+        }
+    }
+}
+
+// inefficient -> may call detach on the same tower multiple times
+void Map::detachAllEnemies() {
+    for (int i=0; i<path.size(); ++i) {
+        for (Tower* tower : insideRange[path[i]]) {
+            tower->detachAll();
+        }
+    }
+}
+
+void Map::attachAllEnemies() {
+    for (int i=0; i<path.size(); ++i) {
+        for (Tower* tower: insideRange[path[i]]) {
+            for (Enemy* enemy : path[i]->getEnemies()) {
+                tower->attach(enemy);
+            }
+        }
+    }
 }

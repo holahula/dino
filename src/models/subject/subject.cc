@@ -16,6 +16,10 @@ void Subject::detach(Observer *o) {
     }
 }
 
+void Subject::detachAll() {
+    observers.clear();
+}
+
 void Subject::notifyObservers(Tower * tower) {
     // for (auto ob : observers) ob->notify(tower);
     // only notify the 1st enemy (closest to the exit)

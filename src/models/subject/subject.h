@@ -11,6 +11,7 @@ public:
     Subject();
     void attach(Observer *o);
     void detach(Observer *o);
+    void detachAll();
     void notifyObservers(Tower *t);
     virtual ~Subject() = 0;
 };
