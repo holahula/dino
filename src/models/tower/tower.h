@@ -6,6 +6,7 @@
 class Tower : public Subject {
     protected:
         int range;
+        
     public:
         Tower();
         ~Tower();
@@ -15,6 +16,7 @@ class Tower : public Subject {
         
         virtual void upgrade() = 0;
 
+        int getRange() const;
         void attack();
 };
 
