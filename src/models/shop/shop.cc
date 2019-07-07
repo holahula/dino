@@ -35,12 +35,6 @@ Tower* Shop::newTower(int& money, char type){
     return t;
 }
 
-// FreezeTower* Shop::newFreezeTower(int& money){
-//     money -= FreezeTower::cost;
-//     FreezeTower* t = new FreezeTower();
-//     return t;
-// }
-
 // MoneyTower* Shop::newMoneyTower(int& money){
 //     money -= MoneyTower::cost;
 //     MoneyTower* t = new MoneyTower();
