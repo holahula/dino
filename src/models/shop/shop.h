@@ -1,19 +1,30 @@
 #ifndef SHOP_H_
 #define SHOP_H_
 
-#include <utility>
-
+#include "./../tower/tower.h"
+#include "./../tower/damage/damage.h"
+#include "./../tower/freeze/freeze.h"
+#include "./../tower/money/money.h"
 #include "../tower/tower.h"
 
+#include <utility>
+
 class Shop {
-    bool buy(int, Tower *);
-    void sell(int &, Tower *);
-    
+
+
     public:
         Shop();
         ~Shop();
 
- 
+        bool buy(int, char);
+        void sell(int &, Tower *);
+
+        Tower* newTower(int&, char);
+
+        void upgradeTower(int&, int);
+        // DamageTower* newDamageTower(int&);
+        // FreezeTower* newFreezeTower(int&);
+        // MoneyTower* newMoneyTower(int&);
 };
 
 #endif
