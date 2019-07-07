@@ -17,6 +17,11 @@ void Subject::detach(Observer *o) {
 }
 
 void Subject::notifyObservers(Tower * tower) {
-    for (auto ob : observers)
-        ob->notify(tower);
+    // for (auto ob : observers) ob->notify(tower);
+    // only notify the 1st enemy (closest to the exit)
+
+    // TODO: if increase the # of enemies shooting, simply increase the # of notified enemies
+    if(observers.size() > 0) {
+        observers[0]->notify(tower);
+    }
 }
