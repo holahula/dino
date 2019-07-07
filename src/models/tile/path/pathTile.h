@@ -18,7 +18,7 @@ class PathTile : public Tile {
         void moveEnemies();
         void insertEnemy(Enemy *);
         char getType() const override;
-        std::vector<Enemy*> getEnemies() const;
+        std::vector<Enemy*> & getEnemies();
 };
 
 #endif

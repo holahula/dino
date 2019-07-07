@@ -124,6 +124,16 @@ vector<Enemy*> Map::nextFrame() {
     return vector<Enemy*>(beforeSet.begin(), beforeSet.end());
 }
 
-vector<PathTile*> Map::getPath() const {
-    return path;
+vector<Enemy*> Map::removeDeadEnemies() {
+    vector<Enemy*> deadEnemies;
+    for (int i=0; i<path.size(); ++i) {
+        vector<Enemy*>& currEnemies = path[i]->getEnemies();
+        for (Enemy* enemy : currEnemies) {
+            if (enemy->getHP() <= 0) {
+                deadEnemies.push_back(enemy);
+                currEnemies.erase(std::remove(currEnemies.begin(), currEnemies.end(), enemy), currEnemies.end());
+            }
+        }
+    }
+    return deadEnemies;
 }
