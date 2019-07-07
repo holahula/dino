@@ -14,8 +14,8 @@ TODO: money management functions,
     detach and attach enemies every frame?
 
  game functionality is done?
-
  */
+
 class State {
     int hp, money, round;
 
@@ -28,6 +28,8 @@ class State {
     bool loseHP(int);
     void incrementMoney(int);
     // void spend(int);
+    bool buyTower(Tower *);
+
     void addTower(Tower *);
     void addEnemy(Enemy *);
     void removeEnemy(Enemy *);
@@ -37,7 +39,9 @@ class State {
     int totalHPLost(std::vector<Enemy*>);
     bool moveEnemies(int, int);
     
+    bool preFrame(int, int);
     void processFrame();
+    void postFrame();
 
     void updateState(int, int);
 
