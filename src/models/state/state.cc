@@ -12,8 +12,8 @@ using namespace std;
 State::State(): hp(100), money(10), round(1), shop(new Shop()), map(new Map()){}
 
 State::~State() {
-    for(auto &tower : towers) delete tower;
-    for(auto &enemy : enemies) delete enemy;
+    for(Tower* tower : towers) delete tower;
+    for(Enemy* enemy : enemies) delete enemy;
 }  
 
 void State::displayMap(){
@@ -36,15 +36,13 @@ void State::addTower(Tower* t) {
 }
 
 void State::addEnemy(Enemy* e){
+    pendingEnemies.push(e);
     enemies.push_back(e);
 }
 
 void State::removeEnemy(Enemy* enemy){
-    cout << "pre removeEnemy()" << endl;
     enemies.erase(remove(enemies.begin(), enemies.end(), enemy), enemies.end());
-    cout << "enemy erased from enemies vector, time to delete the enemy" << endl;
     delete enemy;
-    cout << "deletion successful, post removeEnemy()" << endl;
 }
 
 /******************************
@@ -106,16 +104,17 @@ int State::totalHPLost(vector<Enemy*> enemies){
 bool State::moveEnemies(int frame, int size){
     vector<Enemy*> escaped = map->nextFrame();
 
+    for(Enemy* enemy: escaped){
+        removeEnemy(enemy);
+    }
+
     if(!surviveDmg(totalHPLost(escaped))){
         return false;
     }
 
-    for(auto & enemy: escaped){
-        removeEnemy(enemy);
-    }
-
-    if (frame <= size){
-        map->insertEnemy(enemies[frame - 1]);
+    if (!pendingEnemies.empty()){
+        map->insertEnemy(pendingEnemies.top());
+        pendingEnemies.pop();
     }
 
     return true;
@@ -131,23 +130,18 @@ bool State::preFrame(int frame, int size){
 
 void State::processFrame(){
     // shoot enemies
-    cout << "-- PROCESS FRAME START --" << endl;
-    cout << "pre shoot towers" << endl;
-    for(auto &tower : towers){
+    for(Tower* tower : towers){
         pair<int, int> type = tower->getType();
         if(type.first == 'D'){
             incrementMoney(type.second);
         }
         tower->notifyObservers(tower);
     }
-    cout << "post shoot towers / pre kill dead enemies" << endl;
 
     vector<Enemy*> dead =  map->removeDeadEnemies();
     for (auto enemy : dead) {
         removeEnemy(enemy);
     }
-    // cout << "post enemies killed" << endl;
-    cout << "-- PROCESS FRAME COMPLETED --" << endl;
 }
 
 // prepares for the next frame, detachs all the enemies from their respective towers
@@ -195,11 +189,9 @@ void State::startRound(){
             cout << "pre-frame status error" << endl;
             break;
         }
-        cout << "pre frame complete" << endl;
         processFrame();
 
         postFrame();
-        cout << "post frame complete"  << endl;
 
         frame++;
     }

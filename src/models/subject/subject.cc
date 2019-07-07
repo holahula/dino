@@ -30,10 +30,7 @@ void Subject::notifyObservers(Tower * tower) {
     // only notify the 1st enemy (closest to the exit)
 
     // TODO: if increase the # of enemies shooting, simply increase the # of notified enemies
-    cout << "- notifyObserver execution - " << endl;
-
     if(observers.size() > 0) {
-        cout << "shooting [0]th enemy" << endl;
         try {
             Observer* val = observers.at(0);
             val->notify(tower);

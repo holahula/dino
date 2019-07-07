@@ -7,6 +7,7 @@
 #include "./../map/map.h"
 
 #include <vector>
+#include <stack>
 
 /*
 TODO: money management functions,
@@ -24,6 +25,7 @@ class State {
 
     std::vector<Tower*> towers;
     std::vector<Enemy*> enemies;
+    std::stack<Enemy*> pendingEnemies;
 
     bool surviveDmg(int);
     void incrementMoney(int);
