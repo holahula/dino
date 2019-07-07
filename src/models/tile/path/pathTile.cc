@@ -33,7 +33,7 @@ char PathTile::getType() const {
     return 'P';
 }
 
-vector<Enemy *> PathTile::getEnemies() const {
+vector<Enemy *>& PathTile::getEnemies() {
     return enemies;
 }
 
