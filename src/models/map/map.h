@@ -14,6 +14,8 @@ class Map {
     std::vector<std::vector<Tile*> > map;
     std::vector<PathTile*> path;
     std::vector<std::pair<int,int> > createPath(std::pair<int,int> from, std::pair<int,int> to);
+    bool checkSquare(std::vector<std::vector<bool> >& visited, std::pair<int,int> x, std::pair<int,int> y);
+    bool isSquare(std::vector<std::vector<bool> >& visited, std::pair<int,int> curr);
     bool createPathHelper(
         std::vector<std::vector<bool> >&,
         std::pair<int,int>,
@@ -24,10 +26,11 @@ class Map {
     public:
         Map();
         ~Map();
-
         std::vector<Enemy*> nextFrame();
         std::vector<Enemy*> removeDeadEnemies();
         void insertEnemy(Enemy*);
+        int getWidth();
+        int getHeight();
         friend std::ostream& operator<<(std::ostream&, Map &);
 };
 

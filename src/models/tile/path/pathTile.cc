@@ -30,7 +30,13 @@ void PathTile::moveEnemies() {
 }
 
 char PathTile::getType() const {
-    return 'P';
+    if (next.empty()) {
+        return 'F';
+    } else if (prev.empty()) {
+        return 'S';
+    } else {
+        return 'P';
+    }
 }
 
 vector<Enemy *>& PathTile::getEnemies() {

@@ -15,9 +15,17 @@ Map::~Map(){
     }
 }
 
+int Map::getWidth() {
+    return width;
+}
+
+int Map::getHeight() {
+    return height;
+}
+
 ostream& operator<<(ostream& out, Map & currFrame) {
-    for (int i=0; i<currFrame.map.size(); ++i) {
-        for (int j=0; j<currFrame.map[i].size(); ++j) {
+    for (int j=currFrame.getHeight()-1; j>=0; --j) {
+        for (int i=0; i<currFrame.getWidth(); ++i) {
             out << currFrame.map[i][j]->getType() << " ";
         }
         out << endl;
@@ -31,8 +39,8 @@ void Map::insertEnemy(Enemy * newEnemy) {
 
 Map::Map() {
     srand(chrono::system_clock::now().time_since_epoch().count());
-    width = rand()%3 + 4;
-    height = rand()%3 + 4;
+    width = rand()%3 + 7;
+    height = rand()%3 + 7;
 
     this->map = vector<vector<Tile*> >(width, vector<Tile*>(height, nullptr));
     initPath();
@@ -64,11 +72,38 @@ void Map::initMap() {
     }
 }
 
+bool Map::checkSquare(vector<vector<bool> >& visited, pair<int,int> x, pair<int,int> y) {
+    if (x.first < 0 || x.second >= width) return false;
+    if (y.first < 0 || y.second >= height) return false;
+    int count = 0;
+    for (int i=x.first; i<=x.second; ++i) {
+        for (int j=y.first; j<=y.second; ++j) {
+            if (visited[i][j]) {
+                ++count;
+            }
+        }
+    }
+    return count >= 4;
+}
+
+bool Map::isSquare(vector<vector<bool> >& visited, pair<int,int> curr) {
+    if (checkSquare(visited, make_pair(curr.first-1, curr.first), make_pair(curr.second, curr.second+1))
+        || checkSquare(visited, make_pair(curr.first, curr.first+1), make_pair(curr.second, curr.second+1))
+        || checkSquare(visited, make_pair(curr.first-1, curr.first), make_pair(curr.second-1, curr.second))
+        || checkSquare(visited, make_pair(curr.first, curr.first+1), make_pair(curr.second-1, curr.second))) {
+        return true;
+    }
+    return false;
+}
+
 bool Map::createPathHelper (
     vector<vector<bool> >& visited,
     pair<int,int> curr,
     pair<int,int> dest,
     vector<pair<int,int> >& path) {
+        if (isSquare(visited, curr)) {
+            return false;
+        }
         if (curr.first == dest.first && curr.second == dest.second) {
             return true;
         }
