@@ -4,7 +4,7 @@
 
 using namespace std;
 
-PathTile::PathTile(int x, int y, vector<PathTile*> next, vector<PathTile*> prev): Tile(x,y), next(next), prev(prev){};
+PathTile::PathTile(int x, int y): Tile(x,y), next(vector<PathTile*>()), prev(vector<PathTile*>()){};
 
 PathTile::~PathTile(){}
 
@@ -13,13 +13,20 @@ bool PathTile::endOfPath() const {
 }
 
 void PathTile::moveEnemies() {
-    if (!endOfPath()) {
-        srand(chrono::system_clock::now().time_since_epoch().count());
-        for (size_t i=0; i<enemies.size(); ++i) {
+    srand(chrono::system_clock::now().time_since_epoch().count());
+    vector<Enemy*> frozen;
+    for (int i=0; i<enemies.size(); ++i) {
+        if (enemies[i]->getFrozen() > 0) {
+            enemies[i]->decFrozen();
+            frozen.push_back(enemies[i]);
+            continue;
+        }
+        if (!endOfPath()) {
             next[rand()%next.size()]->enemies.push_back(enemies[i]);
         }
     }
     enemies.clear();
+    enemies = frozen;
 }
 
 char PathTile::getType() const {
@@ -28,4 +35,8 @@ char PathTile::getType() const {
 
 vector<Enemy *> PathTile::getEnemies() const {
     return enemies;
+}
+
+void PathTile::insertEnemy(Enemy* newEnemy) {
+    enemies.push_back(newEnemy);
 }
