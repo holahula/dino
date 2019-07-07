@@ -11,7 +11,7 @@ char LandTile::getType() const {
     if (isOccupied()) {
         return tower->getType().first;
     }
-    return ' ';
+    return '.';
 }
 
 bool LandTile::isOccupied() const {
