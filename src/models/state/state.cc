@@ -20,7 +20,7 @@ void State::incrementMoney(int amount) {
     money += amount;
 }
 
-bool State::loseHP(int amount) {
+bool State::surviveDmg(int amount) {
     if(hp-amount <= 0) return false;
 
     hp -= amount;
@@ -39,6 +39,50 @@ void State::removeEnemy(Enemy* enemy){
     enemies.erase(remove(enemies.begin(), enemies.end(), enemy), enemies.end());
     delete enemy;
 }
+
+/******************************
+    BETWEEN ROUND FUNCTIONS
+******************************/
+
+bool State::buyTower(char type, int x, int y){
+    if (!map->inMap(x, y) || map->isOccupied(x, y) || !shop->buy(money, type)) {
+        return false;
+    }
+    
+    Tower* t = shop->newTower(money, type);
+    addTower(t);
+
+    // if(type == 'D'){
+    //     t = shop->newDamageTower(money);
+    // } else if (type == 'F'){
+    //     t = shop->newFreezeTower(money);
+    // } else if (type == 'M'){
+    //     t = shop->newMoneyTower(money);
+    // }
+
+    map->insertTower(t, x, y);
+
+    return true;
+}
+
+bool State::upgradeTower(int x, int y){
+    if (!map->inMap(x, y) || !map->isTower(x, y) || money < map->getTower(x, y)->getUpgradeCost()) {
+        return false;
+    }
+
+    Tower* t = map->getTower(x, y);
+    int upgradeCost = t->getUpgradeCost();
+
+    shop->upgradeTower(money, upgradeCost);
+    t->upgrade();
+    map->increaseTowerRange(t, x, y);
+
+    return true;
+}
+
+/*****************************
+    DURING ROUND FUNCTIONS
+*****************************/
 
 // based on round, construct enemies -> insert them into state enemy vector
 int State::constructEnemies(int round) {
@@ -59,7 +103,7 @@ int State::totalHPLost(vector<Enemy*> enemies){
 bool State::moveEnemies(int frame, int size){
     vector<Enemy*> escaped = map->nextFrame();
 
-    if(!loseHP(totalHPLost(escaped))){
+    if(!surviveDmg(totalHPLost(escaped))){
         return false;
     }
 
@@ -78,13 +122,12 @@ bool State::preFrame(int frame, int size){
     if(!moveEnemies(frame, size)){ 
         return false;
     }
+    map->attachAllEnemies();
     return true;
 }
 
 void State::processFrame(){
     // shoot enemies
-    map->attachAllEnemies();
-
     for(auto &tower : towers){
         pair<int, int> type = tower->getType();
         if(type.first == 'D'){
@@ -100,7 +143,17 @@ void State::processFrame(){
 
 // prepares for the next frame, detachs all the enemies from their respective towers
 void State::postFrame(){
+    cout << map << endl;
     map->detachAllEnemies();
+}
+
+void State::getMoneyTowerIncome(){
+    for(auto& tower : towers){
+        pair<int, int> type = tower->getType();
+        if(type.first == 'M'){
+            money += type.second;
+        }
+    }
 }
 
 void State::updateState(int hp, int round){
@@ -110,6 +163,9 @@ void State::updateState(int hp, int round){
     } else if(round == MAX_ROUND){
         cout << "winner winner chicken dinner" << endl;
     }
+
+    getMoneyTowerIncome();
+    round++;
 }
 
 void State::startRound(){
@@ -126,8 +182,3 @@ void State::startRound(){
     }
     updateState(hp, round);
 }
-
-// map -> next frame returns 2 vectors of enemies
-// 1st is dead 
-// 2nd is reached end 
-// need to delete all of these 
