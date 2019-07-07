@@ -56,7 +56,7 @@ int State::totalHPLost(vector<Enemy*> enemies){
     return total;
 }
 
-bool State::moveEnemies(int frame, int sz){
+bool State::moveEnemies(int frame, int size){
     vector<Enemy*> escaped = map->nextFrame();
 
     if(!loseHP(totalHPLost(escaped))){
@@ -67,7 +67,7 @@ bool State::moveEnemies(int frame, int sz){
         removeEnemy(enemy);
     }
 
-    if (frame <= sz){
+    if (frame <= size){
         map->insertEnemy(enemies[frame - 1]);
     }
 
