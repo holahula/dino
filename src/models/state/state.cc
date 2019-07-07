@@ -20,8 +20,6 @@ void State::incrementMoney(int amount) {
     money += amount;
 }
 
-
-
 bool State::loseHP(int amount) {
     if(hp-amount <= 0) return false;
 
@@ -85,7 +83,7 @@ void State::processFrame(){
         if(type.first == 'D'){
             incrementMoney(type.second);
         }
-        
+
         tower->notifyObservers(tower);
     }
 
