@@ -17,7 +17,6 @@ class FreezeTower : public Tower {
         std::pair<char, int> getType() const override;
 
         void upgrade() override;
-
 };
 
 #endif

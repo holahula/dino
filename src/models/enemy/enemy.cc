@@ -12,7 +12,7 @@ int Enemy::getHP() const {
 }
 
 void Enemy::decFrozen() {
-    isFrozen = max(isFrozen--, 0);
+    isFrozen = max(--isFrozen, 0);
 }
 
 int Enemy::getFrozen() const {
@@ -23,12 +23,11 @@ void Enemy::notify(Tower * tower){
     pair<char, int> type = tower->getType();
     if(type.first == 'D') {
         hp -= type.second;
-        cout << "Enemy hit for " << type.second << " dmg!" << endl;
-        if(hp <= 0) cout << "Enemy dead!" << endl;
     }
     else if (type.first == 'F') {
-        isFrozen = type.second;
-        cout << "Enemy frozen for " << type.second << " frames!" << endl;
+        if (!isFrozen) {
+            isFrozen = type.second;
+        }
     }
 }
 

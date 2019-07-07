@@ -18,8 +18,10 @@ void PathTile::moveEnemies() {
     for (int i=0; i<enemies.size(); ++i) {
         if (enemies[i]->getFrozen() > 0) {
             enemies[i]->decFrozen();
-            frozen.push_back(enemies[i]);
-            continue;
+            if (enemies[i]->getFrozen() != 0) {
+                frozen.push_back(enemies[i]);
+                continue;
+            }
         }
         if (!endOfPath()) {
             next[rand()%next.size()]->enemies.push_back(enemies[i]);

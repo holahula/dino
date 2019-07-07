@@ -6,7 +6,7 @@
 using namespace std;
 
 
-FreezeTower::FreezeTower() : Tower(), duration(1), upCost(5){};
+FreezeTower::FreezeTower() : Tower(), duration(2), upCost(5){};
 FreezeTower::~FreezeTower() {}
 
 int FreezeTower::getUpgradeCost() const {
@@ -26,4 +26,3 @@ void FreezeTower::upgrade() {
     duration++;
     upCost += 5;
 }
-

@@ -41,6 +41,18 @@ ostream& operator<<(ostream& out, Map & currFrame) {
         out << i << " ";
     }
     out << endl;
+
+    for (int i=0; i<currFrame.path.size(); ++i) {
+        if (currFrame.path[i]->getEnemies().empty()) {
+            continue;
+        }
+        out << "Path Tile: (" << currFrame.path[i]->location().first << ", " << currFrame.path[i]->location().second;
+        out << "), has balloons: " << endl;
+        for (Enemy* enemy: currFrame.path[i]->getEnemies()) {
+            out << "type: " << enemy->getType() << ", hp: " << enemy->getHP() << ", frozen: ";
+            out << (enemy->getFrozen() > 0 ? "Yes" : "No") << endl;
+        }
+    }
     return out;
 }
 
