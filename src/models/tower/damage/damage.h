@@ -13,7 +13,7 @@ class DamageTower : public Tower {
         DamageTower();
         ~DamageTower();
 
-        int getUpgradeCost() const;
+        int getUpgradeCost() const override;
         int getCost() const override;
         
         std::pair<char, int> getType() const override;

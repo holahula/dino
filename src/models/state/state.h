@@ -25,10 +25,9 @@ class State {
     std::vector<Tower*> towers;
     std::vector<Enemy*> enemies;
 
-    bool loseHP(int);
+    bool surviveDmg(int);
     void incrementMoney(int);
     // void spend(int);
-    bool buyTower(Tower *);
 
     void addTower(Tower *);
     void addEnemy(Enemy *);
@@ -37,12 +36,15 @@ class State {
     int constructEnemies(int);
 
     int totalHPLost(std::vector<Enemy*>);
+
     bool moveEnemies(int, int);
     
     bool preFrame(int, int);
+
     void processFrame();
     void postFrame();
 
+    void getMoneyTowerIncome();
     void updateState(int, int);
 
     public:
@@ -50,6 +52,9 @@ class State {
 
         State();
         ~State();
+
+        bool buyTower(char, int, int);
+        bool upgradeTower(int, int);
 
         void startRound();
 

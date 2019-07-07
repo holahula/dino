@@ -13,10 +13,8 @@ class MoneyTower : public Tower {
         MoneyTower();
         ~MoneyTower();
 
-        int getIncome() const;
-        int getUpgradeCost() const;
-
         int getCost() const override;
+        int getUpgradeCost() const override;
         std::pair<char, int> getType() const override;
         
         void upgrade() override;
