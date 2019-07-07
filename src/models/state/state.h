@@ -12,12 +12,12 @@ class State {
   std::vector<Enemy*> enemies;
 
  public:
-  State(int money = 100, int HP = 100);
+  State(int money = 100, int hp = 100);
   ~State();
   void earn(int);
   void spend(int);
   void loseHP(int);
-  void addTower(Tower tower);
+  void addTower(Tower *);
 };
 
 #endif

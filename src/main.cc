@@ -1,9 +1,9 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "enemy/enemy.h"
-#include "state/state.h"
-#include "tower/tower.h"
+#include "models/enemy/enemy.h"
+#include "models/state/state.h"
+#include "models/tower/tower.h"
 using namespace std;
 
 int main() {

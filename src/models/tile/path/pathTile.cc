@@ -15,7 +15,7 @@ bool PathTile::endOfPath() const {
 void PathTile::moveEnemies() {
     if (!endOfPath()) {
         srand(chrono::system_clock::now().time_since_epoch().count());
-        for (int i=0; i<enemies.size(); ++i) {
+        for (size_t i=0; i<enemies.size(); ++i) {
             next[rand()%next.size()]->enemies.push_back(enemies[i]);
         }
     }
