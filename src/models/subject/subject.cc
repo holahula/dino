@@ -1,6 +1,7 @@
 #include "subject.h"
 
 #include <iostream>
+#include <utility>
 
 using namespace std;
 
@@ -33,6 +34,11 @@ void Subject::notifyObservers(Tower * tower) {
 
     if(observers.size() > 0) {
         cout << "shooting [0]th enemy" << endl;
-        observers[0]->notify(tower);
+        try {
+            Observer* val = observers.at(0);
+            val->notify(tower);
+        }  catch (out_of_range& err) {
+            cout << "out of range! cannot shoot this enemy" << endl;
+        }
     }
 }
