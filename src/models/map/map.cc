@@ -255,7 +255,7 @@ void Map::detachAllEnemies() {
 }
 
 void Map::attachAllEnemies() {
-    for (int i=0; i<path.size(); ++i) {
+    for (int i=path.size()-1; i>=0; --i) {
         for (Tower* tower: insideRange[path[i]]) {
             for (Enemy* enemy : path[i]->getEnemies()) {
                 tower->attach(enemy);
