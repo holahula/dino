@@ -33,7 +33,7 @@ int square(int x) {
 }
 
 int distance(pair<int,int> lhs, pair<int,int> rhs) {
-    return sqrt(square(lhs.first - rhs.first) + square(lhs.second - rhs.second));
+    return ceil(sqrt(square(lhs.first - rhs.first) + square(lhs.second - rhs.second)));
 }
 
 ostream& operator<<(ostream& out, Map & currFrame) {
