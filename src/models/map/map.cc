@@ -183,7 +183,7 @@ vector<Enemy*> Map::removeDeadEnemies() {
 }
 
 bool isPathTile(char c) {
-    return c == 'P' || c == 'F' || c == 'S';
+    return c == 'P' || c == 'E' || c == 'S';
 }
 
 bool Map::inMap(int x, int y) {
