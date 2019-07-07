@@ -22,8 +22,7 @@ class Shop {
         Tower* newTower(int&, char);
 
         void upgradeTower(int&, int);
-        // DamageTower* newDamageTower(int&);
-        // FreezeTower* newFreezeTower(int&);
+
         // MoneyTower* newMoneyTower(int&);
 };
 

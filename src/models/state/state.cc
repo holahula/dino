@@ -54,10 +54,6 @@ bool State::buyTower(char type, int x, int y){
 
     // if(type == 'D'){
     //     t = shop->newDamageTower(money);
-    // } else if (type == 'F'){
-    //     t = shop->newFreezeTower(money);
-    // } else if (type == 'M'){
-    //     t = shop->newMoneyTower(money);
     // }
 
     map->insertTower(t, x, y);
