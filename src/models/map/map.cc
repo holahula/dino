@@ -85,9 +85,9 @@ void Map::initPath() {
     vector<pair<int,int> > createdPath = createPath(make_pair(0, rand()%height), make_pair(width-1, rand()%height));
 
     path = vector<PathTile*>(createdPath.size(), nullptr);
-    for (size_t i=createdPath.size()-1; i>=0; --i) {
+    for (int i=(int)createdPath.size()-1; i>=0; --i) {
         path[i] = new PathTile(createdPath[i].first, createdPath[i].second);
-        if (i != createdPath.size()-1) {
+        if (i != (int)createdPath.size()-1) {
             path[i]->next.push_back(path[i+1]);
             path[i+1]->prev.push_back(path[i]);
         }
@@ -217,7 +217,7 @@ vector<pair<int,int> > Map::createPath(pair<int,int> from, pair<int,int> to) {
 
 vector<Enemy*> Map::nextFrame() {
     vector<Enemy*> before = path[path.size()-1]->getEnemies();
-    for (size_t i=path.size()-1; i>=0; --i) {
+    for (int i=(int)path.size()-1; i>=0; --i) {
         path[i]->moveEnemies();
     }
     vector<Enemy*> after = path[path.size()-1]->getEnemies();
@@ -302,7 +302,7 @@ void Map::detachAllEnemies() {
 }
 
 void Map::attachAllEnemies() {
-    for (size_t i=path.size()-1; i>=0; --i) {
+    for (int i=(int)path.size()-1; i>=0; --i) {
         for (Tower* tower: insideRange[path[i]]) {
             for (Enemy* enemy : path[i]->getEnemies()) {
                 tower->attach(enemy);
