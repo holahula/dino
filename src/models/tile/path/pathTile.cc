@@ -15,7 +15,7 @@ bool PathTile::endOfPath() const {
 void PathTile::moveEnemies() {
     srand(chrono::system_clock::now().time_since_epoch().count());
     vector<Enemy*> frozen;
-    for (int i=0; i<enemies.size(); ++i) {
+    for (size_t i=0; i<enemies.size(); ++i) {
         if (enemies[i]->getFrozen() > 0) {
             enemies[i]->decFrozen();
             if (enemies[i]->getFrozen() != 0) {
