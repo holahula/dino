@@ -1,7 +1,6 @@
 #ifndef GTKMM_EXAMPLE_VIEW_H
 #define GTKMM_EXAMPLE_VIEW_H
 
-#include "./../map/map.h"
 #include "./../state/state.h"
 
 #include <gtkmm.h>
