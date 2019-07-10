@@ -3,6 +3,7 @@
 
 #include "./../state/state.h"
 
+#include <gtkmm-3.0/gtkmm/grid.h>
 #include <gtkmm.h>
 
 class View : public Gtk::Window {
@@ -31,13 +32,14 @@ class View : public Gtk::Window {
 
   // Child widgets:
   Gtk::Grid m_grid;
+  Gtk::Grid tiles;
+  Gtk::Grid panel;
   Gtk::Button m_button_start;
   Gtk::Button m_button_print;
   Gtk::Button m_button_round;
   Gtk::Button m_button_buy_damage_tower;
   Gtk::Button m_button_buy_freeze_tower;
   Gtk::Button m_button_buy_money_tower;
-  Gtk::Label m_label;
 };
 
 #endif

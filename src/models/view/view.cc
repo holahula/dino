@@ -16,11 +16,9 @@ View::View() : m_button_start("Start Game"),
                m_button_round("Start Next Round"),
                m_button_buy_damage_tower("Buy Damage Tower"),
                m_button_buy_freeze_tower("Buy Freeze Tower"),
-               m_button_buy_money_tower("Buy Money Tower"),
-               m_label("\t\n\t\n") {
+               m_button_buy_money_tower("Buy Money Tower") {
   set_title("Tower Defense");
   set_border_width(10);
-  m_label.override_background_color(Gdk::RGBA("green"), Gtk::STATE_FLAG_NORMAL);
 
   //Targets:
   std::vector<Gtk::TargetEntry> listTargets;
@@ -39,14 +37,6 @@ View::View() : m_button_start("Start Game"),
   m_button_buy_freeze_tower.signal_drag_data_get().connect(sigc::mem_fun(*this, &View::on_button_drag_data_get));
   m_button_buy_money_tower.signal_drag_data_get().connect(sigc::mem_fun(*this, &View::on_button_drag_data_get));
 
-  //Drop site:
-
-  //Make m_label a DnD drop destination:
-  m_label.drag_dest_set(listTargets);
-
-  //Connect signals:
-  m_label.signal_drag_data_received().connect(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received));
-
   m_button_start.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_start_clicked));
   m_button_print.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_print_clicked));
   m_button_round.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_round_clicked));
@@ -54,13 +44,27 @@ View::View() : m_button_start("Start Game"),
   m_button_buy_freeze_tower.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_buy_freeze_tower_clicked));
   m_button_buy_money_tower.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_buy_money_tower_clicked));
 
-  m_grid.add(m_button_start);
-  m_grid.add(m_button_print);
-  m_grid.add(m_button_round);
-  m_grid.add(m_button_buy_damage_tower);
-  m_grid.add(m_button_buy_freeze_tower);
-  m_grid.add(m_button_buy_money_tower);
-  m_grid.add(m_label);
+  tiles.set_row_spacing(0);
+  tiles.set_column_spacing(0);
+
+  for (int i = 0; i < 10; i++) {
+    for (int j = 0; j < 10; j++) {
+      Gtk::Label* label = Gtk::manage(new Gtk::Label("\t\t\n\t\t\n"));
+      label->drag_dest_set(listTargets);
+      label->signal_drag_data_received().connect(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received));
+      label->override_background_color(Gdk::RGBA(i * j % 2 == 0 ? "green" : "brown"), Gtk::STATE_FLAG_NORMAL);
+      tiles.attach(*label, i, j, 1, 1);
+    }
+  }
+
+  panel.add(m_button_start);
+  panel.add(m_button_print);
+  panel.add(m_button_round);
+  panel.add(m_button_buy_damage_tower);
+  panel.add(m_button_buy_freeze_tower);
+  panel.add(m_button_buy_money_tower);
+  m_grid.attach(panel, 0, 0, 1, 1);
+  m_grid.attach(tiles, 0, 1, 1, 1);
   add(m_grid);
 
   show_all();
@@ -124,4 +128,3 @@ void View::on_label_drop_drag_data_received(
 
   context->drag_finish(false, false, time);
 }
-
