@@ -212,6 +212,7 @@ vector<pair<int,int> > Map::createPath(pair<int,int> from, pair<int,int> to) {
     return path;
 }
 
+// returns the enemies that have left the map
 vector<Enemy*> Map::nextFrame() {
     vector<Enemy*> before = path[path.size()-1]->getEnemies();
     for (int i=(int)path.size()-1; i>=0; --i) {

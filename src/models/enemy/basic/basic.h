@@ -8,7 +8,9 @@ class BasicEnemy : public Enemy {
         BasicEnemy(int);
 
         char getType() const override;
-        
+
+        void nextState() override;
+
         ~BasicEnemy();
 };
 

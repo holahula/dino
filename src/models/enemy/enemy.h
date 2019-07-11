@@ -26,11 +26,10 @@ class Enemy : public Observer {
         int getFrozen() const;
 
         virtual char getType() const = 0;
-        
-        void notify(Tower *tower) override;
+        virtual void nextState() = 0;
+        virtual void notify(Tower*) override;
         void observeTowers(std::vector<Tower*>);
         void removeTowers();
-
         virtual ~Enemy();
         friend std::ostream& operator<<(std::ostream&, Enemy&);
 };

@@ -24,6 +24,7 @@ void PathTile::moveEnemies() {
             }
         }
         if (!endOfPath()) {
+            enemies[i]->nextState();
             next[rand()%next.size()]->enemies.push_back(enemies[i]);
         }
     }

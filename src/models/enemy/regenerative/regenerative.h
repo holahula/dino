@@ -13,6 +13,8 @@ class RegenerativeEnemy : public Enemy {
 
         char getType() const override;
         
+        void nextState() override;
+
         ~RegenerativeEnemy();
 };
 
