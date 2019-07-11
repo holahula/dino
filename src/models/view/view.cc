@@ -16,7 +16,6 @@ View::View() : panel_menu("Menu"),
 				bbox_menu(Gtk::ORIENTATION_VERTICAL),
 				bbox_shop(Gtk::ORIENTATION_VERTICAL),
 				m_button_new_game("New Game"),
-				m_button_print("Print Map"),
 				m_button_round("Start Next Round"),
 				m_button_buy_damage_tower("Buy Damage Tower"),
 				m_button_buy_freeze_tower("Buy Freeze Tower"),
@@ -54,7 +53,6 @@ View::View() : panel_menu("Menu"),
 
 	// Signals
 	m_button_new_game.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_new_game_clicked));
-	m_button_print.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_print_clicked));
 	m_button_round.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_round_clicked));
 	m_button_buy_damage_tower.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_buy_damage_tower_clicked));
 	m_button_buy_freeze_tower.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_buy_freeze_tower_clicked));
@@ -80,7 +78,6 @@ void View::on_button_new_game_clicked() {
 	m_label_money.set_text("Money: " + to_string(game.getMoney()));
 
 	//Add widgets to grid
-	bbox_menu.add(m_button_print);
 	bbox_menu.add(m_button_round);
 
 	bbox_shop.add(m_button_buy_damage_tower);
@@ -88,13 +85,22 @@ void View::on_button_new_game_clicked() {
 	bbox_shop.add(m_button_buy_money_tower);
 	
 	// Build grid of tiles using the map
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			Gtk::Label* label = Gtk::manage(new Gtk::Label("\t\t\n\t\t\n"));
+	auto map = game.getMap();
+	int row = 0, col = 0, nc = map.getHeight();
+	for(auto it = map.begin(); it != map.end(); ++it) {
+		Gtk::Label* label = Gtk::manage(new Gtk::Label("\t\t\n\t\t\n"));
+		if ((*it).getType() == '.') {
 			label->drag_dest_set(listTargets);
-			label->signal_drag_data_received().connect(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received));
-			label->override_background_color(Gdk::RGBA(i * j % 2 == 0 ? "green" : "brown"), Gtk::STATE_FLAG_NORMAL);
-			tiles.attach(*label, i, j, 1, 1);
+		}
+		label->signal_drag_data_received().connect(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received));
+		label->override_background_color(Gdk::RGBA((*it).getType() == '.' ? "green" : "brown"), Gtk::STATE_FLAG_NORMAL);
+		tiles.attach(*label, row, col, 1, 1);
+		
+		if (col < nc - 1) {
+			col++;
+		} else {
+			row++;
+			col = 0;
 		}
 	}
 	
@@ -105,10 +111,6 @@ void View::on_button_new_game_clicked() {
 	m_grid.attach(tiles, 0, 0, 2, 2);
 
 	show_all();
-}
-
-void View::on_button_print_clicked() {
-	game.displayMap();
 }
 
 void View::on_button_round_clicked() {
@@ -139,17 +141,11 @@ void View::on_button_buy_money_tower_clicked() {
 	}
 }
 
-void View::on_button_drag_data_get(
-    const Glib::RefPtr<Gdk::DragContext>&,
-    Gtk::SelectionData& selection_data, guint, guint) {
-  	selection_data.set(selection_data.get_target(), 8 /* 8 bits format */,
-                     (const guchar*)"I'm Data!",
-                     9 /* the length of I'm Data! in bytes */);
+void View::on_button_drag_data_get(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time) {
+  	selection_data.set(selection_data.get_target(), 8, (const guchar*)"I'm Data!", 9);
 }
 
-void View::on_label_drop_drag_data_received(
-    const Glib::RefPtr<Gdk::DragContext>& context, int, int,
-    const Gtk::SelectionData& selection_data, guint, guint time) {
+void View::on_label_drop_drag_data_received(const Glib::RefPtr<Gdk::DragContext>& context, int, int, const Gtk::SelectionData& selection_data, guint info, guint time) {
 	const int length = selection_data.get_length();
 	if ((length >= 0) && (selection_data.get_format() == 8)) {
 		std::cout << "Received \"" << selection_data.get_data_as_string() << "\" in label " << std::endl;

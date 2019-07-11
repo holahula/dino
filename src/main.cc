@@ -81,7 +81,6 @@ void test() {
       case 'p':
         game.displayMap();
         break;
-
       default:
         cout << "Invalid command: " << cmd << endl;
         break;

@@ -18,7 +18,6 @@ class View : public Gtk::Window {
 	Gtk::ButtonBox bbox_menu;
 	Gtk::ButtonBox bbox_shop;
 	Gtk::Button m_button_new_game;
-	Gtk::Button m_button_print;
 	Gtk::Button m_button_round;
 	Gtk::Button m_button_buy_damage_tower;
 	Gtk::Button m_button_buy_freeze_tower;
@@ -26,7 +25,6 @@ class View : public Gtk::Window {
 	Gtk::Label m_label_money;
 	
 	void on_button_new_game_clicked();
-	void on_button_print_clicked();
 	void on_button_round_clicked();
 	void on_button_buy_damage_tower_clicked();
 	void on_button_buy_freeze_tower_clicked();
