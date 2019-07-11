@@ -27,11 +27,8 @@ class View : public Gtk::Window {
 	
 	void on_button_new_game_clicked();
 	void on_button_round_clicked();
-	void on_button_buy_damage_tower_clicked();
-	void on_button_buy_freeze_tower_clicked();
-	void on_button_buy_money_tower_clicked();
 
-	void on_button_drag_data_get(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
+	void on_button_drag_data_get(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time, char tower);
 	void on_label_drop_drag_data_received(const Glib::RefPtr<Gdk::DragContext>& context, int x, int y, const Gtk::SelectionData& selection_data, guint info, guint time, TileView *tileView);
 
  public:
