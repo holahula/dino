@@ -14,6 +14,8 @@ State::State(): hp(100), money(10), round(1), shop(new Shop()), map(new Map()){}
 State::~State() {
     for(Tower* tower : towers) delete tower;
     for(Enemy* enemy : enemies) delete enemy;
+    delete shop;
+    delete map;
 }  
 
 void State::displayMap(){
