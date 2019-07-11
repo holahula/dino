@@ -50,7 +50,7 @@ bool Enemy::isTargetable() {
 
 ostream& operator<<(std::ostream& out, Enemy& enemy) {
     out << "type: " << enemy.getType() << ", hp: " << enemy.getHP() << ", frozen: ";
-    out << (enemy.getFrozen() > 0 ? "Yes" : "No") << endl;
+    out << (enemy.getFrozen() > 0 ? "Yes" : "No") << ", targetable: "<< (enemy.isTargetable() ? "Yes" : "No") << endl;
     return out;
 }
 
