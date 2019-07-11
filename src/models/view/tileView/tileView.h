@@ -9,6 +9,8 @@
 class TileView : public Gtk::Label {
   public:
 	Tile *tile;
+	char type;
+	int row, col;
 	TileView(Tile *);
 	~TileView();
 };
