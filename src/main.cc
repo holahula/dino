@@ -2,14 +2,24 @@
 #include "models/map/map.h"
 #include "models/state/state.h"
 #include "models/tower/tower.h"
+#include "models/view/view.h"
 
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <gtkmm/application.h>
 
 using namespace std;
 
-int main() {
+int main(int argc, char *argv[]) {
+  auto app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
+
+  View view;
+
+  return app->run(view);
+}
+
+void test() {
   stringstream ss;
   unique_ptr<State> game(new State());
 
@@ -77,5 +87,4 @@ int main() {
         break;
     }
   }
-  return 0;
 }
