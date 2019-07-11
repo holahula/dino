@@ -2,12 +2,12 @@
 #define STATE_H_
 
 #include "./../enemy/enemy.h"
-#include "./../tower/tower.h"
-#include "./../shop/shop.h"
 #include "./../map/map.h"
+#include "./../shop/shop.h"
+#include "./../tower/tower.h"
 
-#include <vector>
 #include <stack>
+#include <vector>
 
 /*
 TODO: money management functions,
@@ -18,49 +18,53 @@ TODO: money management functions,
  */
 
 class State {
-    int hp, money, round;
+  int hp, money, round;
 
-    Shop * shop;
-    Map * map;
+  Shop *shop;
+  Map *map;
 
-    std::vector<Tower*> towers;
-    std::vector<Enemy*> enemies;
-    std::stack<Enemy*> pendingEnemies;
+  std::vector<Tower *> towers;
+  std::vector<Enemy *> enemies;
+  std::stack<Enemy *> pendingEnemies;
 
-    bool surviveDmg(int);
-    void incrementMoney(int);
-    // void spend(int);
+  bool surviveDmg(int);
+  void incrementMoney(int);
+  // void spend(int);
 
-    void addTower(Tower *);
-    void addEnemy(Enemy *);
-    void removeEnemy(Enemy *);
+  void addTower(Tower *);
+  void addEnemy(Enemy *);
+  void removeEnemy(Enemy *);
 
-    int constructEnemies(int);
+  int constructEnemies(int);
 
-    int totalHPLost(std::vector<Enemy*>);
+  int totalHPLost(std::vector<Enemy *>);
 
-    bool moveEnemies(int, int);
-    
-    bool preFrame(int, int);
+  bool moveEnemies(int, int);
 
-    void processFrame();
-    void postFrame();
+  bool preFrame(int, int);
 
-    void getMoneyTowerIncome();
-    void updateState(int, int);
+  void processFrame();
+  void postFrame();
 
-    public:
-        static const int MAX_ROUND = 10;
+  void getMoneyTowerIncome();
+  void updateState(int, int);
 
-        State();
-        ~State();
+ public:
+  static const int MAX_ROUND = 10;
 
-        void displayMap();
-        bool buyTower(char, int, int);
-        bool upgradeTower(int, int);
+  State();
+  ~State();
 
-        void startRound();
+  void displayMap();
+  bool buyTower(char, int, int);
+  bool upgradeTower(int, int);
 
+  void startRound();
+  
+  Map& getMap();
+  int getMoney();
+  int getHp();
+  int getRound();
 };
 
 #endif

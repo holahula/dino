@@ -1,16 +1,17 @@
 CXX = g++
-CXXFLAGS = -g -std=c++14 -Wall -MMD
-#CXXFLAGS = -std=c++14 -Wall -MMD
+CXXFLAGS = -c -g -std=c++14 -Wall -MMD
+SOURCES = main.cc models/view/view.cc models/enemy/enemy.cc models/enemy/basic/basic.cc models/enemy/invisible/invisible.cc models/enemy/regenerative/regenerative.cc models/map/map.cc models/map/iterator.cc models/observer/observer.cc models/shop/shop.cc models/state/state.cc models/subject/subject.cc models/tile/tile.cc models/tile/land/landTile.cc models/tile/path/pathTile.cc models/tower/tower.cc models/tower/damage/damage.cc models/tower/freeze/freeze.cc models/tower/money/money.cc exceptions/land-tile-occupied-exception/landTileOccupiedException.cc exceptions/no-tower-exception/noTowerException.cc
+OBJECTS = ${SOURCES:.cc=.o}
 EXEC = td
-OBJECTS = main.o models/enemy/enemy.o models/enemy/basic/basic.o models/enemy/invisible/invisible.o models/enemy/regenerative/regenerative.o models/map/map.o models/observer/observer.o models/shop/shop.o models/state/state.o models/subject/subject.o models/tile/tile.o models/tile/land/landTile.o models/tile/path/pathTile.o models/tower/tower.o models/tower/damage/damage.o models/tower/freeze/freeze.o models/tower/money/money.o exceptions/land-tile-occupied-exception/landTileOccupiedException.o exceptions/no-tower-exception/noTowerException.o
-DEPENDS = ${OBJECTS:.o=.d}
 
-${EXEC}: ${OBJECTS}
-	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC}
+all: ${SOURCES} ${EXEC} 
 
--include ${DEPENDS}
+${EXEC}: ${OBJECTS} 
+	${CXX} ${OBJECTS} -o $@ `pkg-config gtkmm-3.0 --libs`
 
-.PHONY: clean
+.cc.o:
+	${CXX} ${CXXFLAGS} $< -o $@ `pkg-config gtkmm-3.0 --cflags`
 
 clean:
-	rm ${OBJECTS} ${EXEC} ${DEPENDS}
+	rm -rf *.o ${EXEC}
+
