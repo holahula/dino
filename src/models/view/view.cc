@@ -58,16 +58,13 @@ View::View() : panel_menu("Menu"),
 	m_button_buy_money_tower.drag_source_set_icon(icon_money_tower);
 
 	//Connect signals:
-	m_button_buy_damage_tower.signal_drag_data_get().connect(sigc::mem_fun(*this, &View::on_button_drag_data_get));
-	m_button_buy_freeze_tower.signal_drag_data_get().connect(sigc::mem_fun(*this, &View::on_button_drag_data_get));
-	m_button_buy_money_tower.signal_drag_data_get().connect(sigc::mem_fun(*this, &View::on_button_drag_data_get));
+	m_button_buy_damage_tower.signal_drag_data_get().connect(sigc::bind(sigc::mem_fun(*this, &View::on_button_drag_data_get), 'D'));
+	m_button_buy_freeze_tower.signal_drag_data_get().connect(sigc::bind(sigc::mem_fun(*this, &View::on_button_drag_data_get), 'F'));
+	m_button_buy_money_tower.signal_drag_data_get().connect(sigc::bind(sigc::mem_fun(*this, &View::on_button_drag_data_get), 'M'));
 
 	// Signals
 	m_button_new_game.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_new_game_clicked));
 	m_button_round.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_round_clicked));
-	m_button_buy_damage_tower.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_buy_damage_tower_clicked));
-	m_button_buy_freeze_tower.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_buy_freeze_tower_clicked));
-	m_button_buy_money_tower.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_buy_money_tower_clicked));
 
 	// Add widgets to grids
 	bbox_menu.add(m_button_new_game);
@@ -129,35 +126,21 @@ void View::on_button_round_clicked() {
 	game->startRound();
 }
 
-void View::on_button_buy_damage_tower_clicked() {
-	if (!game->buyTower('D', x, y)) {
-		cout << "Invalid Purchase! Damage tower @ (" << x << ", " << y << ") could not be bought" << endl;
-	} else {
-		cout << "Damage tower purchase successful!" << endl;
-	}
-}
-
-void View::on_button_buy_freeze_tower_clicked() {
-	if (!game->buyTower('F', x, y)) {
-		cout << "Invalid Purchase! Freeze tower @ (" << x << ", " << y << ") could not be bought" << endl;
-	} else {
-		cout << "Freeze tower purchase successful!" << endl;
-	}
-}
-
-void View::on_button_buy_money_tower_clicked() {
-	if (!game->buyTower('M', x, y)) {
-		cout << "Invalid Purchase! Money tower @ (" << x << ", " << y << ") could not be bought" << endl;
-	} else {
-		cout << "Money tower purchase successful!" << endl;
-	}
-}
-
-void View::on_button_drag_data_get(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time) {
-  	selection_data.set(selection_data.get_target(), 8, (const guchar*)"I'm Data!", 9);
+void View::on_button_drag_data_get(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time, char tower) {
+  	selection_data.set(selection_data.get_target(), 8, (const guchar*)""+tower, 1);
 }
 
 void View::on_label_drop_drag_data_received(const Glib::RefPtr<Gdk::DragContext>& context, int, int, const Gtk::SelectionData& selection_data, guint info, guint time, TileView *tileView) {
-	tileView->override_background_color(Gdk::RGBA("black"), Gtk::STATE_FLAG_NORMAL);
+	const int length = selection_data.get_length();
+	if((length >= 0) && (selection_data.get_format() == 8))
+	{
+		std::cout << "Received \"" << selection_data.get_data_as_string()<< "\" in label " << std::endl;
+		// if (!game.buyTower('D', x, y)) {
+		// 	cout << "Invalid Purchase! Damage tower @ (" << x << ", " << y << ") could not be bought" << endl;
+		// } else {
+		// 	cout << "Damage tower purchase successful!" << endl;
+		// 	tileView->override_background_color(Gdk::RGBA("black"), Gtk::STATE_FLAG_NORMAL);
+		// }
+	}
 	context->drag_finish(false, false, time);
 }
