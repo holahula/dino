@@ -4,6 +4,7 @@
 #include "../tile.h"
 #include "../../enemy/enemy.h"
 #include <vector>
+#include <iostream>
 
 class PathTile : public Tile {
     std::vector<Enemy*> enemies;
@@ -19,6 +20,7 @@ class PathTile : public Tile {
         void insertEnemy(Enemy *);
         char getType() const override;
         std::vector<Enemy*> & getEnemies();
+        friend std::ostream& operator<<(std::ostream&, PathTile&);
 };
 
 #endif

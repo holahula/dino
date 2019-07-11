@@ -32,6 +32,7 @@ class Enemy : public Observer {
         void removeTowers();
 
         virtual ~Enemy();
+        friend std::ostream& operator<<(std::ostream&, Enemy&);
 };
 
 #endif

@@ -44,6 +44,12 @@ void Enemy::removeTowers(){
     subjects.clear();
 }
 
+ostream& operator<<(std::ostream& out, Enemy& enemy) {
+    out << "type: " << enemy.getType() << ", hp: " << enemy.getHP() << ", frozen: ";
+    out << (enemy.getFrozen() > 0 ? "Yes" : "No") << endl;
+    return out;
+}
+
 Enemy::~Enemy(){
     for(int i = 0; i < subjects.size(); i++){
         subjects[i]->detach(this);

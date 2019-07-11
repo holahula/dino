@@ -48,3 +48,10 @@ vector<Enemy *>& PathTile::getEnemies() {
 void PathTile::insertEnemy(Enemy* newEnemy) {
     enemies.push_back(newEnemy);
 }
+
+ostream& operator<<(ostream& out, PathTile& pathTile) {
+    for (Enemy* enemy: pathTile.getEnemies()) {
+        out << *enemy;
+    }
+    return out;
+}
