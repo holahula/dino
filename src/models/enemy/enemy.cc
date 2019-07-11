@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Enemy::Enemy(int hp) : isFrozen(0), hp(hp) {}
+Enemy::Enemy(int hp) : isFrozen(0), targetable(true), hp(hp) {}
 
 int Enemy::getHP() const {
     return hp;
@@ -44,9 +44,13 @@ void Enemy::removeTowers(){
     subjects.clear();
 }
 
+bool Enemy::isTargetable() {
+    return targetable;
+}
+
 ostream& operator<<(std::ostream& out, Enemy& enemy) {
     out << "type: " << enemy.getType() << ", hp: " << enemy.getHP() << ", frozen: ";
-    out << (enemy.getFrozen() > 0 ? "Yes" : "No") << endl;
+    out << (enemy.getFrozen() > 0 ? "Yes" : "No") << ", targetable: "<< (enemy.isTargetable() ? "Yes" : "No") << endl;
     return out;
 }
 

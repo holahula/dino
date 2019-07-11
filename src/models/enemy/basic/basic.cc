@@ -8,4 +8,6 @@ char BasicEnemy::getType() const {
     return 'B';
 }
 
+void BasicEnemy::nextState() {}
+
 BasicEnemy::~BasicEnemy(){}

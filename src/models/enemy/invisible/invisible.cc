@@ -3,14 +3,20 @@
 
 using namespace std;
 
-InvisibleEnemy::InvisibleEnemy(int hp) : Enemy::Enemy(hp), visibility(false){}
+InvisibleEnemy::InvisibleEnemy(int hp) : Enemy::Enemy(hp){
+    targetable = false;
+}
 
 void InvisibleEnemy::updateVisibility(){
-    visibility = !visibility;
+    targetable = !targetable;
 }
 
 char InvisibleEnemy::getType() const {
     return 'I';
+}
+
+void InvisibleEnemy::nextState() { 
+    updateVisibility();
 }
 
 InvisibleEnemy::~InvisibleEnemy(){}

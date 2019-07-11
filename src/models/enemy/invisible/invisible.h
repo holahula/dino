@@ -3,15 +3,17 @@
 
 #include "./../enemy.h"
 
+class Tower;
 class InvisibleEnemy : public Enemy {
-    bool visibility;
-
     public:
         InvisibleEnemy(int);
 
         void updateVisibility();
-        char getType() const override;
         
+        char getType() const override;
+
+        virtual void nextState() override;
+
         ~InvisibleEnemy();
 };
 
