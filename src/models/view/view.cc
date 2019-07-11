@@ -1,5 +1,7 @@
 #include "view.h"
 #include "tileView/tileView.h"
+#include "../tile/tile.h"
+#include "../tile/land/landTile.h"
 #include "../tile/path/pathTile.h"
 #include "./../enemy/enemy.h"
 #include "./../map/map.h"
@@ -98,12 +100,13 @@ void View::on_button_new_game_clicked() {
 	int row = 0, col = 0, nc = map->getHeight();
 	for(auto it = map->begin(); it != map->end(); ++it) {
 		TileView* tileView = new TileView(&(*it));
-		if (tileView->tile->getType() == '.') {
+		if (tileView->type == '.') {
 			tileView->drag_dest_set(listTargets);
 		}
 		tileView->signal_drag_data_received().connect(sigc::bind(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received), tileView));
-		tileView->override_background_color(Gdk::RGBA(tileView->tile->getType() == '.' ? "green" : "brown"), Gtk::STATE_FLAG_NORMAL);
+		tileView->override_background_color(Gdk::RGBA(tileView->type == '.' ? "green" : "brown"), Gtk::STATE_FLAG_NORMAL);
 		tiles.attach(*tileView, row, col, 1, 1);
+				
 		
 		if (col < nc - 1) {
 			col++;
@@ -155,11 +158,6 @@ void View::on_button_drag_data_get(const Glib::RefPtr<Gdk::DragContext>& context
 }
 
 void View::on_label_drop_drag_data_received(const Glib::RefPtr<Gdk::DragContext>& context, int, int, const Gtk::SelectionData& selection_data, guint info, guint time, TileView *tileView) {
-	const int length = selection_data.get_length();
-	if ((length >= 0) && (selection_data.get_format() == 8)) {
-		// if(tileView->tile->getType() == '.') {
-		// 	std::cout << "yay";
-		// }
-	}
+	tileView->override_background_color(Gdk::RGBA("black"), Gtk::STATE_FLAG_NORMAL);
 	context->drag_finish(false, false, time);
 }
