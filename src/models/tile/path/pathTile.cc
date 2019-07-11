@@ -51,7 +51,7 @@ void PathTile::insertEnemy(Enemy* newEnemy) {
 
 ostream& operator<<(ostream& out, PathTile& pathTile) {
     for (Enemy* enemy: pathTile.getEnemies()) {
-        out << (*enemy);
+        out << *enemy;
     }
     return out;
 }
