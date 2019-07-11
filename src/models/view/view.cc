@@ -1,4 +1,5 @@
 #include "view.h"
+#include "tileView/tileView.h"
 #include "../tile/path/pathTile.h"
 #include "./../enemy/enemy.h"
 #include "./../map/map.h"
@@ -46,6 +47,14 @@ View::View() : panel_menu("Menu"),
 	m_button_buy_freeze_tower.drag_source_set(listTargets);
 	m_button_buy_money_tower.drag_source_set(listTargets);
 
+	// Customize drag and drop icon
+	Glib::RefPtr<Gdk::Pixbuf> icon_damage_tower = Gdk::Pixbuf::create_from_file("models/view/damage_tower.png");
+	m_button_buy_damage_tower.drag_source_set_icon(icon_damage_tower);
+	Glib::RefPtr<Gdk::Pixbuf> icon_freeze_tower = Gdk::Pixbuf::create_from_file("models/view/freeze_tower.png");
+	m_button_buy_freeze_tower.drag_source_set_icon(icon_freeze_tower);
+	Glib::RefPtr<Gdk::Pixbuf> icon_money_tower = Gdk::Pixbuf::create_from_file("models/view/money_tower.png");
+	m_button_buy_money_tower.drag_source_set_icon(icon_money_tower);
+
 	//Connect signals:
 	m_button_buy_damage_tower.signal_drag_data_get().connect(sigc::mem_fun(*this, &View::on_button_drag_data_get));
 	m_button_buy_freeze_tower.signal_drag_data_get().connect(sigc::mem_fun(*this, &View::on_button_drag_data_get));
@@ -88,13 +97,13 @@ void View::on_button_new_game_clicked() {
 	auto map = game.getMap();
 	int row = 0, col = 0, nc = map.getHeight();
 	for(auto it = map.begin(); it != map.end(); ++it) {
-		Gtk::Label* label = Gtk::manage(new Gtk::Label("\t\t\n\t\t\n"));
-		if ((*it).getType() == '.') {
-			label->drag_dest_set(listTargets);
+		TileView* tileView = new TileView(&(*it));
+		if (tileView->tile->getType() == '.') {
+			tileView->drag_dest_set(listTargets);
 		}
-		label->signal_drag_data_received().connect(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received));
-		label->override_background_color(Gdk::RGBA((*it).getType() == '.' ? "green" : "brown"), Gtk::STATE_FLAG_NORMAL);
-		tiles.attach(*label, row, col, 1, 1);
+		tileView->signal_drag_data_received().connect(sigc::bind(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received), tileView));
+		tileView->override_background_color(Gdk::RGBA(tileView->tile->getType() == '.' ? "green" : "brown"), Gtk::STATE_FLAG_NORMAL);
+		tiles.attach(*tileView, row, col, 1, 1);
 		
 		if (col < nc - 1) {
 			col++;
@@ -145,11 +154,12 @@ void View::on_button_drag_data_get(const Glib::RefPtr<Gdk::DragContext>& context
   	selection_data.set(selection_data.get_target(), 8, (const guchar*)"I'm Data!", 9);
 }
 
-void View::on_label_drop_drag_data_received(const Glib::RefPtr<Gdk::DragContext>& context, int, int, const Gtk::SelectionData& selection_data, guint info, guint time) {
+void View::on_label_drop_drag_data_received(const Glib::RefPtr<Gdk::DragContext>& context, int, int, const Gtk::SelectionData& selection_data, guint info, guint time, TileView *tileView) {
 	const int length = selection_data.get_length();
 	if ((length >= 0) && (selection_data.get_format() == 8)) {
-		std::cout << "Received \"" << selection_data.get_data_as_string() << "\" in label " << std::endl;
+		// if(tileView->tile->getType() == '.') {
+		// 	std::cout << "yay";
+		// }
 	}
-
 	context->drag_finish(false, false, time);
 }
