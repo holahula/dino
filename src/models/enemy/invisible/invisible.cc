@@ -3,10 +3,12 @@
 
 using namespace std;
 
-InvisibleEnemy::InvisibleEnemy(int hp) : Enemy::Enemy(hp), visible(false){}
+InvisibleEnemy::InvisibleEnemy(int hp) : Enemy::Enemy(hp){
+    targetable = false;
+}
 
 void InvisibleEnemy::updateVisibility(){
-    visible = !visible;
+    targetable = !targetable;
 }
 
 char InvisibleEnemy::getType() const {
@@ -15,12 +17,6 @@ char InvisibleEnemy::getType() const {
 
 void InvisibleEnemy::nextState() { 
     updateVisibility();
-}
-
-void InvisibleEnemy::notify(Tower* tower) {
-    if (visible) {
-        Enemy::notify(tower);
-    }
 }
 
 InvisibleEnemy::~InvisibleEnemy(){}

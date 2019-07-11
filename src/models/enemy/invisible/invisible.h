@@ -5,8 +5,6 @@
 
 class Tower;
 class InvisibleEnemy : public Enemy {
-    bool visible;
-
     public:
         InvisibleEnemy(int);
 
@@ -15,8 +13,6 @@ class InvisibleEnemy : public Enemy {
         char getType() const override;
 
         virtual void nextState() override;
-
-        virtual void notify(Tower*) override;
 
         ~InvisibleEnemy();
 };

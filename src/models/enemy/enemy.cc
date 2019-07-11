@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Enemy::Enemy(int hp) : isFrozen(0), hp(hp) {}
+Enemy::Enemy(int hp) : isFrozen(0), targetable(true), hp(hp) {}
 
 int Enemy::getHP() const {
     return hp;
@@ -42,6 +42,10 @@ void Enemy::removeTowers(){
         subjects[i]->detach(this);
     }
     subjects.clear();
+}
+
+bool Enemy::isTargetable() {
+    return targetable;
 }
 
 ostream& operator<<(std::ostream& out, Enemy& enemy) {

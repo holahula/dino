@@ -303,7 +303,9 @@ void Map::attachAllEnemies() {
     for (int i=(int)path.size()-1; i>=0; --i) {
         for (Tower* tower: insideRange[path[i]]) {
             for (Enemy* enemy : path[i]->getEnemies()) {
-                tower->attach(enemy);
+                if (enemy->isTargetable()) {
+                    tower->attach(enemy);
+                }
             }
         }
     }

@@ -13,10 +13,9 @@ class Enemy : public Observer {
         std::vector<Tower*> subjects;
         // private b/c movement is controlled by game state
         int isFrozen;
-
     protected:
         int hp;
-
+        bool targetable;
     public:
         Enemy(int);
 
@@ -30,6 +29,7 @@ class Enemy : public Observer {
         virtual void notify(Tower*) override;
         void observeTowers(std::vector<Tower*>);
         void removeTowers();
+        bool isTargetable();
         virtual ~Enemy();
         friend std::ostream& operator<<(std::ostream&, Enemy&);
 };
