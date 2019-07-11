@@ -57,7 +57,7 @@ ostream& operator<<(ostream& out, Map & currFrame) {
             continue;
         }
         out << "Path Tile: (" << currFrame.path[i]->location().first << ", " << currFrame.path[i]->location().second;
-        out << "), has balloons: ";
+        out << "), has balloons: " << endl;
         out << *currFrame.path[i];
     }
     return out;
