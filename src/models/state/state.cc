@@ -197,3 +197,15 @@ void State::startRound(){
     }
     updateState(hp, round);
 }
+
+int State::getMoney() {
+	return money;
+}
+
+int State::getHp() {
+	return hp;
+}
+
+int State::getRound() {
+	return round;
+}
