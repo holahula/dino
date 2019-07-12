@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 
 void test() {
   stringstream ss;
-  State game;
+  unique_ptr<State> game(new State());
 
   char cmd, cmd2;
   int x, y;
@@ -31,7 +31,7 @@ void test() {
     switch (cmd) {
       // Start a new game
       case 'n':
-        game = State();
+        game = unique_ptr<State>(new State());
         cout << "game created" << endl;
         break;
       // Buy a tower
@@ -40,7 +40,7 @@ void test() {
         switch (cmd2) {
           // damage tower
           case 'd':
-            if (!game.buyTower('D', x, y)) {
+            if (!game->buyTower('D', x, y)) {
               cout << "Invalid Purchase! Damage tower @ (" << x << ", " << y << ") could not be bought" << endl;
             } else {
               cout << "Damage tower purchase successful!" << endl;
@@ -48,7 +48,7 @@ void test() {
             break;
           // freeze tower
           case 'f':
-            if (!game.buyTower('F', x, y)) {
+            if (!game->buyTower('F', x, y)) {
               cout << "Invalid Purchase! Freeze tower @ (" << x << ", " << y << ") could not be bought" << endl;
             } else {
               cout << "Freeze tower purchase successful!" << endl;
@@ -56,7 +56,7 @@ void test() {
             break;
           // money tower
           case 'm':
-            if (!game.buyTower('M', x, y)) {
+            if (!game->buyTower('M', x, y)) {
               cout << "Invalid Purchase! Money tower @ (" << x << ", " << y << ") could not be bought" << endl;
             } else {
               cout << "Money tower purchase successful!" << endl;
@@ -67,7 +67,7 @@ void test() {
       // Upgrade a tower
       case 'u':
         cin >> x >> y;
-        if (!game.upgradeTower(x, y)) {
+        if (!game->upgradeTower(x, y)) {
           cout << "Invalid Upgrade! Tower @ (" << x << ", " << y << ") could not be upgraded" << endl;
         } else {
           cout << "Upgrade successful!" << endl;
@@ -75,11 +75,11 @@ void test() {
         break;
       // Start Next round
       case 'r':
-        game.startRound();
+        game->startRound();
         break;
       // Print map
       case 'p':
-        game.displayMap();
+        game->displayMap();
         break;
 
       default:
