@@ -93,6 +93,7 @@ bool State::sellTower(int x, int y) {
     }
 
     Tower* t = map->getTower(x,y);
+    shop->sell(money, t);
     map->sellTower(x,y);
     removeTower(t);
     return true;
