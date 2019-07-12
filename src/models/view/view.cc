@@ -82,7 +82,7 @@ View::~View() {}
 void View::on_button_new_game_clicked() {
 	// Start a new game
 	game = State();
-
+	cout << "Hello!" << endl;
 	// Initialize widgets
 	m_label_money.set_text("Money: " + to_string(game.getMoney()));
 
