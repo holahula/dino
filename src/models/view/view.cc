@@ -92,12 +92,12 @@ void View::on_button_new_game_clicked() {
 	bbox_shop.add(m_button_buy_damage_tower);
 	bbox_shop.add(m_button_buy_freeze_tower);
 	bbox_shop.add(m_button_buy_money_tower);
-	
+	cout << "haf 0" << endl;
 	// Build grid of tiles using the map
 	Map* map = game.getMap();
-
+	cout << "haf 1" << endl;
 	int row = 0, col = 0, nc = map->getHeight();
-
+	cout << "haf 2" << endl;
 	for(Map::Iterator it = map->begin(); it != map->end(); ++it) {
 		cout << "plz 0 " << endl;
 		TileView* tileView = new TileView(&(*it));
