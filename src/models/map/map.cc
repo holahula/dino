@@ -14,6 +14,7 @@
 
 using namespace std;
 
+
 MapImpl::~MapImpl() {
     for (size_t i=0; i<map.size(); ++i) {
         for (size_t j=0; j<map[i].size(); ++j) {
