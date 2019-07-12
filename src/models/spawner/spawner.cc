@@ -122,8 +122,8 @@ void Spawner::updateTraining(int round){
 void Spawner::updateState(int round, int hpLost, double enemyHP){
     // cout << "state being updated!" << endl;
     // cout << round << " " << hpLost << " " << enemyHP << endl;
-    cout << difficulty << " " << status << " " << gold << " " << spawn << endl;
-    cout << statusMultiplier << " " << goldMultiplier << " " << spawnMultiplier << endl;
+    // cout << difficulty << " " << status << " " << gold << " " << spawn << endl;
+    // cout << statusMultiplier << " " << goldMultiplier << " " << spawnMultiplier << endl;
     
     playerUpdate(hpLost);
     enemyUpdate(enemyHP);
@@ -133,8 +133,8 @@ void Spawner::updateState(int round, int hpLost, double enemyHP){
         updateTraining(round);
     }
 
-    cout << difficulty << " " << status << " " << gold << " " << spawn << endl;
-    cout << statusMultiplier << " " << goldMultiplier << " " << spawnMultiplier << endl;
+    // cout << difficulty << " " << status << " " << gold << " " << spawn << endl;
+    // cout << statusMultiplier << " " << goldMultiplier << " " << spawnMultiplier << endl;
 }
 
 bool Spawner::isBossLevel(int round) {
@@ -161,8 +161,8 @@ uniform_int_distribution<> Spawner::generateUniformDistribution(int min, int max
 }
 
 Enemy* Spawner::generateEnemy(int hp, int round, bool invis, int regenerative){
-    cout << round << " "<< hp << " " << invis << " " << regenerative << endl;
-    cout << regen << invisible << endl;
+    // cout << round << " "<< hp << " " << invis << " " << regenerative << endl;
+    // cout << regen << invisible << endl;
     if(!regen && !invisible){
         return new BasicEnemy(hp);
     } else if (!regen) {
