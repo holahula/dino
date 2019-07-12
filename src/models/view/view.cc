@@ -22,7 +22,8 @@ View::View() : panel_menu("Menu"),
 				m_button_round("Start Next Round"),
 				m_button_buy_damage_tower("Buy Damage Tower"),
 				m_button_buy_freeze_tower("Buy Freeze Tower"),
-				m_button_buy_money_tower("Buy Money Tower") {
+				m_button_buy_money_tower("Buy Money Tower"),
+				game(State()) {
 
 	// Customizations
 	set_title("Tower Defense");
