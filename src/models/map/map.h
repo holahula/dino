@@ -3,6 +3,7 @@
 
 #include "./tile/tile.h"
 #include "./tile/path/pathTile.h"
+#include "./tile/land/landTile.h"
 #include "../enemy/enemy.h"
 #include <vector>
 #include <utility>
@@ -16,6 +17,7 @@ struct MapImpl {
     int height;
     std::vector<std::vector<Tile*> > map;
     std::vector<PathTile*> path;
+    std::vector<LandTile*> land;
     std::unordered_map<PathTile*, std::unordered_set<Tower*> > insideRange;
     public:
         ~MapImpl();
@@ -52,6 +54,7 @@ class Map {
         bool isTower(int x, int y);
         bool inMap(int x, int y);
         Tower *getTower(int x, int y);
+        LandTile* getLandTile(int x, int y);
         void insertTower(Tower*, int x, int y);
         bool sellTower(int x, int y);
         void increaseTowerRange(Tower*, int x, int y);

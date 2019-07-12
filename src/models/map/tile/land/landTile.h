@@ -11,7 +11,7 @@ class LandTile : public Tile {
         LandTile(int, int);
         ~LandTile();
         char getType() const override;
-        bool isOccupied() const;
+        bool isOccupied() const override;
         void removeTower();
         Tower* getTower();
         void addTower(Tower *);

@@ -12,7 +12,7 @@ int Enemy::getHP() const {
 }
 
 void Enemy::decFrozen() {
-    isFrozen = max(--isFrozen, 0);
+    isFrozen = isFrozen > 0 ? isFrozen-1 : 0;
 }
 
 int Enemy::getFrozen() const {
@@ -32,13 +32,13 @@ void Enemy::notify(Tower * tower){
 }
 
 void Enemy::observeTowers(vector<Tower*> towers){
-    for(int i = 0; i < towers.size(); i++){
+    for(size_t i = 0; i < towers.size(); ++i) {
         towers[i]->attach(this);
     }
 }
 
 void Enemy::removeTowers(){
-    for(int i = 0; i < subjects.size(); i++){
+    for(size_t i = 0; i < subjects.size(); ++i){
         subjects[i]->detach(this);
     }
     subjects.clear();
@@ -55,7 +55,7 @@ ostream& operator<<(std::ostream& out, Enemy& enemy) {
 }
 
 Enemy::~Enemy(){
-    for(int i = 0; i < subjects.size(); i++){
+    for(size_t i = 0; i < subjects.size(); ++i){
         subjects[i]->detach(this);
     }
 }

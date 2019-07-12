@@ -13,6 +13,7 @@
 #include <map>
 #include <random>
 #include <utility>
+#include <chrono>
 
 using namespace std;
 
@@ -194,8 +195,8 @@ vector<Enemy*> Spawner::generateEnemies(int round){
         maxHP += (int)ceil((double)health * (double)round / 50.0);
     }
 
-    random_device rd;
-    mt19937 gen(rd());
+    unsigned seed1 = chrono::system_clock::now().time_since_epoch().count();
+    mt19937 gen(seed1);
 
     lognormal_distribution<> logDist = generateLogDistribution(log(maxHP), 1.0);
     bernoulli_distribution bernoulliDist = generateBernoulliDistribution((double)round/50.0);
