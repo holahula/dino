@@ -91,7 +91,6 @@ bool State::sellTower(int x, int y) {
     if (!map->inMap(x,y) || !map->isTower(x,y)) {
         return false;
     }
-
     Tower* t = map->getTower(x,y);
     shop->sell(money, t);
     map->sellTower(x,y);

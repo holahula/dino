@@ -299,7 +299,7 @@ bool Map::sellTower(int x, int y) {
     }
     Tower* tower = getTower(x,y);
     for (size_t i=0; i<p->path.size(); ++i) {
-        unordered_set<Tower*> currTowers = p->insideRange[p->path[i]];
+        unordered_set<Tower*>& currTowers = p->insideRange[p->path[i]];
         if (currTowers.count(tower)) {
             currTowers.erase(tower);
         }
