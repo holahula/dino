@@ -201,7 +201,6 @@ vector<Enemy*> Spawner::generateEnemies(int round){
     bernoulli_distribution bernoulliDist = generateBernoulliDistribution((double)round/50.0);
     uniform_int_distribution<> uniformDist = generateUniformDistribution(1, 4);
 
-    // have size, and max health - generate mobs!
     for(int i = 0; i < size; i++){
         Enemy* e = generateEnemy(max(1, maxHP-round_(logDist(gen))), round, bernoulliDist(gen), uniformDist(gen));
         enemies.push_back(e);
@@ -211,6 +210,6 @@ vector<Enemy*> Spawner::generateEnemies(int round){
 }
 
 int Spawner::getBonusGold(){
-    return max(0.0, (50 * difficulty/100) + gold);
+    return (int)max(0.0, (50.0 * (double)difficulty/100.0) + (double)gold);
 }
 

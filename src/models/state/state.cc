@@ -149,17 +149,22 @@ void State::processFrame(){
 
 // prepares for the next frame, detachs all the enemies from their respective towers
 void State::postFrame(){
-    // displayMap();
+    displayMap();
     map->detachAllEnemies();
 }
 
 void State::getMoneyTowerIncome(){
-    for(auto& tower : towers){
+    for(Tower* tower : towers){
         pair<int, int> type = tower->getType();
         if(type.first == 'M'){
             money += type.second;
         }
     }
+}
+
+void State::getRoundIncome(){
+    getMoneyTowerIncome();
+    money += spawner->getBonusGold();
 }
 
 void State::updateState(int hp, int hpLost, double remainingEnemyHP){
@@ -172,10 +177,8 @@ void State::updateState(int hp, int hpLost, double remainingEnemyHP){
         return;
     }
 
-    getMoneyTowerIncome();
-
+    getRoundIncome();
     // spawner interactions
-    money += spawner->getBonusGold();
     spawner->updateState(round, hpLost, remainingEnemyHP);
 
 

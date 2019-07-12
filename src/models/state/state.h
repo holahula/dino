@@ -49,6 +49,7 @@ class State {
         void postFrame();
 
         void getMoneyTowerIncome();
+        void getRoundIncome();
         void updateState(int, int, double);
 
     public:
