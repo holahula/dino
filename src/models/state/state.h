@@ -39,7 +39,7 @@ class State {
 
         int constructEnemies();
 
-        int totalHPLost(std::vector<Enemy *>);
+        int totalHP(std::vector<Enemy *>);
 
         bool moveEnemies(int, int);
 
@@ -49,7 +49,7 @@ class State {
         void postFrame();
 
         void getMoneyTowerIncome();
-        void updateState(int, int);
+        void updateState(int, int, double);
 
     public:
         static const int MAX_ROUND = 50;

@@ -1,13 +1,22 @@
 #include "./../enemy/enemy.h"
 #include "./../enemy/basic/basic.h"
-
+#include "./../enemy/invisible/invisible.h"
+#include "./../enemy/regenerative/regenerative.h"
 #include "spawner.h"
 
+#include <iostream>
+#include <iomanip>
 #include <vector>
+#include <cmath>
+#include <algorithm>
+#include <string>
+#include <map>
+#include <random>
+#include <utility>
 
 using namespace std;
 
-Spawner::Spawner(): difficulty(10), status(1), gold(1), spawn(1), statusMultiplier(1), goldMultiplier(1), spawnMultiplier(1) {}
+Spawner::Spawner(): regen(false), invisible(false), training(false), difficulty(10), status(1), gold(1), spawn(1), statusMultiplier(1), goldMultiplier(1), spawnMultiplier(1), health(1), armor(1) {}
 Spawner::~Spawner() {}
 
 void Spawner::playerUpdate(int hpLost){
@@ -72,15 +81,59 @@ void Spawner::enemyUpdate(double enemyHP){
 }
 
 void Spawner::updatePoints(){
-    status *= statusMultiplier;
-    spawner *= spawnerMultiplier;
-    gold *= goldMultiplier;
+    statusMultiplier = max(0.01, statusMultiplier);
+    goldMultiplier = max(0.01, goldMultiplier);
+    spawnMultiplier = max(0.01, spawnMultiplier);
+
+    status = max(0.01, status * statusMultiplier);
+    gold = max(0.01, gold * goldMultiplier);
+    spawn = max(0.01, spawn * spawnMultiplier);
 }
 
-void Spawner::updateState(int hpLost, double enemyHP){
+void Spawner::updateHealth(){
+    health = max(1.0, health * status + (20 * difficulty/100));
+}
+
+void Spawner::updateArmor(){
+    armor = max(1.0, armor * (status / 4) + (20 * difficulty/100));
+}
+
+void Spawner::updateEnemyType(){
+    (armor >= (double)INVISIBLE_THRESHOLD) ? invisible = true : invisible = false;
+    (armor >= (double)REGENERATIVE_THRESHOLD) ? regen = true : regen = false;
+}
+
+void Spawner::updateEnemies(){
+    updateHealth();
+    updateArmor();
+    updateEnemyType();
+}
+
+void Spawner::updateTraining(int round){
+    status++;
+    spawn++;
+
+    if(status == 19 || spawn == 19){
+        training = !training;
+    }
+}
+
+void Spawner::updateState(int round, int hpLost, double enemyHP){
+    // cout << "state being updated!" << endl;
+    // cout << round << " " << hpLost << " " << enemyHP << endl;
+    cout << difficulty << " " << status << " " << gold << " " << spawn << endl;
+    cout << statusMultiplier << " " << goldMultiplier << " " << spawnMultiplier << endl;
+    
     playerUpdate(hpLost);
     enemyUpdate(enemyHP);
     updatePoints();
+    updateEnemies();
+    if(!training && round % 2 == 0) {
+        updateTraining(round);
+    }
+    
+    cout << difficulty << " " << status << " " << gold << " " << spawn << endl;
+    cout << statusMultiplier << " " << goldMultiplier << " " << spawnMultiplier << endl;
 }
 
 bool Spawner::isBossLevel(int round) {
@@ -88,17 +141,76 @@ bool Spawner::isBossLevel(int round) {
 }
 
 int Spawner::hordeSize() {
-    return max(20, 20 + (30 * difficulty / 100) + spawn)
+    return max(20.0, 20 + (30 * difficulty / 100) + spawn);
 }
 
-vector<Enemy*> Spawner::generateEnemies(){
-    int amount = hordeSize()
+lognormal_distribution<> Spawner::generateLogDistribution(double max, double min) {
+    lognormal_distribution<> d(max, min);
+    return d;
+}
+
+bernoulli_distribution Spawner::generateBernoulliDistribution(double ratio) {
+    bernoulli_distribution d(ratio);
+    return d;
+}
+
+uniform_int_distribution<> Spawner::generateUniformDistribution(int min, int max) {
+    uniform_int_distribution<> d(min, max);
+    return d;
+}
+
+Enemy* Spawner::generateEnemy(int hp, int round, bool invis, int regenerative){
+    cout << round << " "<< hp << " " << invis << " " << regenerative << endl;
+    cout << regen << invisible << endl;
+    if(!regen && !invisible){
+        return new BasicEnemy(hp);
+    } else if (!regen) {
+        if(invis) return new InvisibleEnemy(hp);
+        else return new BasicEnemy(hp);   
+    } else {
+        if(regenerative >= 3) return new RegenerativeEnemy(hp, 1);
+        else if (regenerative == 2) return new InvisibleEnemy(hp);
+        else return new BasicEnemy(hp);
+    }
+}
+
+int round_(double n){
+    return round(n);
+}
+
+vector<Enemy*> Spawner::generateEnemies(int round){
     vector<Enemy*> enemies;
-    enemies.push_back(new BasicEnemy(1));
+
+    int maxHP = health;
+    int size = 0;
+
+    if(round == 1) size = 20;
+    else size = hordeSize();
+    
+    bool boss = isBossLevel(round);
+
+    if(boss) {
+        size += (int)ceil((double)size * (double)round / 50.0);
+        maxHP += (int)ceil((double)health * (double)round / 50.0);
+    }
+
+    random_device rd;
+    mt19937 gen(rd());
+
+    lognormal_distribution<> logDist = generateLogDistribution(log(maxHP), 1.0);
+    bernoulli_distribution bernoulliDist = generateBernoulliDistribution((double)round/50.0);
+    uniform_int_distribution<> uniformDist = generateUniformDistribution(1, 4);
+
+    // have size, and max health - generate mobs!
+    for(int i = 0; i < size; i++){
+        Enemy* e = generateEnemy(max(1, maxHP-round_(logDist(gen))), round, bernoulliDist(gen), uniformDist(gen));
+        enemies.push_back(e);
+    }
 
     return enemies;
 }
 
 int Spawner::getBonusGold(){
-    return (50 * difficulty/100) + gold;
+    return max(0.0, (50 * difficulty/100) + gold);
 }
+

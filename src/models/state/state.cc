@@ -28,10 +28,11 @@ void State::incrementMoney(int amount) {
     money += amount;
 }
 
-bool State::surviveDmg(int amount) {
-    if(hp-amount <= 0) return false;
+bool State::surviveDmg(int damage) {
+    hp -= damage;
 
-    hp -= amount;
+    if(hp <= 0) return false;
+
     return true;
 }
 
@@ -87,14 +88,15 @@ bool State::upgradeTower(int x, int y){
 *****************************/
 
 int State::constructEnemies() {
-    vector<Enemy*> generatedEnemies = spawner->generateEnemies();
+    vector<Enemy*> generatedEnemies = spawner->generateEnemies(round);
     for(auto e : generatedEnemies){
         addEnemy(e);
     }
+    cout << "TOTAL ENEMIES GENERATED: " << generatedEnemies.size() << endl;
     return generatedEnemies.size();
 }
 
-int State::totalHPLost(vector<Enemy*> enemies){
+int State::totalHP(vector<Enemy*> enemies){
     int total = 0;
     for(auto &e : enemies) {
         total += e->getHP();
@@ -105,7 +107,7 @@ int State::totalHPLost(vector<Enemy*> enemies){
 bool State::moveEnemies(int frame, int size){
     vector<Enemy*> escaped = map->nextFrame();
 
-    if(!surviveDmg(totalHPLost(escaped))){
+    if(!surviveDmg(totalHP(escaped))){
         return false;
     }
     // changed from Enemy* to auto
@@ -147,7 +149,7 @@ void State::processFrame(){
 
 // prepares for the next frame, detachs all the enemies from their respective towers
 void State::postFrame(){
-    displayMap();
+    // displayMap();
     map->detachAllEnemies();
 }
 
@@ -160,15 +162,22 @@ void State::getMoneyTowerIncome(){
     }
 }
 
-void State::updateState(int hp, int round){
+void State::updateState(int hp, int hpLost, double remainingEnemyHP){
     if(hp <= 0) {
         // TODO: handle death, clean up everything
         cout << "dead on round " << round << endl;
+        return;
     } else if(round == MAX_ROUND){
         cout << "winner winner chicken dinner" << endl;
+        return;
     }
 
     getMoneyTowerIncome();
+
+    // spawner interactions
+    money += spawner->getBonusGold();
+    spawner->updateState(round, hpLost, remainingEnemyHP);
+
 
     cout << "You have " << hp << " HP" << endl;
     cout << "You have $" << money << endl;
@@ -177,26 +186,26 @@ void State::updateState(int hp, int round){
 }
 
 void State::startRound(){
-    cout << "Round " << round << "!" << endl;
+    cout << "Round " << round << ":" << endl;
 
     int frame = 1;
-    int size = constructEnemies();
     bool status;
+    int size = constructEnemies();
+    int hpStartRound = hp;
+    int totalEnemyHP = totalHP(enemies);
     // round while loop 
     while(enemies.size() != 0){
         cout << "Frame: " << frame << endl;
         status = preFrame(frame, size);
-        if(!status) {
-            cout << "pre-frame status error" << endl;
-            break;
-        }
-        processFrame();
+        if(!status) break;
 
+        processFrame();
         postFrame();
 
         frame++;
     }
-    updateState(hp, round);
+
+    updateState(hp, hpStartRound - hp, (double)(hpStartRound - hp)/(double)totalEnemyHP);
 }
 
 /*****************************
