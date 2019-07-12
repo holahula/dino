@@ -1,7 +1,8 @@
 #include "./../shop/shop.h"
 #include "./../map/map.h"
-#include "./../tile/path/pathTile.h"
 #include "./../enemy/basic/basic.h"
+#include "./../spawner/spawner.h"
+
 #include "state.h"
 
 #include <vector>
@@ -9,13 +10,14 @@
 
 using namespace std;
 
-State::State(): hp(100), money(10), round(1), shop(new Shop()), map(new Map()){}
+State::State(): hp(100), money(10), round(1), shop(new Shop()), map(new Map()), spawner(new Spawner()){}
 
 State::~State() {
     for(Tower* tower : towers) delete tower;
     for(Enemy* enemy : enemies) delete enemy;
     delete shop;
     delete map;
+    delete spawner;
 }  
 
 void State::displayMap(){
@@ -47,6 +49,7 @@ void State::removeEnemy(Enemy* enemy){
     delete enemy;
 }
 
+
 /******************************
     BETWEEN ROUND FUNCTIONS
 ******************************/
@@ -58,10 +61,6 @@ bool State::buyTower(char type, int x, int y){
     
     Tower* t = shop->newTower(money, type);
     addTower(t);
-
-    // if(type == 'D'){
-    //     t = shop->newDamageTower(money);
-    // }
 
     map->insertTower(t, x, y);
 
@@ -87,12 +86,12 @@ bool State::upgradeTower(int x, int y){
     DURING ROUND FUNCTIONS
 *****************************/
 
-// based on round, construct enemies -> insert them into state enemy vector
-int State::constructEnemies(int round) {
-    for(int i = 0; i < 10; i++){
-        addEnemy(new BasicEnemy(2));
+int State::constructEnemies() {
+    vector<Enemy*> generatedEnemies = spawner->generateEnemies();
+    for(auto e : generatedEnemies){
+        addEnemy(e);
     }
-    return 10;
+    return generatedEnemies.size();
 }
 
 int State::totalHPLost(vector<Enemy*> enemies){
@@ -109,8 +108,8 @@ bool State::moveEnemies(int frame, int size){
     if(!surviveDmg(totalHPLost(escaped))){
         return false;
     }
-
-    for(Enemy* enemy: escaped){
+    // changed from Enemy* to auto
+    for(auto enemy: escaped){
         removeEnemy(enemy);
     }
 
@@ -181,7 +180,7 @@ void State::startRound(){
     cout << "Round " << round << "!" << endl;
 
     int frame = 1;
-    int size = constructEnemies(round);
+    int size = constructEnemies();
     bool status;
     // round while loop 
     while(enemies.size() != 0){
@@ -200,12 +199,16 @@ void State::startRound(){
     updateState(hp, round);
 }
 
-int State::getMoney() {
-	return money;
-}
+/*****************************
+    GETTERS AND SETTERS
+*****************************/
 
 int State::getHp() {
 	return hp;
+}
+
+int State::getMoney() {
+	return money;
 }
 
 int State::getRound() {
