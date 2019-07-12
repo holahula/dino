@@ -87,7 +87,7 @@ void View::on_button_new_game_clicked() {
 	game = new State();
 
 	// Initialize widgets
-	m_label_money.set_text("Money: " + to_string(game.getMoney()));
+	m_label_money.set_text("Money: " + to_string(game->getMoney()));
 
 	//Add widgets to grid
 	bbox_menu.add(m_button_round);
@@ -97,7 +97,7 @@ void View::on_button_new_game_clicked() {
 	bbox_shop.add(m_button_buy_money_tower);
 	cout << "haf 0" << endl;
 	// Build grid of tiles using the map
-	Map* map = game.getMap();
+	Map* map = game->getMap();
 	cout << "haf 1" << endl;
 	int row = 0, col = 0, nc = map->getHeight();
 	cout << "haf 2" << endl;
@@ -131,7 +131,7 @@ void View::on_button_new_game_clicked() {
 }
 
 void View::on_button_round_clicked() {
-	game.startRound();
+	game->startRound();
 }
 
 void View::on_button_drag_data_get(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time, char tower) {
