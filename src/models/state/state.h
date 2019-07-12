@@ -5,6 +5,7 @@
 #include "./../map/map.h"
 #include "./../shop/shop.h"
 #include "./../tower/tower.h"
+#include "./../spawner/spawner.h"
 
 #include <stack>
 #include <vector>
@@ -18,52 +19,57 @@ TODO: money management functions,
  */
 
 class State {
-  int hp, money, round;
+    private:
+        int hp, money, round;
 
-  Shop *shop;
-  Map *map;
+        Shop * shop;
+        Map * map;
+        Spawner * spawner;
 
-  std::vector<Tower *> towers;
-  std::vector<Enemy *> enemies;
-  std::stack<Enemy *> pendingEnemies;
+        std::vector<Tower *> towers;
+        std::vector<Enemy *> enemies;
+        std::stack<Enemy *> pendingEnemies;
 
-  bool surviveDmg(int);
-  void incrementMoney(int);
-  // void spend(int);
+        bool surviveDmg(int);
+        void incrementMoney(int);
 
-  void addTower(Tower *);
-  void addEnemy(Enemy *);
-  void removeEnemy(Enemy *);
+        void addTower(Tower *);
+        void addEnemy(Enemy *);
+        void removeEnemy(Enemy *);
 
-  int constructEnemies(int);
+        int constructEnemies();
 
-  int totalHPLost(std::vector<Enemy *>);
+        int totalHPLost(std::vector<Enemy *>);
 
-  bool moveEnemies(int, int);
+        bool moveEnemies(int, int);
 
-  bool preFrame(int, int);
+        bool preFrame(int, int);
 
-  void processFrame();
-  void postFrame();
+        void processFrame();
+        void postFrame();
 
-  void getMoneyTowerIncome();
-  void updateState(int, int);
+        void getMoneyTowerIncome();
+        void updateState(int, int);
 
- public:
-  static const int MAX_ROUND = 10;
+    public:
+        static const int MAX_ROUND = 50;
 
-  State();
-  ~State();
+        static const int MAX_LIVES = 100;
+        static const int MIN_LIVES = 0;
 
-  void displayMap();
-  bool buyTower(char, int, int);
-  bool upgradeTower(int, int);
 
-  void startRound();
-  
-  int getMoney();
-  int getHp();
-  int getRound();
+        State();
+        ~State();
+
+        void displayMap();
+        bool buyTower(char, int, int);
+        bool upgradeTower(int, int);
+
+        void startRound();
+
+        int getHp();
+        int getMoney();
+        int getRound();
 };
 
 #endif
