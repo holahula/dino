@@ -18,7 +18,6 @@ int main() {
   int x, y;
 
   cout << "welcome to beans, beans, beans" << endl;
-
   while (cin >> cmd && cmd != 'q') {
     switch (cmd) {
       // Start a new game
