@@ -15,8 +15,8 @@
 using namespace std;
 
 MapImpl::~MapImpl() {
-    for (size_t i=0; i<width; ++i) {
-        for (size_t j=0; j<height; ++j) {
+    for (size_t i=0; i<map.size(); ++i) {
+        for (size_t j=0; j<map[i].size(); ++j) {
             delete map[i][j];
         }
     }
