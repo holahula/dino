@@ -293,7 +293,21 @@ void Map::increaseTowerRange(Tower* tower, int x, int y) {
     }
 }
 
-// inefficient -> may call detach on the same tower multiple times
+bool Map::sellTower(int x, int y) {
+    if (!isTower(x,y)) {
+        return false;
+    }
+    Tower* tower = getTower(x,y);
+    for (size_t i=0; i<p->path.size(); ++i) {
+        unordered_set<Tower*> currTowers = p->insideRange[p->path[i]];
+        if (currTowers.count(tower)) {
+            currTowers.erase(tower);
+        }
+    }
+    ((LandTile*)p->map[x][y])->removeTower();
+    return true;
+}
+
 void Map::detachAllEnemies() {
     for (size_t i=0; i<p->path.size(); ++i) {
         for (Tower* tower : p->insideRange[p->path[i]]) {

@@ -53,6 +53,7 @@ class Map {
         bool inMap(int x, int y);
         Tower *getTower(int x, int y);
         void insertTower(Tower*, int x, int y);
+        bool sellTower(int x, int y);
         void increaseTowerRange(Tower*, int x, int y);
         void insertEnemy(Enemy*);
         int getWidth();

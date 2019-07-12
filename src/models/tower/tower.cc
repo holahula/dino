@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Tower::Tower() : range(3) {}
+Tower::Tower(int startingValue) : range(3), totalValue(startingValue) {}
 Tower::~Tower() {}
 
 int Tower::getRange() const {
@@ -11,4 +11,8 @@ int Tower::getRange() const {
 
 void Tower::attack() {
     notifyObservers(this);
+}
+
+int Tower::getTotalValue() const {
+    return totalValue;
 }

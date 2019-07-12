@@ -20,8 +20,6 @@ class Shop {
         Tower* newTower(int&, char);
 
         void upgradeTower(int&, int);
-
-        // MoneyTower* newMoneyTower(int&);
 };
 
 #endif

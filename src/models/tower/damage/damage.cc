@@ -5,7 +5,7 @@
 
 using namespace std;
 
-DamageTower::DamageTower() : Tower(), dmg(1), upCost(1) {};
+DamageTower::DamageTower() : Tower(DamageTower::cost), dmg(1), upCost(1) {};
 DamageTower::~DamageTower(){}
 
 int DamageTower::getUpgradeCost() const {
@@ -21,6 +21,7 @@ int DamageTower::getCost() const {
 }
 
 void DamageTower::upgrade() {
+    totalValue += upCost;
     dmg *= 2;
     upCost *= 2;
     range++;
