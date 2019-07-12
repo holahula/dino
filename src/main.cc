@@ -11,15 +11,15 @@
 
 using namespace std;
 
-// int main(int argc, char *argv[]) {
-//   auto app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
+int main(int argc, char *argv[]) {
+  auto app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 
-//   View view;
+  View view;
 
-//   return app->run(view);
-// }
+  return app->run(view);
+}
 
-int main() {
+void test() {
   stringstream ss;
   State game;
 
@@ -86,5 +86,4 @@ int main() {
         break;
     }
   }
-  return 0;
 }
