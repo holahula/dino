@@ -10,6 +10,7 @@ class Tile {
     public:
         Tile(int x, int y);
         std::pair<int,int> location() const;
+        virtual bool isOccupied() const = 0;
         virtual char getType() const = 0;
         virtual ~Tile() = 0;
 };

@@ -19,6 +19,7 @@ class PathTile : public Tile {
         void moveEnemies();
         void insertEnemy(Enemy *);
         char getType() const override;
+        bool isOccupied() const override;
         std::vector<Enemy*> & getEnemies();
         friend std::ostream& operator<<(std::ostream&, PathTile&);
 };

@@ -56,3 +56,7 @@ ostream& operator<<(ostream& out, PathTile& pathTile) {
     }
     return out;
 }
+
+bool PathTile::isOccupied() const {
+    return true;
+}

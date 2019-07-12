@@ -101,7 +101,9 @@ void Map::initMap() {
     for (size_t i=0; i<p->map.size(); ++i) {
         for (size_t j=0; j<p->map[i].size(); ++j) {
             if (!p->map[i][j]) {
-                p->map[i][j] = new LandTile(i,j);
+                LandTile * curr = new LandTile(i,j);
+                p->map[i][j] = curr;
+                p->land.push_back(curr);
             }
         }
     }
@@ -254,18 +256,32 @@ bool Map::inMap(int x, int y) {
 }
 
 bool Map::isOccupied(int x, int y) {
-    return isPathTile(p->map[x][y]->getType()) || ((LandTile*) p->map[x][y])->isOccupied();
+    return p->map[x][y]->isOccupied();
 }
 
 bool Map::isTower(int x, int y) {
-    return !isPathTile(p->map[x][y]->getType()) && ((LandTile*) p->map[x][y])->isOccupied();
+    return !isPathTile(p->map[x][y]->getType()) && p->map[x][y]->isOccupied();
 }
 
 Tower* Map::getTower(int x, int y) {
     if (!isTower(x,y)) {
         throw NoTowerException("There is no tower at this location");
     }
-    return ((LandTile*) p->map[x][y])->getTower();
+    for (size_t i=0; i<p->land.size(); ++i) {
+        if (p->land[i]->location().first == x && p->land[i]->location().second) {
+            return p->land[i]->getTower();
+        }
+    }
+    return nullptr;
+}
+
+LandTile* Map::getLandTile(int x, int y) {
+    for (size_t i=0; i<p->land.size(); ++i) {
+        if (p->land[i]->location().first == x && p->land[i]->location().second) {
+            return p->land[i];
+        }
+    }
+    return nullptr;
 }
 
 void Map::insertTower(Tower* tower, int x, int y) {
@@ -274,7 +290,7 @@ void Map::insertTower(Tower* tower, int x, int y) {
         throw LandTileOccupiedException("Cannot place a tower here");
     }
 
-    ((LandTile*) p->map[x][y])->addTower(tower);
+    getLandTile(x,y)->addTower(tower);
     for (size_t i=0; i<p->path.size(); ++i) {
         int dist = distance(p->path[i]->location(), make_pair(x,y));
         if (dist <= tower->getRange()) {
@@ -305,7 +321,7 @@ bool Map::sellTower(int x, int y) {
             currTowers.erase(tower);
         }
     }
-    ((LandTile*)p->map[x][y])->removeTower();
+    getLandTile(x,y)->removeTower();
     return true;
 }
 
