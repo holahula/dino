@@ -8,7 +8,7 @@
 #include <gtkmm.h>
 
 class View : public Gtk::Window {
-  	unique_ptr<State> game;
+	std::unique_ptr<State> game;
 	// targets for drag and drop
 	std::vector<Gtk::TargetEntry> listTargets;
 
