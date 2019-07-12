@@ -93,10 +93,15 @@ void View::on_button_new_game_clicked() {
 	bbox_shop.add(m_button_buy_freeze_tower);
 	bbox_shop.add(m_button_buy_money_tower);
 	
+	cout << "lmao 3" << endl; 
 	// Build grid of tiles using the map
 	auto map = game.getMap();
+	cout << "lmao 2" << endl; 
+
 	int row = 0, col = 0, nc = map.getHeight();
-	cout << "pre for" << endl;
+	cout << "lmao 1" << endl; 
+
+
 	for(auto it = map.begin(); it != map.end(); ++it) {
 		TileView* tileView = new TileView(&(*it));
 		if (tileView->type == '.') {
@@ -114,7 +119,7 @@ void View::on_button_new_game_clicked() {
 			col = 0;
 		}
 	}
-	cout << "pre after" << endl;
+
 	tiles.set_row_spacing(0);
 	tiles.set_column_spacing(0);
 	panel_shop.add(bbox_shop);
