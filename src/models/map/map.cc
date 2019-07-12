@@ -268,7 +268,7 @@ Tower* Map::getTower(int x, int y) {
         throw NoTowerException("There is no tower at this location");
     }
     for (size_t i=0; i<p->land.size(); ++i) {
-        if (p->land[i]->location().first == x && p->land[i]->location().second) {
+        if (p->land[i]->location().first == x && p->land[i]->location().second == y) {
             return p->land[i]->getTower();
         }
     }
@@ -277,7 +277,7 @@ Tower* Map::getTower(int x, int y) {
 
 LandTile* Map::getLandTile(int x, int y) {
     for (size_t i=0; i<p->land.size(); ++i) {
-        if (p->land[i]->location().first == x && p->land[i]->location().second) {
+        if (p->land[i]->location().first == x && p->land[i]->location().second == y) {
             return p->land[i];
         }
     }
