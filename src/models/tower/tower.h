@@ -6,15 +6,15 @@
 class Tower : public Subject {
     protected:
         int range;
-        
+        int totalValue;
     public:
-        Tower();
+        Tower(int);
         ~Tower();
 
         virtual std::pair<char, int> getType() const = 0;
         virtual int getCost() const = 0;
         virtual int getUpgradeCost() const = 0;
-        
+        int getTotalValue() const;
         virtual void upgrade() = 0;
 
         int getRange() const;

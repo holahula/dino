@@ -36,6 +36,8 @@ class State {
         void addTower(Tower *);
         void addEnemy(Enemy *);
         void removeEnemy(Enemy *);
+        void removeTower(Tower *);
+
 
         int constructEnemies();
 
@@ -57,6 +59,10 @@ class State {
 
         static const int MAX_LIVES = 100;
         static const int MIN_LIVES = 0;
+
+
+
+        bool sellTower(int, int);
 
 
         State();

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Enemy::Enemy(int hp) : isFrozen(0), targetable(true), hp(hp) {}
+Enemy::Enemy(int hp) : isFrozen(0), hp(hp), targetable(true) {}
 
 int Enemy::getHP() const {
     return hp;

@@ -54,6 +54,9 @@ int main() {
               cout << "Money tower purchase successful!" << endl;
             }
             break;
+          default:
+            cout << "Invalid command!" << endl;
+            break;
         }
         break;
       // Upgrade a tower
@@ -64,6 +67,19 @@ int main() {
         } else {
           cout << "Upgrade successful!" << endl;
         }
+        break;
+      // Sell a tower
+      case 's':
+        cin >> x >> y;
+        if (!game->sellTower(x, y)) {
+          cout << "Invalid Sell Operation! Tower @ (" << x << ", " << y << ") could not be sold" << endl;
+        } else {
+          cout << "Sold successfully!" << endl;
+        }
+        break;
+      // Get total money
+      case 'm':
+        cout << "You currently have: $" << game->getMoney() << endl;
         break;
       // Start Next round
       case 'r':

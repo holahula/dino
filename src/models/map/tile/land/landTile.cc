@@ -28,3 +28,7 @@ void LandTile::addTower(Tower * addedTower) {
     }
     tower = addedTower;
 }
+
+void LandTile::removeTower() {
+    tower = nullptr;
+}
