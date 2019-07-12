@@ -46,6 +46,11 @@ void State::removeEnemy(Enemy* enemy){
     delete enemy;
 }
 
+void State::removeTower(Tower* tower){
+    towers.erase(remove(towers.begin(), towers.end(), tower), towers.end());
+    delete tower;
+}
+
 /******************************
     BETWEEN ROUND FUNCTIONS
 ******************************/
@@ -82,6 +87,16 @@ bool State::upgradeTower(int x, int y){
     return true;
 }
 
+bool State::sellTower(int x, int y) {
+    if (!map->inMap(x,y) || !map->isTower(x,y)) {
+        return false;
+    }
+
+    Tower* t = map->getTower(x,y);
+    map->sellTower(x,y);
+    removeTower(t);
+    return true;
+}
 /*****************************
     DURING ROUND FUNCTIONS
 *****************************/

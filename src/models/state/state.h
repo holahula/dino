@@ -34,6 +34,7 @@ class State {
   void addTower(Tower *);
   void addEnemy(Enemy *);
   void removeEnemy(Enemy *);
+  void removeTower(Tower *);
 
   int constructEnemies(int);
 
@@ -58,6 +59,7 @@ class State {
   void displayMap();
   bool buyTower(char, int, int);
   bool upgradeTower(int, int);
+  bool sellTower(int, int);
 
   void startRound();
   

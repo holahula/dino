@@ -33,14 +33,8 @@ Tower* Shop::newTower(int& money, char type){
     return t;
 }
 
-// MoneyTower* Shop::newMoneyTower(int& money){
-//     money -= MoneyTower::cost;
-//     MoneyTower* t = new MoneyTower();
-//     return t;
-// }
-
 void Shop::sell(int& money, Tower* tower) {
-    money += tower->getCost();
+    money += 0.75*tower->getTotalValue();
 }
 
 void Shop::upgradeTower(int& money, int cost){
