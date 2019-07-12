@@ -98,7 +98,7 @@ void View::on_button_new_game_clicked() {
 
 	int row = 0, col = 0, nc = map->getHeight();
 
-	for(Iterator it = map->begin(); it != map->end(); ++it) {
+	for(Map::Iterator it = map->begin(); it != map->end(); ++it) {
 		cout << "plz 0 " << endl;
 		TileView* tileView = new TileView(&(*it));
 		cout << "plz 1" << endl;
