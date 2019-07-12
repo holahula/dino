@@ -95,14 +95,14 @@ void View::on_button_new_game_clicked() {
 	
 	cout << "lmao 3" << endl; 
 	// Build grid of tiles using the map
-	auto map = game.getMap();
+	Map* map = game.getMap();
 	cout << "lmao 2" << endl; 
 
 	int row = 0, col = 0, nc = map.getHeight();
 	cout << "lmao 1" << endl; 
 
 
-	for(auto it = map.begin(); it != map.end(); ++it) {
+	for(auto it = map->begin(); it != map->end(); ++it) {
 		TileView* tileView = new TileView(&(*it));
 		if (tileView->type == '.') {
 			tileView->drag_dest_set(listTargets);
@@ -110,7 +110,7 @@ void View::on_button_new_game_clicked() {
 		tileView->signal_drag_data_received().connect(sigc::bind(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received), tileView));
 		tileView->override_background_color(Gdk::RGBA(tileView->type == '.' ? "green" : "brown"), Gtk::STATE_FLAG_NORMAL);
 		tiles.attach(*tileView, row, col, 1, 1);
-				
+
 		
 		if (col < nc - 1) {
 			col++;

@@ -212,6 +212,6 @@ int State::getRound() {
 	return round;
 }
 
-Map& State::getMap() {
-	return *map;
+Map* State::getMap() {
+	return map;
 }

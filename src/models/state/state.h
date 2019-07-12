@@ -61,7 +61,7 @@ class State {
 
   void startRound();
   
-  Map& getMap();
+  Map* getMap();
   int getMoney();
   int getHp();
   int getRound();
