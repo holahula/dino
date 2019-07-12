@@ -82,7 +82,7 @@ View::~View() {}
 void View::on_button_new_game_clicked() {
 	// Start a new game
 	game = State();
-	cout << "Hello!" << endl;
+
 	// Initialize widgets
 	m_label_money.set_text("Money: " + to_string(game.getMoney()));
 
@@ -96,6 +96,7 @@ void View::on_button_new_game_clicked() {
 	// Build grid of tiles using the map
 	auto map = game.getMap();
 	int row = 0, col = 0, nc = map.getHeight();
+	cout << "pre for" << endl;
 	for(auto it = map.begin(); it != map.end(); ++it) {
 		TileView* tileView = new TileView(&(*it));
 		if (tileView->type == '.') {
@@ -113,7 +114,7 @@ void View::on_button_new_game_clicked() {
 			col = 0;
 		}
 	}
-	
+	cout << "pre after" << endl;
 	tiles.set_row_spacing(0);
 	tiles.set_column_spacing(0);
 	panel_shop.add(bbox_shop);
