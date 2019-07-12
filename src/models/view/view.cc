@@ -24,7 +24,7 @@ View::View() : panel_menu("Menu"),
 				m_button_buy_freeze_tower("Buy Freeze Tower"),
 				m_button_buy_money_tower("Buy Money Tower"),
 				game(State()) {
-
+	cout << "hello" << endl;
 	// Customizations
 	set_title("Tower Defense");
 	set_border_width(10);
