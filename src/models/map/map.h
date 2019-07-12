@@ -1,14 +1,15 @@
 #ifndef MAP_H_
 #define MAP_H_
 
-#include "../tile/tile.h"
-#include "../tile/path/pathTile.h"
+#include "./tile/tile.h"
+#include "./tile/path/pathTile.h"
 #include "../enemy/enemy.h"
 #include <vector>
 #include <utility>
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
+#include <memory>
 
 class Map {
     int width;

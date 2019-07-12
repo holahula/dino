@@ -1,6 +1,6 @@
 #include "landTile.h"
-#include "../../tower/tower.h"
-#include "../../../exceptions/land-tile-occupied-exception/landTileOccupiedException.h"
+#include "../../../tower/tower.h"
+#include "../../../../exceptions/land-tile-occupied-exception/landTileOccupiedException.h"
 using namespace std;
 
 LandTile::LandTile(int x, int y): Tile(x,y), tower(nullptr) {}

@@ -1,6 +1,6 @@
 #include "map.h"
-#include "../tile/land/landTile.h"
-#include "../tile/path/pathTile.h"
+#include "./tile/land/landTile.h"
+#include "./tile/path/pathTile.h"
 #include "../../exceptions/land-tile-occupied-exception/landTileOccupiedException.h"
 #include "../../exceptions/no-tower-exception/noTowerException.h"
 #include <vector>
@@ -13,6 +13,16 @@
 #include <algorithm>
 
 using namespace std;
+
+Map::Map() {
+    srand(chrono::system_clock::now().time_since_epoch().count());
+    width = rand()%4 + 8;
+    height = rand()%4 + 8;
+
+    this->map = vector<vector<Tile*> >(width, vector<Tile*>(height, nullptr));
+    initPath();
+    initMap();
+}
 
 Map::~Map(){
     for (size_t i=0; i<map.size(); ++i) {
@@ -65,16 +75,6 @@ ostream& operator<<(ostream& out, Map & currFrame) {
 
 void Map::insertEnemy(Enemy* newEnemy) {
     path[0]->insertEnemy(newEnemy);
-}
-
-Map::Map() {
-    srand(chrono::system_clock::now().time_since_epoch().count());
-    width = rand()%4 + 8;
-    height = rand()%4 + 8;
-
-    this->map = vector<vector<Tile*> >(width, vector<Tile*>(height, nullptr));
-    initPath();
-    initMap();
 }
 
 

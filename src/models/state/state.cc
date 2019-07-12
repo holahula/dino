@@ -1,6 +1,5 @@
 #include "./../shop/shop.h"
 #include "./../map/map.h"
-#include "./../tile/path/pathTile.h"
 #include "./../enemy/basic/basic.h"
 #include "state.h"
 
