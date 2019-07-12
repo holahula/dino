@@ -16,7 +16,7 @@
 
 using namespace std;
 
-Spawner::Spawner(): regen(false), invisible(false), training(false), difficulty(10), status(1), gold(1), spawn(1), statusMultiplier(1), goldMultiplier(1), spawnMultiplier(1), health(1), armor(1) {}
+Spawner::Spawner(): regen(false), invisible(false), training(true), difficulty(10), status(1), gold(1), spawn(1), statusMultiplier(1), goldMultiplier(1), spawnMultiplier(1), health(1), armor(1) {}
 Spawner::~Spawner() {}
 
 void Spawner::playerUpdate(int hpLost){
@@ -128,10 +128,10 @@ void Spawner::updateState(int round, int hpLost, double enemyHP){
     enemyUpdate(enemyHP);
     updatePoints();
     updateEnemies();
-    if(!training && round % 2 == 0) {
+    if(training && round % 2 == 0) {
         updateTraining(round);
     }
-    
+
     cout << difficulty << " " << status << " " << gold << " " << spawn << endl;
     cout << statusMultiplier << " " << goldMultiplier << " " << spawnMultiplier << endl;
 }
