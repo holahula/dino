@@ -194,8 +194,8 @@ vector<Enemy*> Spawner::generateEnemies(int round){
         maxHP += (int)ceil((double)health * (double)round / 50.0);
     }
 
-    srand(chrono::system_clock::now().time_since_epoch().count());
-    mt19937 gen(rand());
+    unsigned seed1 = std::chrono::system_clock::now().time_since_epoch().count();
+    mt19937 gen(seed1);
 
     lognormal_distribution<> logDist = generateLogDistribution(log(maxHP), 1.0);
     bernoulli_distribution bernoulliDist = generateBernoulliDistribution((double)round/50.0);
