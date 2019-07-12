@@ -14,17 +14,7 @@
 
 using namespace std;
 
-Map::Map() {
-    srand(chrono::system_clock::now().time_since_epoch().count());
-    width = rand()%4 + 8;
-    height = rand()%4 + 8;
-
-    this->map = vector<vector<Tile*> >(width, vector<Tile*>(height, nullptr));
-    initPath();
-    initMap();
-}
-
-Map::~Map(){
+MapImpl::~MapImpl() {
     for (size_t i=0; i<map.size(); ++i) {
         for (size_t j=0; j<map[i].size(); ++j) {
             delete map[i][j];
@@ -32,12 +22,26 @@ Map::~Map(){
     }
 }
 
+Map::Map(): p(new MapImpl()) {
+    srand(chrono::system_clock::now().time_since_epoch().count());
+    p->width = rand()%4 + 8;
+    p->height = rand()%4 + 8;
+
+    p->map = vector<vector<Tile*> >(p->width, vector<Tile*>(p->height, nullptr));
+    initPath();
+    initMap();
+}
+
+Map::~Map(){
+    delete p;
+}
+
 int Map::getWidth() {
-    return width;
+    return p->width;
 }
 
 int Map::getHeight() {
-    return height;
+    return p->height;
 }
 
 int square(int x) {
@@ -52,7 +56,7 @@ ostream& operator<<(ostream& out, Map & currFrame) {
     for (int j=currFrame.getHeight()-1; j>=0; --j) {
         out << j << " ";
         for (int i=0; i<currFrame.getWidth(); ++i) {
-            out << currFrame.map[i][j]->getType() << " ";
+            out << currFrame.p->map[i][j]->getType() << " ";
         }
         out << endl;
     }
@@ -62,49 +66,49 @@ ostream& operator<<(ostream& out, Map & currFrame) {
     }
     out << endl;
 
-    for (size_t i=0; i<currFrame.path.size(); ++i) {
-        if (currFrame.path[i]->getEnemies().empty()) {
+    for (size_t i=0; i<currFrame.p->path.size(); ++i) {
+        if (currFrame.p->path[i]->getEnemies().empty()) {
             continue;
         }
-        out << "Path Tile: (" << currFrame.path[i]->location().first << ", " << currFrame.path[i]->location().second;
+        out << "Path Tile: (" << currFrame.p->path[i]->location().first << ", " << currFrame.p->path[i]->location().second;
         out << "), has balloons: " << endl;
-        out << *currFrame.path[i];
+        out << *currFrame.p->path[i];
     }
     return out;
 }
 
 void Map::insertEnemy(Enemy* newEnemy) {
-    path[0]->insertEnemy(newEnemy);
+    p->path[0]->insertEnemy(newEnemy);
 }
 
 
 void Map::initPath() {
-    vector<pair<int,int> > createdPath = createPath(make_pair(0, rand()%height), make_pair(width-1, rand()%height));
+    vector<pair<int,int> > createdPath = createPath(make_pair(0, rand()%p->height), make_pair(p->width-1, rand()%p->height));
 
-    path = vector<PathTile*>(createdPath.size(), nullptr);
+    p->path = vector<PathTile*>(createdPath.size(), nullptr);
     for (int i=(int)createdPath.size()-1; i>=0; --i) {
-        path[i] = new PathTile(createdPath[i].first, createdPath[i].second);
+        p->path[i] = new PathTile(createdPath[i].first, createdPath[i].second);
         if (i != (int)createdPath.size()-1) {
-            path[i]->next.push_back(path[i+1]);
-            path[i+1]->prev.push_back(path[i]);
+            p->path[i]->next.push_back(p->path[i+1]);
+            p->path[i+1]->prev.push_back(p->path[i]);
         }
-        map[path[i]->location().first][path[i]->location().second] = path[i];
+        p->map[p->path[i]->location().first][p->path[i]->location().second] = p->path[i];
     }
 }
 
 void Map::initMap() {
-    for (size_t i=0; i<map.size(); ++i) {
-        for (size_t j=0; j<map[i].size(); ++j) {
-            if (!map[i][j]) {
-                map[i][j] = new LandTile(i,j);
+    for (size_t i=0; i<p->map.size(); ++i) {
+        for (size_t j=0; j<p->map[i].size(); ++j) {
+            if (!p->map[i][j]) {
+                p->map[i][j] = new LandTile(i,j);
             }
         }
     }
 }
 
 bool Map::checkSquare(vector<vector<bool> >& visited, pair<int,int> x, pair<int,int> y) {
-    if (x.first < 0 || x.second >= width) return false;
-    if (y.first < 0 || y.second >= height) return false;
+    if (x.first < 0 || x.second >= p->width) return false;
+    if (y.first < 0 || y.second >= p->height) return false;
     int count = 0;
     for (int i=x.first; i<=x.second; ++i) {
         for (int j=y.first; j<=y.second; ++j) {
@@ -151,7 +155,7 @@ bool Map::smallMapPathBuilder (
         do {
             pair<int,int> next = make_pair(curr.first+dir[currIdx].first, curr.second+dir[currIdx].second);
             currIdx = (currIdx + 1) % dir.size();
-            if (next.first < 0 || next.first >= width || next.second < 0 || next.second >= height){
+            if (next.first < 0 || next.first >= p->width || next.second < 0 || next.second >= p->height){
                 continue;
             };
             if (visited[next.first][next.second]){
@@ -178,14 +182,13 @@ void Map::bigMapPathBuilder (
         dir.push_back(make_pair(0,1));
         dir.push_back(make_pair(1,0));
         dir.push_back(make_pair(0,-1));
-        dir.push_back(make_pair(-1,0));
 
         pair<int,int> curr = from;
         while (curr.first != to.first || curr.second != to.second) {
-            pair<int,int> minLoc = make_pair(curr.first + dir[0].first, curr.second + dir[0].second);
+            pair<int,int> minLoc = curr;
             int minDist = square(minLoc.first-to.first) + square(minLoc.second-to.second);
 
-            for (size_t i=1; i<dir.size(); ++i) {
+            for (size_t i=0; i<dir.size(); ++i) {
                 pair<int, int> nextLoc = make_pair(curr.first + dir[i].first, curr.second + dir[i].second);
                 int nextDist = square(nextLoc.first-to.first) + square(nextLoc.second-to.second);
                 if (minDist > nextDist) {
@@ -202,10 +205,10 @@ vector<pair<int,int> > Map::createPath(pair<int,int> from, pair<int,int> to) {
     vector<pair<int,int> > path;
     path.push_back(from);
 
-    if (width > 10 || height > 10) {
+    if (p->width >= 10 || p->height >= 10) {
         bigMapPathBuilder(from, to, path);
     } else {
-        vector<vector<bool> > visited = vector<vector<bool> >(width, vector<bool>(height, false));
+        vector<vector<bool> > visited = vector<vector<bool> >(p->width, vector<bool>(p->height, false));
         visited[from.first][from.second] = true;
         smallMapPathBuilder(visited, from, to, path);
     }
@@ -214,11 +217,11 @@ vector<pair<int,int> > Map::createPath(pair<int,int> from, pair<int,int> to) {
 
 // returns the enemies that have left the map
 vector<Enemy*> Map::nextFrame() {
-    vector<Enemy*> before = path[path.size()-1]->getEnemies();
-    for (int i=(int)path.size()-1; i>=0; --i) {
-        path[i]->moveEnemies();
+    vector<Enemy*> before = p->path[p->path.size()-1]->getEnemies();
+    for (int i=(int)p->path.size()-1; i>=0; --i) {
+        p->path[i]->moveEnemies();
     }
-    vector<Enemy*> after = path[path.size()-1]->getEnemies();
+    vector<Enemy*> after = p->path[p->path.size()-1]->getEnemies();
 
     set<Enemy*> beforeSet = set<Enemy*>(before.begin(), before.end());
     for (size_t i=0; i<after.size(); ++i) {
@@ -229,8 +232,8 @@ vector<Enemy*> Map::nextFrame() {
 
 vector<Enemy*> Map::removeDeadEnemies() {
     vector<Enemy*> deadEnemies;
-    for (size_t i=0; i<path.size(); ++i) {
-        vector<Enemy*>& currEnemies = path[i]->getEnemies();
+    for (size_t i=0; i<p->path.size(); ++i) {
+        vector<Enemy*>& currEnemies = p->path[i]->getEnemies();
         for (Enemy* enemy : currEnemies) {
             if (enemy->getHP() <= 0) {
                 deadEnemies.push_back(enemy);
@@ -246,22 +249,22 @@ bool isPathTile(char c) {
 }
 
 bool Map::inMap(int x, int y) {
-    return x >=0 && x<width && y>=0 && y<height;
+    return x >=0 && x<p->width && y>=0 && y<p->height;
 }
 
 bool Map::isOccupied(int x, int y) {
-    return isPathTile(map[x][y]->getType()) || ((LandTile*) map[x][y])->isOccupied();
+    return isPathTile(p->map[x][y]->getType()) || ((LandTile*) p->map[x][y])->isOccupied();
 }
 
 bool Map::isTower(int x, int y) {
-    return !isPathTile(map[x][y]->getType()) && ((LandTile*) map[x][y])->isOccupied();
+    return !isPathTile(p->map[x][y]->getType()) && ((LandTile*) p->map[x][y])->isOccupied();
 }
 
 Tower* Map::getTower(int x, int y) {
     if (!isTower(x,y)) {
         throw NoTowerException("There is no tower at this location");
     }
-    return ((LandTile*) map[x][y])->getTower();
+    return ((LandTile*) p->map[x][y])->getTower();
 }
 
 void Map::insertTower(Tower* tower, int x, int y) {
@@ -270,21 +273,21 @@ void Map::insertTower(Tower* tower, int x, int y) {
         throw LandTileOccupiedException("Cannot place a tower here");
     }
 
-    ((LandTile*) map[x][y])->addTower(tower);
-    for (size_t i=0; i<path.size(); ++i) {
-        int dist = distance(path[i]->location(), make_pair(x,y));
+    ((LandTile*) p->map[x][y])->addTower(tower);
+    for (size_t i=0; i<p->path.size(); ++i) {
+        int dist = distance(p->path[i]->location(), make_pair(x,y));
         if (dist <= tower->getRange()) {
-            insideRange[path[i]].insert(tower);
+            p->insideRange[p->path[i]].insert(tower);
         }
     }
 }
 
 void Map::increaseTowerRange(Tower* tower, int x, int y) {
-    for (size_t i=0; i<path.size(); ++i) {
-        if (!insideRange[path[i]].count(tower)) {
-            int dist = distance(path[i]->location(), make_pair(x,y));
+    for (size_t i=0; i<p->path.size(); ++i) {
+        if (!p->insideRange[p->path[i]].count(tower)) {
+            int dist = distance(p->path[i]->location(), make_pair(x,y));
             if (dist <= tower->getRange()) {
-                insideRange[path[i]].insert(tower);
+                p->insideRange[p->path[i]].insert(tower);
             }
         }
     }
@@ -292,17 +295,17 @@ void Map::increaseTowerRange(Tower* tower, int x, int y) {
 
 // inefficient -> may call detach on the same tower multiple times
 void Map::detachAllEnemies() {
-    for (size_t i=0; i<path.size(); ++i) {
-        for (Tower* tower : insideRange[path[i]]) {
+    for (size_t i=0; i<p->path.size(); ++i) {
+        for (Tower* tower : p->insideRange[p->path[i]]) {
             tower->detachAll();
         }
     }
 }
 
 void Map::attachAllEnemies() {
-    for (int i=(int)path.size()-1; i>=0; --i) {
-        for (Tower* tower: insideRange[path[i]]) {
-            for (Enemy* enemy : path[i]->getEnemies()) {
+    for (int i=(int)p->path.size()-1; i>=0; --i) {
+        for (Tower* tower: p->insideRange[p->path[i]]) {
+            for (Enemy* enemy : p->path[i]->getEnemies()) {
                 if (enemy->isTargetable()) {
                     tower->attach(enemy);
                 }

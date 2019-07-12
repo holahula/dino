@@ -11,13 +11,20 @@
 #include <unordered_set>
 #include <memory>
 
-class Map {
+struct MapImpl {
     int width;
     int height;
     std::vector<std::vector<Tile*> > map;
     std::vector<PathTile*> path;
-    std::vector<std::pair<int,int> > createPath(std::pair<int,int> from, std::pair<int,int> to);
     std::unordered_map<PathTile*, std::unordered_set<Tower*> > insideRange;
+    public:
+        ~MapImpl();
+};
+
+class Map {
+    MapImpl* p;
+
+    std::vector<std::pair<int,int> > createPath(std::pair<int,int> from, std::pair<int,int> to);
     bool checkSquare(std::vector<std::vector<bool> >& visited, std::pair<int,int> x, std::pair<int,int> y);
     bool isSquare(std::vector<std::vector<bool> >& visited, std::pair<int,int> curr);
     bool smallMapPathBuilder(
