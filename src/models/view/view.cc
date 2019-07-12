@@ -23,7 +23,7 @@ View::View() : panel_menu("Menu"),
 				m_button_buy_damage_tower("Buy Damage Tower"),
 				m_button_buy_freeze_tower("Buy Freeze Tower"),
 				m_button_buy_money_tower("Buy Money Tower"),
-				game(State()) {
+				game(nullptr) {
 	cout << "hello" << endl;
 	// Customizations
 	set_title("Tower Defense");
@@ -77,11 +77,14 @@ View::View() : panel_menu("Menu"),
 	
 }
 
-View::~View() {}
+View::~View() {
+	delete game;
+}
 
 void View::on_button_new_game_clicked() {
 	// Start a new game
-	game = State();
+	delete game;
+	game = new State();
 
 	// Initialize widgets
 	m_label_money.set_text("Money: " + to_string(game.getMoney()));
