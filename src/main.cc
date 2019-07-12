@@ -53,6 +53,9 @@ int main() {
               cout << "Money tower purchase successful!" << endl;
             }
             break;
+          default:
+            cout << "Invalid command!" << endl;
+            break;
         }
         break;
       // Upgrade a tower
