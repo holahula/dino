@@ -182,14 +182,13 @@ void Map::bigMapPathBuilder (
         dir.push_back(make_pair(0,1));
         dir.push_back(make_pair(1,0));
         dir.push_back(make_pair(0,-1));
-        dir.push_back(make_pair(-1,0));
 
         pair<int,int> curr = from;
         while (curr.first != to.first || curr.second != to.second) {
-            pair<int,int> minLoc = make_pair(curr.first + dir[0].first, curr.second + dir[0].second);
+            pair<int,int> minLoc = curr;
             int minDist = square(minLoc.first-to.first) + square(minLoc.second-to.second);
 
-            for (size_t i=1; i<dir.size(); ++i) {
+            for (size_t i=0; i<dir.size(); ++i) {
                 pair<int, int> nextLoc = make_pair(curr.first + dir[i].first, curr.second + dir[i].second);
                 int nextDist = square(nextLoc.first-to.first) + square(nextLoc.second-to.second);
                 if (minDist > nextDist) {
