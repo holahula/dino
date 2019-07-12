@@ -195,7 +195,7 @@ vector<Enemy*> Spawner::generateEnemies(int round){
         maxHP += (int)ceil((double)health * (double)round / 50.0);
     }
 
-    unsigned seed1 = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned seed1 = chrono::system_clock::now().time_since_epoch().count();
     mt19937 gen(seed1);
 
     lognormal_distribution<> logDist = generateLogDistribution(log(maxHP), 1.0);
