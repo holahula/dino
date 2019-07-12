@@ -98,7 +98,7 @@ void View::on_button_new_game_clicked() {
 	Map* map = game.getMap();
 	cout << "lmao 2" << endl; 
 
-	int row = 0, col = 0, nc = map.getHeight();
+	int row = 0, col = 0, nc = map->getHeight();
 	cout << "lmao 1" << endl; 
 
 
