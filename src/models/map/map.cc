@@ -206,7 +206,7 @@ vector<pair<int,int> > Map::createPath(pair<int,int> from, pair<int,int> to) {
     vector<pair<int,int> > path;
     path.push_back(from);
 
-    if (p->width > 10 || p->height > 10) {
+    if (p->width >= 10 || p->height >= 10) {
         bigMapPathBuilder(from, to, path);
     } else {
         vector<vector<bool> > visited = vector<vector<bool> >(p->width, vector<bool>(p->height, false));
