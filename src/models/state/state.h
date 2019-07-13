@@ -77,6 +77,7 @@ class State {
         int getHp();
         int getMoney();
         int getRound();
+		Map* getMap();
 };
 
 #endif

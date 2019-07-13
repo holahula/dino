@@ -241,3 +241,7 @@ int State::getMoney() {
 int State::getRound() {
 	return round;
 }
+
+Map* State::getMap() {
+	return map;
+}
