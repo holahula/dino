@@ -9,7 +9,7 @@
 
 using namespace std;
 
-State::State(): hp(100), money(10), round(1), shop(new Shop()), map(new Map()){}
+State::State(): hp(100), money(1000), round(1), shop(new Shop()), map(new Map()){}
 
 State::~State() {
     for(Tower* tower : towers) delete tower;
