@@ -1,0 +1,21 @@
+.land_tile {
+	background-image: url("assets/land_tile.png");
+}
+
+.damage_tower_tile {
+	background-image: url("assets/land_tile_damage_tower.png");
+}
+
+.freeze_tower_tile {
+	background-image: url("assets/land_tile_freeze_tower.png");
+}
+
+.money_tower_tile {
+	background-image: url("assets/land_tile_money_tower.png");
+}
+
+.path_tile {
+	font-size:12px;
+	font-weight: bolder;
+	background-image: url("assets/path_tile.png");
+}
