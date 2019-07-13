@@ -9,7 +9,18 @@
 
 #include <utility>
 
+struct Inventory {
+    FreezeTower* freezeTower;
+    DamageTower* damageTower;
+    MoneyTower* moneyTower;
+
+    public:
+        ~Inventory();
+};
+
 class Shop {
+    private:
+        Inventory *inv;
     public:
         Shop();
         ~Shop();
@@ -20,6 +31,10 @@ class Shop {
         Tower* newTower(int&, char);
 
         void upgradeTower(int&, int);
+
+        FreezeTower* getFreezeTower();
+        DamageTower* getDamageTower();
+        MoneyTower* getMoneyTower();
 };
 
 #endif
