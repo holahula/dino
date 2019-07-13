@@ -65,11 +65,11 @@ View::View() : selected_tileView(nullptr),
 	m_button_buy_money_tower.drag_source_set(listTargets);
 
 	// Customize drag and drop icon
-	Glib::RefPtr<Gdk::Pixbuf> icon_damage_tower = Gdk::Pixbuf::create_from_file("models/view/assets/damage_tower.png");
+	Glib::RefPtr<Gdk::Pixbuf> icon_damage_tower = Gdk::Pixbuf::create_from_file("resources/assets/damage_tower.png");
 	m_button_buy_damage_tower.drag_source_set_icon(icon_damage_tower);
-	Glib::RefPtr<Gdk::Pixbuf> icon_freeze_tower = Gdk::Pixbuf::create_from_file("models/view/assets/freeze_tower.png");
+	Glib::RefPtr<Gdk::Pixbuf> icon_freeze_tower = Gdk::Pixbuf::create_from_file("resources/assets/freeze_tower.png");
 	m_button_buy_freeze_tower.drag_source_set_icon(icon_freeze_tower);
-	Glib::RefPtr<Gdk::Pixbuf> icon_money_tower = Gdk::Pixbuf::create_from_file("models/view/assets/money_tower.png");
+	Glib::RefPtr<Gdk::Pixbuf> icon_money_tower = Gdk::Pixbuf::create_from_file("resources/assets/money_tower.png");
 	m_button_buy_money_tower.drag_source_set_icon(icon_money_tower);
 
 	// Signals:
