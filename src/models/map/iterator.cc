@@ -23,9 +23,9 @@ bool Map::Iterator::operator!=(const Map::Iterator &other) {
 }
 
 Map::Iterator Map::begin() {
-	return Iterator{0, 0, width, height, map};
+	return Iterator{0, 0, p->width, p->height, p->map};
 }
 
 Map::Iterator Map::end() {
-	return Iterator{width, 0, width, height, map};
+	return Iterator{p->width, 0, p->width, p->height, p->map};
 }

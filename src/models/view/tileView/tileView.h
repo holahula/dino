@@ -1,7 +1,7 @@
 #ifndef TILEVIEW_H_
 #define TILEVIEW_H_
 
-#include "../../tile/tile.h"
+#include "../../map/tile/tile.h"
 #include "../view.h"
 
 #include <gtkmm.h>
