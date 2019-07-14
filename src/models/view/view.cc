@@ -130,9 +130,6 @@ View::~View() {
 		tileViewGrid[i].clear();
     }
 	tileViewGrid.clear();
-	// for (size_t i=0; i<tileViewPath.size(); ++i) {
-	// 	delete tileViewPath[i];
-	// }
 	tileViewPath.clear();
 	delete selected_tower;
 	delete selected_tileView;
