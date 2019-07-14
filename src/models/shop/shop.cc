@@ -2,8 +2,33 @@
 
 using namespace std;
 
-Shop::Shop(){}
-Shop::~Shop(){}
+Inventory::~Inventory(){
+    delete freezeTower;
+    delete damageTower;
+    delete moneyTower;
+}
+
+Shop::Shop(): inv(new Inventory()){
+    inv->freezeTower = new FreezeTower();
+    inv->damageTower = new DamageTower();
+    inv->moneyTower = new MoneyTower();
+}
+
+Shop::~Shop(){
+    delete inv;
+}
+
+FreezeTower* Shop::getFreezeTower(){
+    return inv->freezeTower;
+}
+
+DamageTower* Shop::getDamageTower(){
+    return inv->damageTower;
+}
+
+MoneyTower* Shop::getMoneyTower(){
+    return inv->moneyTower;
+}
 
 bool Shop::buy(int money, char type) {
     if ((type == 'D' && money >= DamageTower::cost)

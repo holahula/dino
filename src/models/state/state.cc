@@ -192,6 +192,12 @@ void State::updateState(int hp, int hpLost, double remainingEnemyHP){
         return;
     }
 
+    // if(hpLost == 0 && round % 5 == 0){
+    if(round % 5 == 0){
+        cout << "You gained 5 HP for killing the boss level!" << endl;
+        hp = max(100, hp+5);
+    }
+
     getRoundIncome();
     // spawner interactions
     spawner->updateState(round, hpLost, remainingEnemyHP);
