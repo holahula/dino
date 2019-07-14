@@ -6,6 +6,7 @@
 #include "./../shop/shop.h"
 #include "./../tower/tower.h"
 #include "./../spawner/spawner.h"
+#include "./../view/view.h"
 
 #include <stack>
 #include <vector>
@@ -19,6 +20,7 @@ TODO: money management functions,
  */
 
 class State {
+	friend class View;
     private:
         int hp, money, round;
 

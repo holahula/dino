@@ -24,8 +24,8 @@ View::View() : selected_tileView(nullptr),
 				box_menu(Gtk::ORIENTATION_VERTICAL),
 				box_shop(Gtk::ORIENTATION_VERTICAL),
 				box_info(Gtk::ORIENTATION_VERTICAL),
-				m_button_new_game("New Game"),
-				m_button_round("Start Next Round"),
+				m_button_new_game("Start a new Game"),
+				m_button_round("Go"),
 				m_button_buy_damage_tower("Buy Damage Tower"),
 				m_button_buy_freeze_tower("Buy Freeze Tower"),
 				m_button_buy_money_tower("Buy Money Tower"),
@@ -83,10 +83,10 @@ View::View() : selected_tileView(nullptr),
 	m_button_upgrade_tower.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_upgrade_tower_clicked));
 	m_button_sell_tower.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_sell_tower_clicked));
 
-	// Add buttons and labels to boxes
-	box_menu.add(m_button_new_game);
+	// Add Widgets
 	box_menu.add(m_label_user_spec);
 	box_menu.add(m_button_round);
+	box_menu.add(m_button_new_game);
 
 	box_shop.add(m_button_buy_damage_tower);
 	box_shop.add(m_button_buy_freeze_tower);
@@ -95,30 +95,39 @@ View::View() : selected_tileView(nullptr),
 	box_info.add(m_label_tower_spec);
 	box_info.add(m_button_upgrade_tower);
 	box_info.add(m_button_sell_tower);
-
-	// Add widgets to grids
 	
 	panel_shop.add(box_shop);
 	panel_info.add(box_info);
-	m_grid.attach(panel_shop, 2, 1, 1, 1);
-	m_grid.attach(panel_info, 2, 2, 1, 2);
+	m_grid.attach(panel_shop, 2, 1, 1, 3);
+	m_grid.attach(panel_info, 3, 0, 1, 4);
 	m_grid.attach(tiles, 0, 0, 2, 4);
 
 	panel_menu.add(box_menu);
 	m_grid.attach(panel_menu, 2, 0, 1, 1);
 	add(m_grid);
 
+	startNewGame();
+
 	show_all();
 	m_button_upgrade_tower.hide();
 	m_button_sell_tower.hide();
+	m_button_new_game.hide();
 }
 
-View::~View() {}
+View::~View() {
+	for (size_t i=0; i<tileViewGrid.size(); ++i) {
+        for (size_t j=0; j<tileViewGrid[i].size(); ++j) {
+			delete tileViewGrid[i][j];
+        }
+    }
+}
 
-void View::on_button_new_game_clicked() {
+void View::startNewGame() {
 	// Start a new game
 	game = unique_ptr<State>(new State);
-
+	vector<vector<TileView *> > temp = vector<vector<TileView*> >(game->getMap()->getWidth(), vector<TileView*>(game->getMap()->getHeight(), nullptr));
+	tileViewGrid = temp;
+	
 	// Initialize widgets
 	update_view();
 	
@@ -126,7 +135,8 @@ void View::on_button_new_game_clicked() {
 	Map* map = game->getMap();
 	int row = 0, col = 0, nc = map->getHeight();
 	for(auto it = map->begin(); it != map->end(); ++it) {
-		TileView* tileView = new TileView(&(*it));
+		TileView *tileView = new TileView(&(*it));
+		tileViewGrid.at(row).at(col) = tileView;
 		if (tileView->type == '.') {
 			tileView->drag_dest_set(listTargets);
 			tileView->set_events(Gdk::BUTTON_PRESS_MASK);
@@ -136,7 +146,7 @@ void View::on_button_new_game_clicked() {
 		}
 		tileView->signal_drag_data_received().connect(sigc::bind(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received), tileView));
 		tileView->get_style_context()->add_class(tileView->type == '.' ? "land_tile" : "path_tile");
-		tiles.attach(*tileView, row, col, 1, 1);			
+		tiles.attach(*tileViewGrid.at(row).at(col), row, col, 1, 1);			
 		
 		if (col < nc - 1) {
 			col++;
@@ -145,15 +155,17 @@ void View::on_button_new_game_clicked() {
 			col = 0;
 		}
 	}
+}
 
-	show_all();
-	m_button_upgrade_tower.hide();
-	m_button_sell_tower.hide();
+void View::on_button_new_game_clicked() {
+	startNewGame();
 }
 
 void View::on_button_round_clicked() {
-	game->startRound();
-	update_view();
+	m_button_round.set_sensitive(false);
+	//game->startRound();
+	startRound();
+	m_button_round.set_sensitive();
 }
 
 void View::on_button_upgrade_tower_clicked() {
@@ -265,4 +277,51 @@ pair<string, string> View::getTowerFullType(char type, bool isCapitalized) {
 		return (type == 'D') ? make_pair("Damage", "Damage") : ((type == 'F') ? make_pair("Freeze", "Duration") : make_pair("Money", "Income"));
 	}
 	return (type == 'D') ? make_pair("damage", "damage") : ((type == 'F') ? make_pair("freeze", "duration") : make_pair("money", "income"));
+}
+
+void View::startRound() {
+    int frame = 1;
+    bool status;
+    int size = game->constructEnemies();
+	int hp = game->hp;
+    int hpStartRound = hp;
+    int totalEnemyHP = game->totalHP(game->enemies);
+    // round while loop 
+    while(game->enemies.size() != 0){
+        status = game->preFrame(frame, size);
+        if(!status) break;
+
+        game->processFrame();
+        
+		// display
+
+		
+    	game->map->detachAllEnemies();
+
+        frame++;
+    }
+
+    updateState(hp, hpStartRound - hp, (double)(hpStartRound - hp)/(double)totalEnemyHP);
+}
+
+void View::updateState(int hp, int hpLost, double remainingEnemyHP) {
+    if(hp <= 0) {
+        Gtk::MessageDialog dialog(*this, "Game Over", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
+		dialog.set_secondary_text("You lost!");
+		dialog.run();
+        return;
+    } else if(game->round == game->MAX_ROUND){
+        Gtk::MessageDialog dialog(*this, "Game Finished", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
+		dialog.set_secondary_text("You won! There are no more rounds left.");
+		dialog.run();
+        return;
+    }
+
+    game->getRoundIncome();
+    // spawner interactions
+    game->spawner->updateState(game->round, hpLost,remainingEnemyHP);
+
+	update_view();
+    
+    game->round++;
 }

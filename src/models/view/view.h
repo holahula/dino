@@ -17,6 +17,7 @@ class View : public Gtk::Window {
 	Tower *selected_tower;
 	// targets for drag and drop
 	std::vector<Gtk::TargetEntry> listTargets;
+	std::vector<std::vector<TileView *> > tileViewGrid;
 
  protected:
 	Gtk::Grid m_grid;
@@ -52,6 +53,10 @@ class View : public Gtk::Window {
 	void update_selected_tileView(TileView *);
 	void update_selected_tower();
 	std::pair<std::string, std::string> getTowerFullType(char, bool);
+
+	void startRound();
+	void updateState(int, int, double);
+	void startNewGame();
 
  public:
 	View();
