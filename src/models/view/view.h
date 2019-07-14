@@ -1,8 +1,6 @@
 #ifndef VIEW_H
 #define VIEW_H
 
-#include "../state/state.h"
-
 #include <memory>
 #include <utility>
 #include <string>
@@ -10,6 +8,8 @@
 
 // forward declaration
 class TileView;
+class Tower;
+class State;
 
 class View : public Gtk::Window {
 	std::unique_ptr<State> game;

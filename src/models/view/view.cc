@@ -131,8 +131,6 @@ View::~View() {
     }
 	tileViewGrid.clear();
 	tileViewPath.clear();
-	delete selected_tower;
-	delete selected_tileView;
 }
 
 void View::startNewGame() {
