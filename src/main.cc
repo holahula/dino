@@ -51,7 +51,7 @@ int text_interface() {
             }
             // Buy a tower
             case 'b': {
-                cin >> strX >> strY;
+                cin >> cmd2 >> strX >> strY;
                 x = atoi(strX.c_str());
                 y = atoi(strY.c_str());
                 switch (cmd2) {
