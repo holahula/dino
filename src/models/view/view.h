@@ -4,6 +4,8 @@
 #include "../state/state.h"
 
 #include <memory>
+#include <utility>
+#include <string>
 #include <gtkmm.h>
 
 // forward declaration
@@ -31,15 +33,14 @@ class View : public Gtk::Window {
 	Gtk::Button m_button_buy_freeze_tower;
 	Gtk::Button m_button_buy_money_tower;
 	Gtk::Button m_button_upgrade_tower;
-	Gtk::Label m_price_damage_tower;
-	Gtk::Label m_price_freeze_tower;
-	Gtk::Label m_price_money_tower;
+	Gtk::Button m_button_sell_tower;
 	Gtk::Label m_label_user_spec;
 	Gtk::Label m_label_tower_spec;
 	
 	void on_button_new_game_clicked();
 	void on_button_round_clicked();
 	void on_button_upgrade_tower_clicked();
+	void on_button_sell_tower_clicked();
 	bool on_tile_clicked(GdkEventButton *, TileView *);
 
 	void on_button_drag_data_get(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time, char tower);
@@ -50,6 +51,7 @@ class View : public Gtk::Window {
 	void update_info();
 	void update_selected_tileView(TileView *);
 	void update_selected_tower();
+	std::pair<std::string, std::string> getTowerFullType(char, bool);
 
  public:
 	View();

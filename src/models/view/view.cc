@@ -30,6 +30,7 @@ View::View() : selected_tileView(nullptr),
 				m_button_buy_freeze_tower("Buy Freeze Tower"),
 				m_button_buy_money_tower("Buy Money Tower"),
 				m_button_upgrade_tower("Upgrade Tower"),
+				m_button_sell_tower("Sell Tower"),
 				m_label_tower_spec("Select a Tower") {
 
 	// Customizations
@@ -80,6 +81,7 @@ View::View() : selected_tileView(nullptr),
 	m_button_new_game.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_new_game_clicked));
 	m_button_round.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_round_clicked));
 	m_button_upgrade_tower.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_upgrade_tower_clicked));
+	m_button_sell_tower.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_sell_tower_clicked));
 
 	// Add buttons and labels to boxes
 	box_menu.add(m_button_new_game);
@@ -92,6 +94,7 @@ View::View() : selected_tileView(nullptr),
 
 	box_info.add(m_label_tower_spec);
 	box_info.add(m_button_upgrade_tower);
+	box_info.add(m_button_sell_tower);
 
 	// Add widgets to grids
 	
@@ -107,6 +110,7 @@ View::View() : selected_tileView(nullptr),
 
 	show_all();
 	m_button_upgrade_tower.hide();
+	m_button_sell_tower.hide();
 }
 
 View::~View() {}
@@ -116,7 +120,6 @@ void View::on_button_new_game_clicked() {
 	game = unique_ptr<State>(new State);
 
 	// Initialize widgets
-	// m_price_damage_tower.set_text("Price: " + to_string(game->shop->))
 	update_view();
 	
 	// Build grid of tiles using the map
@@ -145,6 +148,7 @@ void View::on_button_new_game_clicked() {
 
 	show_all();
 	m_button_upgrade_tower.hide();
+	m_button_sell_tower.hide();
 }
 
 void View::on_button_round_clicked() {
@@ -157,13 +161,31 @@ void View::on_button_upgrade_tower_clicked() {
 	int col = selected_tileView->col;
 	char t = selected_tileView->type;
 	if (!game->upgradeTower(col, row)) {
-		string tower = (t == 'D') ? "Damage" : ((t == 'F') ? "Freeze" : "Money");
+		string tower = getTowerFullType(t, true).first;
 		Gtk::MessageDialog dialog(*this, "Invalid Upgrade", false /* use_markup */, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK);
 		dialog.set_secondary_text(tower + " tower @ (" + to_string(col) + ", " + to_string(row) + ") could not be upgraded!");
 		dialog.run();
 	} else {
 		update_info();
 		update_tooltip();
+	}
+	update_view();
+}
+
+void View::on_button_sell_tower_clicked() {
+	int row = selected_tileView->row;
+	int col = selected_tileView->col;
+	char t = selected_tileView->type;
+	string tower = getTowerFullType(selected_tower->getType().first, false).first;
+	if (!game->sellTower(col, row)) {
+		string tower = getTowerFullType(t, true).first;
+		Gtk::MessageDialog dialog(*this, "Invalid Sale", false /* use_markup */, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK);
+		dialog.set_secondary_text(tower + " tower @ (" + to_string(col) + ", " + to_string(row) + ") could not be sold!");
+		dialog.run();
+	} else {
+		selected_tileView->get_style_context()->remove_class(tower + "_tower_tile");
+		update_selected_tower();
+		update_info();
 	}
 	update_view();
 }
@@ -187,12 +209,12 @@ void View::on_label_drop_drag_data_received(const Glib::RefPtr<Gdk::DragContext>
 		int col = tileView->col;
 		string tower;
 		if (!game->buyTower(t, col, row)) {
-			tower = (t == 'D') ? "Damage" : ((t == 'F') ? "Freeze" : "Money");
+			tower = getTowerFullType(t, true).first;
 			Gtk::MessageDialog dialog(*this, "Invalid Purchase", false /* use_markup */, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK);
 			dialog.set_secondary_text(tower + " tower @ (" + to_string(col) + ", " + to_string(row) + ") could not be bought!");
 			dialog.run();
 		} else {
-			tower = (t == 'D') ? "damage" : ((t == 'F') ? "freeze" : "money");
+			tower = getTowerFullType(t, false).first;
 			tileView->get_style_context()->add_class(tower + "_tower_tile");
 			update_selected_tileView(tileView);
 			update_tooltip();
@@ -206,19 +228,21 @@ void View::update_view() {
 }
 
 void View::update_tooltip() {
-	pair<string, int> type = (selected_tower->getType().first == 'D') ? make_pair("Damage", selected_tower->getType().second) : ((selected_tower->getType().first == 'F') ? make_pair("Duration", selected_tower->getType().second) : make_pair("Income", selected_tower->getType().second));
-	selected_tileView->label.set_tooltip_text(type.first + ": " + to_string(type.second));
+	pair<string, string> type = getTowerFullType(selected_tower->getType().first, true);
+	selected_tileView->label.set_tooltip_text(type.first + " tower\n" + type.second + ": " + to_string(selected_tower->getType().second));
 }
 
 void View::update_info() {
 	if(selected_tower == nullptr) {
 		m_label_tower_spec.set_text("Select a Tower");
 		m_button_upgrade_tower.hide();
+		m_button_sell_tower.hide();
 	} else {
 		pair<char, int> t = selected_tower->getType();
-		pair<string, string> type = (t.first == 'D') ? make_pair("Damage", "Damage") : ((t.first == 'F') ? make_pair("Freeze", "Duration") : make_pair("Money", "Income"));
+		pair<string, string> type = getTowerFullType(t.first, true);
 		m_label_tower_spec.set_text(type.first + " Tower\nDescription: it's great lol\nCost: $" + to_string(selected_tower->getCost()) + "\nRange: " + to_string(selected_tower->getRange()) + "\nUpgrade Cost: " + to_string(selected_tower->getUpgradeCost()) + "\n" + type.second + ": " + to_string(t.second));
 		m_button_upgrade_tower.show();
+		m_button_sell_tower.show();
 	}
 }
 
@@ -234,4 +258,11 @@ void View::update_selected_tower() {
 		selected_tower = nullptr;
 		return;
 	}
+}
+
+pair<string, string> View::getTowerFullType(char type, bool isCapitalized) {
+	if(isCapitalized) {
+		return (type == 'D') ? make_pair("Damage", "Damage") : ((type == 'F') ? make_pair("Freeze", "Duration") : make_pair("Money", "Income"));
+	}
+	return (type == 'D') ? make_pair("damage", "damage") : ((type == 'F') ? make_pair("freeze", "duration") : make_pair("money", "income"));
 }
