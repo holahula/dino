@@ -14,3 +14,8 @@ ${EXEC}: ${OBJECTS}
 
 clean:
 	rm -rf *.o ${EXEC}
+
+valgrind:
+	G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind --tool=memcheck --leak-check=full --leak-resolution=high --suppressions=gtk.suppression --num-callers=20 --log-file=vgdump ./${EXEC}
+
+# valgrind --tool=memcheck --leak-check=full --leak-resolution=high --track-origins=yes --suppressions=gtk.suppression --num-callers=20 --log-file=vgdump ./${EXEC}

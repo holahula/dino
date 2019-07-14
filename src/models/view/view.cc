@@ -257,6 +257,7 @@ void View::on_label_drop_drag_data_received(const Glib::RefPtr<Gdk::DragContext>
 			tower = getTowerFullType(t, false).first;
 			tileView->get_style_context()->add_class(tower + "_tower_tile");
 			update_selected_tileView(tileView);
+			update_view();
 			update_tooltip();
 		}
 	}
