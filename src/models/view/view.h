@@ -18,6 +18,15 @@ class View : public Gtk::Window {
 	// targets for drag and drop
 	std::vector<Gtk::TargetEntry> listTargets;
 	std::vector<std::vector<TileView *> > tileViewGrid;
+	std::vector<TileView *> tileViewPath;
+
+	int frame;
+    bool status;
+    int size;
+	int hp;
+    int hpStartRound;
+    int totalEnemyHP;
+	bool roundDone;
 
  protected:
 	Gtk::Grid m_grid;
@@ -30,6 +39,8 @@ class View : public Gtk::Window {
 	Gtk::ButtonBox box_info;
 	Gtk::Button m_button_new_game;
 	Gtk::Button m_button_round;
+	Gtk::Button m_button_next;
+	Gtk::Button m_button_skip;
 	Gtk::Button m_button_buy_damage_tower;
 	Gtk::Button m_button_buy_freeze_tower;
 	Gtk::Button m_button_buy_money_tower;
@@ -40,6 +51,8 @@ class View : public Gtk::Window {
 	
 	void on_button_new_game_clicked();
 	void on_button_round_clicked();
+	void on_button_next_clicked();
+	void on_button_skip_clicked();
 	void on_button_upgrade_tower_clicked();
 	void on_button_sell_tower_clicked();
 	bool on_tile_clicked(GdkEventButton *, TileView *);
@@ -55,6 +68,7 @@ class View : public Gtk::Window {
 	std::pair<std::string, std::string> getTowerFullType(char, bool);
 
 	void startRound();
+	void nextStep();
 	void updateState(int, int, double);
 	void startNewGame();
 
