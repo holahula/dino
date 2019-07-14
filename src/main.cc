@@ -52,8 +52,8 @@ int text_interface() {
             // Buy a tower
             case 'b': {
                 cin >> strX >> strY;
-                x = atoi(strX);
-                y = atoi(strY);
+                x = atoi(strX.c_str());
+                y = atoi(strY.c_str());
                 switch (cmd2) {
                     // damage tower
                     case 'd': {
@@ -91,8 +91,8 @@ int text_interface() {
             // Upgrade a tower
             case 'u': {
                 cin >> strX >> strY;
-                x = atoi(strX);
-                y = atoi(strY);
+                x = atoi(strX.c_str());
+                y = atoi(strY.c_str());
                 if (!game->upgradeTower(x, y)) {
                     cout << "Invalid Upgrade! Tower @ (" << x << ", " << y << ") could not be upgraded" << endl;
                 } else {
@@ -103,8 +103,8 @@ int text_interface() {
             // Sell a tower
             case 's': {
                 cin >> strX >> strY;
-                x = atoi(strX);
-                y = atoi(strY);
+                x = atoi(strX.c_str());
+                y = atoi(strY.c_str());
                 if (!game->sellTower(x, y)) {
                     cout << "Invalid Sell Operation! Tower @ (" << x << ", " << y << ") could not be sold" << endl;
                 } else {
