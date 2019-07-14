@@ -9,11 +9,10 @@
 
 class TileView : public Gtk::EventBox {
   public:
-	Tile *tile;
 	Gtk::Label label;
-	char type;
 	int row, col;
-	TileView(Tile *);
+	char type;
+	TileView(int, int, char);
 	~TileView();
 };
 

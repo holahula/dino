@@ -33,7 +33,8 @@ View::View() : selected_tileView(nullptr),
 				m_button_buy_money_tower("Buy Money Tower"),
 				m_button_upgrade_tower("Upgrade Tower"),
 				m_button_sell_tower("Sell Tower"),
-				m_label_tower_spec("Select a Tower") {
+				m_label_tower_spec("Select a Tower"),
+				m_label_enemies_spec("Select Enemies") {
 
 	// Customizations
 	set_title("Tower Defense");
@@ -101,6 +102,7 @@ View::View() : selected_tileView(nullptr),
 	box_info.add(m_label_tower_spec);
 	box_info.add(m_button_upgrade_tower);
 	box_info.add(m_button_sell_tower);
+	box_info.add(m_label_enemies_spec);
 	
 	panel_shop.add(box_shop);
 	panel_info.add(box_info);
@@ -146,16 +148,16 @@ void View::startNewGame() {
 	Map* map = game->getMap();
 	int row = 0, col = 0, nc = map->getHeight();
 	for(auto it = map->begin(); it != map->end(); ++it) {
-		TileView *tileView = new TileView(&(*it));
+		TileView *tileView = new TileView(row, col, *it);
 		tileViewGrid.at(row).at(col) = tileView;
 		if (tileView->type == '.') {
 			tileView->drag_dest_set(listTargets);
-			tileView->set_events(Gdk::BUTTON_PRESS_MASK);
-			tileView->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*this, &View::on_tile_clicked), tileView));
 		} else {
 			tileView->label.set_markup("");
 			tileViewPath.emplace_back(tileView);
 		}
+		tileView->set_events(Gdk::BUTTON_PRESS_MASK);
+		tileView->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*this, &View::on_tile_clicked), tileView));
 		tileView->signal_drag_data_received().connect(sigc::bind(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received), tileView));
 		tileView->get_style_context()->add_class(tileView->type == '.' ? "land_tile" : "path_tile");
 		tiles.attach(*tileViewGrid.at(row).at(col), row, col, 1, 1);			
@@ -285,6 +287,11 @@ void View::update_info() {
 		m_button_upgrade_tower.show();
 		m_button_sell_tower.show();
 	}
+	// if(selected_enemies.size() == 0) {
+	// 	m_label_enemies_spec.set_text("Select Enemies");
+	// } else {
+	// 	m_label_enemies_spec.set_text("hi");
+	// }
 }
 
 void View::update_selected_tileView(TileView *tileView) {
@@ -336,14 +343,7 @@ void View::nextStep() {
 
         game->processFrame();
         
-		// display enemies moving
-		for(size_t i=0; i<tileViewPath.size(); ++i) {
-			TileView *tileView = tileViewPath.at(i);
-			PathTile * tile = (PathTile*)tileView->tile;
-
-			// tileView->label.set_markup("<span color=\"red\">" + to_string(tile->getEnemies().size()) + "\n</span><span color=\"blue\">2\n</span><span color=\"yellow\">5</span>");
-			tileView->label.set_markup("<span color=\"white\">" + (tile->getEnemies().size() == 0 ? "" : to_string(tile->getEnemies().size())) + "\n</span>");
-		}		
+		displayEnemies();
 		
     	game->map->detachAllEnemies();
 
@@ -375,4 +375,37 @@ void View::updateState(int hp, int hpLost, double remainingEnemyHP) {
 	update_view();
     
     game->round++;
+}
+
+void View::displayEnemies() {
+	for(size_t i=0; i<tileViewPath.size(); ++i) {
+		TileView *tileView = tileViewPath.at(i);
+		PathTile * tile = game->getMap()->getPathTile(tileView->row, tileView->col);
+		string enemyType = "";
+		string stats = "";
+		int basicCount = 0;
+		int regenerativeCount = 0;
+		int invisibleCount = 0;
+		for (Enemy* enemy: tile->getEnemies()) {
+			switch(enemy->getType()) {
+				case 'B': 
+					basicCount++;
+					enemyType = "Basic";
+					break;
+				case 'R': 
+					regenerativeCount++;
+					enemyType = "Regenerative";
+					break;
+				default: 
+					invisibleCount++;
+					enemyType = "Invisible";
+					break;
+			}
+			stats += enemyType + " Enemy with " + to_string(enemy->getHP()) + " hp (" + (enemy->getFrozen() > 0 ? "frozen" : "") + (enemy->getFrozen() > 0 && enemy->isTargetable() ? " and " : "") + (enemy->isTargetable() ? "targetable" : "") + ")\n";
+		}
+		tileView->label.set_tooltip_text(stats);
+		// tileView->label.set_markup("<span color=\"red\">" + to_string(tile->getEnemies().size()) + "\n</span><span color=\"blue\">2\n</span><span color=\"yellow\">5</span>");
+		
+		tileView->label.set_markup("<span color=\"white\">" + (tile->getEnemies().size() == 0 ? "" : to_string(tile->getEnemies().size())) + "\n</span>");
+	}		
 }

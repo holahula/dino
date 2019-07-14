@@ -55,6 +55,7 @@ class Map {
         bool inMap(int x, int y);
         Tower *getTower(int x, int y);
         LandTile* getLandTile(int x, int y);
+        PathTile* getPathTile(int x, int y);
         void insertTower(Tower*, int x, int y);
         bool sellTower(int x, int y);
         void increaseTowerRange(Tower*, int x, int y);
@@ -71,7 +72,7 @@ class Map {
 			friend class Map;
 
 		  public:
-		  	Tile& operator*();
+		  	char operator*();
 			Iterator& operator++();
 			bool operator!=(const Iterator&);
 		};

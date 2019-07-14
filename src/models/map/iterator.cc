@@ -4,8 +4,8 @@ using namespace std;
 
 Map::Iterator::Iterator(int row, int col, int nr, int nc, vector<vector<Tile*> > map) : row{row}, col{col}, nr{nr}, nc{nc}, map{map} {}
 
-Tile& Map::Iterator::operator*() {
-	return *map.at(row).at(col);
+char Map::Iterator::operator*() {
+	return map.at(row).at(col)->getType();
 }
 
 Map::Iterator& Map::Iterator::operator++() {

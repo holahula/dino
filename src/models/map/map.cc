@@ -284,6 +284,15 @@ LandTile* Map::getLandTile(int x, int y) {
     return nullptr;
 }
 
+PathTile* Map::getPathTile(int x, int y) {
+    for (size_t i=0; i<p->path.size(); ++i) {
+        if (p->path[i]->location().first == x && p->path[i]->location().second == y) {
+            return p->path[i];
+        }
+    }
+    return nullptr;
+}
+
 void Map::insertTower(Tower* tower, int x, int y) {
     // can throw a LandTileOccupiedException
     if (isOccupied(x,y)) {
