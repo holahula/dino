@@ -284,7 +284,7 @@ void View::update_info() {
 	} else {
 		pair<char, int> t = selected_tower->getType();
 		pair<string, string> type = getTowerFullType(t.first, true);
-		m_label_tower_spec.set_text(type.first + " Tower\n\n" + getTower(t.first)->getDescription() + "\nRange: " + to_string(selected_tower->getRange()) + "\nUpgrade Cost: $" + to_string(selected_tower->getUpgradeCost()) + "\n" + type.second + ": " + to_string(t.second));
+		m_label_tower_spec.set_text(type.first + " Tower\n\nDescription:\n" + getTower(t.first)->getDescription() + "\n\nRange: " + to_string(selected_tower->getRange()) + "\nUpgrade Cost: $" + to_string(selected_tower->getUpgradeCost()) + "\n" + type.second + ": " + to_string(t.second));
 		m_button_upgrade_tower.show();
 		m_button_sell_tower.show();
 	}
@@ -321,7 +321,9 @@ void View::startRound() {
 }
 
 void View::nextStep() {
+	update_view();
 	if(roundDone) {
+		displayEnemies();
     	updateState(hp, hpStartRound - hp, (double)(hpStartRound - hp)/(double)totalEnemyHP);
 		m_button_round.set_sensitive();
 		m_button_buy_damage_tower.set_sensitive();
@@ -337,9 +339,9 @@ void View::nextStep() {
 			roundDone = true;
 		}
 
-        game->processFrame();
-        
 		displayEnemies();
+
+        game->processFrame();
 		
     	game->map->detachAllEnemies();
 
@@ -397,7 +399,7 @@ void View::displayEnemies() {
 					enemyType = "Invisible";
 					break;
 			}
-			stats += enemyType + " Enemy with " + to_string(enemy->getHP()) + " hp (" + (enemy->getFrozen() > 0 ? "frozen" : "") + (enemy->getFrozen() > 0 && enemy->isTargetable() ? " and " : "") + (enemy->isTargetable() ? "targetable" : "") + ")\n";
+			stats += enemyType + " Enemy with " + to_string(enemy->getHP()) + " hp (" + (enemy->getFrozen() > 0 ? "frozen" : "not frozen") + " & " + (enemy->isTargetable() ? "targetable" : "not targetable") + ")\n";
 		}
 		tileView->label.set_tooltip_text(stats);
 		if(tile->getEnemies().size() == 0 && tileView->get_style_context()->has_class("path_tile_print")) {
