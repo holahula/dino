@@ -2,6 +2,7 @@
 #include "money.h"
 
 #include <utility>
+#include <string>
 
 using namespace std;
 
@@ -18,6 +19,10 @@ std::pair<char, int> MoneyTower::getType() const {
 
 int MoneyTower::getCost() const {
     return cost;
+}
+
+string MoneyTower::getDescription() const {
+	return "Generates money \nwith a certain \nincome";
 }
 
 void MoneyTower::upgrade() {

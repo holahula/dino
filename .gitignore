@@ -1,5 +1,7 @@
 .vscode
-src/td
+td
+vgdump
+gtk.suppression
 # Prerequisites
 *.d
 

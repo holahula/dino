@@ -2,6 +2,7 @@
 #include "freeze.h"
 
 #include <utility>
+#include <string>
 
 using namespace std;
 
@@ -19,6 +20,10 @@ std::pair<char, int> FreezeTower::getType() const {
 
 int FreezeTower::getCost() const {
     return cost;
+}
+
+string FreezeTower::getDescription() const {
+	return "Slows down \nenemies for a \ncertain duration \nof time";
 }
 
 void FreezeTower::upgrade() {
