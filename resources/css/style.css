@@ -23,3 +23,18 @@
 .path_tile_print {
 	background-image: url("../assets/path_tile_print.png");
 }
+
+.window {
+	background-image: url("../assets/stone_texture.jpg");
+}
+
+.box {
+	background-color:rgba(255, 255, 255, 0.63);
+	color: black;
+}
+
+.start_button {
+	font-weight:bolder;
+	background-color:rgba(255,255,255,0.5);
+	color: green;
+}

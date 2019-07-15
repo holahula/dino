@@ -18,10 +18,8 @@ using namespace std;
 
 View::View() : selected_tileView(nullptr),
 				selected_tower(nullptr),
-				panel_menu("Menu"),
-				panel_shop("Shop"),
-				panel_info("Information"),
-				box_menu(Gtk::ORIENTATION_VERTICAL),
+				box_menu(Gtk::ORIENTATION_HORIZONTAL),
+				box_round(Gtk::ORIENTATION_VERTICAL),
 				box_shop(Gtk::ORIENTATION_VERTICAL),
 				box_info(Gtk::ORIENTATION_VERTICAL),
 				m_button_new_game("Start a new Game"),
@@ -39,25 +37,37 @@ View::View() : selected_tileView(nullptr),
 				m_label_tower_spec("Select a Tower") {
 
 	// Customizations
-	set_title("Tower Defense");
+	set_title("Dino Tower Defense");
 	set_border_width(10);
+	get_style_context()->add_class("window");
 
-	box_menu.set_border_width(5);
+	box_menu.set_border_width(10);
 	box_menu.set_layout(Gtk::BUTTONBOX_SPREAD);
-	box_menu.set_spacing(5);
+	box_menu.set_spacing(10);
 
-	box_shop.set_border_width(5);
+	box_round.set_layout(Gtk::BUTTONBOX_SPREAD);
+	box_round.set_spacing(10);
+
+	box_shop.set_border_width(10);
 	box_shop.set_layout(Gtk::BUTTONBOX_SPREAD);
-	box_shop.set_spacing(5);
+	box_shop.set_spacing(10);
 
-	box_info.set_border_width(5);
+	box_info.set_border_width(10);
 	box_info.set_layout(Gtk::BUTTONBOX_SPREAD);
-	box_info.set_spacing(5);
+	box_info.set_spacing(10);
 
+	tiles.set_border_width(10);
 	tiles.set_row_spacing(0);
 	tiles.set_column_spacing(0);
 
-	m_grid.set_column_spacing(10);
+	box_menu.get_style_context()->add_class("box");
+	box_shop.get_style_context()->add_class("box");
+	box_info.get_style_context()->add_class("box");
+
+	m_button_new_game.get_style_context()->add_class("start_button");
+
+	m_grid.set_column_spacing(0);
+	m_grid.set_row_spacing(0);
 
 	// Set up drag and drop functionality
 	//Targets:
@@ -92,10 +102,12 @@ View::View() : selected_tileView(nullptr),
 
 	// Add Widgets
 	box_menu.add(m_label_user_spec);
-	box_menu.add(m_button_round);
-	box_menu.add(m_button_next);
-	box_menu.add(m_button_skip);
-	box_menu.add(m_button_new_game);
+	box_menu.add(box_round);
+
+	box_round.add(m_button_round);
+	box_round.add(m_button_next);
+	box_round.add(m_button_skip);
+	box_round.add(m_button_new_game);
 
 	box_shop.add(m_button_buy_damage_tower);
 	box_shop.add(m_label_damage_tower);
@@ -107,15 +119,12 @@ View::View() : selected_tileView(nullptr),
 	box_info.add(m_label_tower_spec);
 	box_info.add(m_button_upgrade_tower);
 	box_info.add(m_button_sell_tower);
-	
-	panel_shop.add(box_shop);
-	panel_info.add(box_info);
-	m_grid.attach(panel_shop, 3, 0, 1, 2);
-	m_grid.attach(panel_info, 4, 0, 1, 2);
-	m_grid.attach(tiles, 0, 0, 2, 4);
 
-	panel_menu.add(box_menu);
-	m_grid.attach(panel_menu, 2, 0, 1, 2);
+	m_grid.attach(box_info, 1, 3, 1, 9);
+	m_grid.attach(tiles, 0, 0, 1, 12);
+	m_grid.attach(box_shop, 2, 0, 5, 12);
+	m_grid.attach(box_menu, 1, 0, 1, 3);
+
 	add(m_grid);
 
 	startNewGame();
