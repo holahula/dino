@@ -25,16 +25,13 @@
 }
 
 .window {
-	background-image: url("../assets/stone_texture.jpg");
+	background-color: rgb(86,58,25);
+	background-image: url("../assets/stone_texture2.jpg");
 }
 
 .box {
-	background-color:rgba(255, 255, 255, 0.63);
-	color: black;
-}
-
-.start_button {
-	font-weight:bolder;
-	background-color:rgba(255,255,255,0.5);
-	color: green;
+	color:rgba(255, 255, 255, 0.9);
+	background-color: rgba(51, 51, 51, 0.75);
+	font-weight:bold;
+	font-size: 10px;
 }

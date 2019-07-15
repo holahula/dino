@@ -64,8 +64,6 @@ View::View() : selected_tileView(nullptr),
 	box_shop.get_style_context()->add_class("box");
 	box_info.get_style_context()->add_class("box");
 
-	m_button_new_game.get_style_context()->add_class("start_button");
-
 	m_grid.set_column_spacing(0);
 	m_grid.set_row_spacing(0);
 
@@ -122,7 +120,7 @@ View::View() : selected_tileView(nullptr),
 
 	m_grid.attach(box_info, 1, 3, 1, 9);
 	m_grid.attach(tiles, 0, 0, 1, 12);
-	m_grid.attach(box_shop, 2, 0, 5, 12);
+	m_grid.attach(box_shop, 2, 0, 1, 12);
 	m_grid.attach(box_menu, 1, 0, 1, 3);
 
 	add(m_grid);
