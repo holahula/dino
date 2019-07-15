@@ -33,6 +33,9 @@ View::View() : selected_tileView(nullptr),
 				m_button_buy_money_tower("Buy Money Tower"),
 				m_button_upgrade_tower("Upgrade Tower"),
 				m_button_sell_tower("Sell Tower"),
+				m_label_damage_tower(""),
+				m_label_freeze_tower(""),
+				m_label_money_tower(""),
 				m_label_tower_spec("Select a Tower") {
 
 	// Customizations
@@ -95,8 +98,11 @@ View::View() : selected_tileView(nullptr),
 	box_menu.add(m_button_new_game);
 
 	box_shop.add(m_button_buy_damage_tower);
+	box_shop.add(m_label_damage_tower);
 	box_shop.add(m_button_buy_freeze_tower);
+	box_shop.add(m_label_freeze_tower);
 	box_shop.add(m_button_buy_money_tower);
+	box_shop.add(m_label_money_tower);
 
 	box_info.add(m_label_tower_spec);
 	box_info.add(m_button_upgrade_tower);
@@ -104,12 +110,12 @@ View::View() : selected_tileView(nullptr),
 	
 	panel_shop.add(box_shop);
 	panel_info.add(box_info);
-	m_grid.attach(panel_shop, 2, 1, 1, 3);
-	m_grid.attach(panel_info, 3, 0, 1, 4);
+	m_grid.attach(panel_shop, 3, 0, 1, 2);
+	m_grid.attach(panel_info, 4, 0, 1, 2);
 	m_grid.attach(tiles, 0, 0, 2, 4);
 
 	panel_menu.add(box_menu);
-	m_grid.attach(panel_menu, 2, 0, 1, 1);
+	m_grid.attach(panel_menu, 2, 0, 1, 2);
 	add(m_grid);
 
 	startNewGame();
@@ -123,48 +129,45 @@ View::View() : selected_tileView(nullptr),
 }
 
 View::~View() {
-	for (size_t i=0; i<tileViewGrid.size(); ++i) {
-        for (size_t j=0; j<tileViewGrid[i].size(); ++j) {
-			delete tileViewGrid[i][j];
-        }
-		tileViewGrid[i].clear();
-    }
-	tileViewGrid.clear();
+	// for (size_t i=0; i<tileViewGrid.size(); ++i) {
+    //     for (size_t j=0; j<tileViewGrid[i].size(); ++j) {
+	// 		delete tileViewGrid[i][j];
+    //     }
+	// 	tileViewGrid[i].clear();
+    // }
+	// tileViewGrid.clear();
 	tileViewPath.clear();
 }
 
 void View::startNewGame() {
 	// Start a new game
 	game = unique_ptr<State>(new State);
-	vector<vector<TileView *> > temp = vector<vector<TileView*> >(game->getMap()->getWidth(), vector<TileView*>(game->getMap()->getHeight(), nullptr));
-	tileViewGrid = temp;
+	// vector<vector<TileView *> > temp = vector<vector<TileView*> >(game->getMap()->getHeight(), vector<TileView*>(game->getMap()->getWidth(), nullptr));
+	// tileViewGrid = temp;
 	
 	// Initialize widgets
 	update_view();
+	m_label_damage_tower.set_text("Cost: $" + to_string(getTower('D')->getCost()) + "\nDescription:\n" + getTower('D')->getDescription());
+	m_label_freeze_tower.set_text("Cost: $" + to_string(getTower('F')->getCost()) + "\nDescription:\n" + getTower('F')->getDescription());
+	m_label_money_tower.set_text("Cost: $" + to_string(getTower('M')->getCost()) + "\nDescription:\n" + getTower('M')->getDescription());
 	
 	// Build grid of tiles using the map
 	Map* map = game->getMap();
-	int row = 0, col = 0, nc = map->getHeight();
-	for(auto it = map->begin(); it != map->end(); ++it) {
-		TileView *tileView = new TileView(row, col, *it);
-		tileViewGrid.at(row).at(col) = tileView;
-		if (tileView->type == '.') {
-			tileView->drag_dest_set(listTargets);
-		} else {
-			tileView->label.set_markup("");
-			tileViewPath.emplace_back(tileView);
-		}
-		tileView->set_events(Gdk::BUTTON_PRESS_MASK);
-		tileView->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*this, &View::on_tile_clicked), tileView));
-		tileView->signal_drag_data_received().connect(sigc::bind(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received), tileView));
-		tileView->get_style_context()->add_class(tileView->type == '.' ? "land_tile" : "path_tile");
-		tiles.attach(*tileViewGrid.at(row).at(col), row, col, 1, 1);			
-		
-		if (col < nc - 1) {
-			col++;
-		} else {
-			row++;
-			col = 0;
+	for(int row = map->getHeight() - 1; row >= 0; --row) {
+		for(int col = 0; col < map->getWidth(); ++col) {
+			TileView *tileView = new TileView(row, col, map->getTile(col, row)->getType());
+			// tileViewGrid.at(col).at(row) = tileView;
+			if (tileView->type == '.') {
+				tileView->drag_dest_set(listTargets);
+			} else {
+				// tileView->label.set_markup("");
+				tileViewPath.emplace_back(tileView);
+			}
+			tileView->set_events(Gdk::BUTTON_PRESS_MASK);
+			tileView->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*this, &View::on_tile_clicked), tileView));
+			tileView->signal_drag_data_received().connect(sigc::bind(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received), tileView));
+			tileView->get_style_context()->add_class(tileView->type == '.' ? "land_tile" : "path_tile");
+			tiles.attach(*tileView, col, row, 1, 1);			
 		}
 	}
 }
@@ -265,7 +268,7 @@ void View::on_label_drop_drag_data_received(const Glib::RefPtr<Gdk::DragContext>
 }
 
 void View::update_view() {
-	m_label_user_spec.set_text("Round: " + to_string(game->getRound()) + "\nHp: " + to_string(game->getHp()) + "\nMoney: " + to_string(game->getMoney()));
+	m_label_user_spec.set_text("Round: " + to_string(game->getRound()) + "\nHp: " + to_string(game->getHp()) + "\nMoney: $" + to_string(game->getMoney()));
 }
 
 void View::update_tooltip() {
@@ -281,7 +284,7 @@ void View::update_info() {
 	} else {
 		pair<char, int> t = selected_tower->getType();
 		pair<string, string> type = getTowerFullType(t.first, true);
-		m_label_tower_spec.set_text(type.first + " Tower\nDescription: it's great lol\nCost: $" + to_string(selected_tower->getCost()) + "\nRange: " + to_string(selected_tower->getRange()) + "\nUpgrade Cost: " + to_string(selected_tower->getUpgradeCost()) + "\n" + type.second + ": " + to_string(t.second));
+		m_label_tower_spec.set_text(type.first + " Tower\n\n" + getTower(t.first)->getDescription() + "\nRange: " + to_string(selected_tower->getRange()) + "\nUpgrade Cost: $" + to_string(selected_tower->getUpgradeCost()) + "\n" + type.second + ": " + to_string(t.second));
 		m_button_upgrade_tower.show();
 		m_button_sell_tower.show();
 	}
@@ -373,7 +376,7 @@ void View::updateState(int hp, int hpLost, double remainingEnemyHP) {
 void View::displayEnemies() {
 	for(size_t i=0; i<tileViewPath.size(); ++i) {
 		TileView *tileView = tileViewPath.at(i);
-		PathTile * tile = game->getMap()->getPathTile(tileView->row, tileView->col);
+		PathTile * tile = game->getMap()->getPathTile(tileView->col, tileView->row);
 		string enemyType = "";
 		string stats = "";
 		int basicCount = 0;
@@ -405,4 +408,15 @@ void View::displayEnemies() {
 		}
 		// tileView->label.set_markup("<span color=\"white\">" + (tile->getEnemies().size() == 0 ? "" : to_string(tile->getEnemies().size())) + "</span>");
 	}		
+}
+
+Tower* View::getTower(char type) {
+	switch(type) {
+		case 'D':
+			return game->shop->getDamageTower();
+		case 'F':
+			return game->shop->getFreezeTower();
+		default:
+			return game->shop->getMoneyTower();
+	}
 }

@@ -18,7 +18,7 @@ class View : public Gtk::Window {
 	Tower *selected_tower;
 	// targets for drag and drop
 	std::vector<Gtk::TargetEntry> listTargets;
-	std::vector<std::vector<TileView *> > tileViewGrid;
+	// std::vector<std::vector<TileView *> > tileViewGrid;
 	std::vector<TileView *> tileViewPath;
 
 	int frame;
@@ -47,6 +47,9 @@ class View : public Gtk::Window {
 	Gtk::Button m_button_buy_money_tower;
 	Gtk::Button m_button_upgrade_tower;
 	Gtk::Button m_button_sell_tower;
+	Gtk::Label m_label_damage_tower;
+	Gtk::Label m_label_freeze_tower;
+	Gtk::Label m_label_money_tower;
 	Gtk::Label m_label_user_spec;
 	Gtk::Label m_label_tower_spec;
 	
@@ -73,6 +76,7 @@ class View : public Gtk::Window {
 	void updateState(int, int, double);
 	void startNewGame();
 	void displayEnemies();
+	Tower* getTower(char);
 
  public:
 	View();

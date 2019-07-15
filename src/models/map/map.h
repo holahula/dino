@@ -56,6 +56,7 @@ class Map {
         Tower *getTower(int x, int y);
         LandTile* getLandTile(int x, int y);
         PathTile* getPathTile(int x, int y);
+		Tile* getTile(int x, int y);
         void insertTower(Tower*, int x, int y);
         bool sellTower(int x, int y);
         void increaseTowerRange(Tower*, int x, int y);
@@ -63,22 +64,6 @@ class Map {
         int getWidth();
         int getHeight();
         friend std::ostream& operator<<(std::ostream&, Map &);
-
-		class Iterator {
-			int row, col, nr, nc;
-			std::vector<std::vector<Tile*> > map;
-
-			Iterator(int, int, int, int, std::vector<std::vector<Tile*> >);
-			friend class Map;
-
-		  public:
-		  	char operator*();
-			Iterator& operator++();
-			bool operator!=(const Iterator&);
-		};
-
-		Iterator begin();
-		Iterator end();
 };
 
 #endif
