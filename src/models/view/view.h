@@ -16,7 +16,6 @@ class View : public Gtk::Window {
 	std::unique_ptr<State> game;
 	TileView *selected_tileView;
 	Tower *selected_tower;
-	// std::vector<Enemy*> selected_enemies;
 	// targets for drag and drop
 	std::vector<Gtk::TargetEntry> listTargets;
 	std::vector<std::vector<TileView *> > tileViewGrid;
@@ -50,7 +49,6 @@ class View : public Gtk::Window {
 	Gtk::Button m_button_sell_tower;
 	Gtk::Label m_label_user_spec;
 	Gtk::Label m_label_tower_spec;
-	Gtk::Label m_label_enemies_spec;
 	
 	void on_button_new_game_clicked();
 	void on_button_round_clicked();

@@ -33,8 +33,7 @@ View::View() : selected_tileView(nullptr),
 				m_button_buy_money_tower("Buy Money Tower"),
 				m_button_upgrade_tower("Upgrade Tower"),
 				m_button_sell_tower("Sell Tower"),
-				m_label_tower_spec("Select a Tower"),
-				m_label_enemies_spec("Select Enemies") {
+				m_label_tower_spec("Select a Tower") {
 
 	// Customizations
 	set_title("Tower Defense");
@@ -102,7 +101,6 @@ View::View() : selected_tileView(nullptr),
 	box_info.add(m_label_tower_spec);
 	box_info.add(m_button_upgrade_tower);
 	box_info.add(m_button_sell_tower);
-	box_info.add(m_label_enemies_spec);
 	
 	panel_shop.add(box_shop);
 	panel_info.add(box_info);
@@ -287,11 +285,6 @@ void View::update_info() {
 		m_button_upgrade_tower.show();
 		m_button_sell_tower.show();
 	}
-	// if(selected_enemies.size() == 0) {
-	// 	m_label_enemies_spec.set_text("Select Enemies");
-	// } else {
-	// 	m_label_enemies_spec.set_text("hi");
-	// }
 }
 
 void View::update_selected_tileView(TileView *tileView) {
@@ -404,8 +397,12 @@ void View::displayEnemies() {
 			stats += enemyType + " Enemy with " + to_string(enemy->getHP()) + " hp (" + (enemy->getFrozen() > 0 ? "frozen" : "") + (enemy->getFrozen() > 0 && enemy->isTargetable() ? " and " : "") + (enemy->isTargetable() ? "targetable" : "") + ")\n";
 		}
 		tileView->label.set_tooltip_text(stats);
-		// tileView->label.set_markup("<span color=\"red\">" + to_string(tile->getEnemies().size()) + "\n</span><span color=\"blue\">2\n</span><span color=\"yellow\">5</span>");
-		
-		tileView->label.set_markup("<span color=\"white\">" + (tile->getEnemies().size() == 0 ? "" : to_string(tile->getEnemies().size())) + "\n</span>");
+		if(tile->getEnemies().size() == 0 && tileView->get_style_context()->has_class("path_tile_print")) {
+			tileView->get_style_context()->remove_class("path_tile_print");
+		}
+		if(tile->getEnemies().size() > 0) {
+			tileView->get_style_context()->add_class("path_tile_print");
+		}
+		// tileView->label.set_markup("<span color=\"white\">" + (tile->getEnemies().size() == 0 ? "" : to_string(tile->getEnemies().size())) + "</span>");
 	}		
 }

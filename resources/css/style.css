@@ -15,7 +15,11 @@
 }
 
 .path_tile {
-	font-size:12px;
+	font-size:8px;
 	font-weight: bolder;
 	background-image: url("../assets/path_tile.png");
+}
+
+.path_tile_print {
+	background-image: url("../assets/path_tile_print.png");
 }
