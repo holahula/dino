@@ -149,11 +149,7 @@ bool State::preFrame(int frame, int size){
 void State::processFrame(){
     // shoot enemies
     for(Tower* tower : towers){
-        pair<int, int> type = tower->getType();
-        if(type.first == 'D'){
-            incrementMoney(type.second);
-        }
-        tower->notifyObservers(tower);
+        incrementMoney(tower->notifyObservers(tower));
     }
 
     vector<Enemy*> dead =  map->removeDeadEnemies();

@@ -19,16 +19,19 @@ int Enemy::getFrozen() const {
     return isFrozen;
 }
 
-void Enemy::notify(Tower * tower){
+int Enemy::notify(Tower * tower){
     pair<char, int> type = tower->getType();
     if(type.first == 'D') {
+        int prevHP = hp;
         hp -= type.second;
+        return min(prevHP, type.second);
     }
     else if (type.first == 'F') {
         if (!isFrozen) {
             isFrozen = type.second;
         }
     }
+    return 0;
 }
 
 void Enemy::observeTowers(vector<Tower*> towers){

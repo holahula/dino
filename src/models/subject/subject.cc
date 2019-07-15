@@ -25,17 +25,16 @@ void Subject::detachAll() {
     observers.clear();
 }
 
-void Subject::notifyObservers(Tower * tower) {
-    // for (auto ob : observers) ob->notify(tower);
-    // only notify the 1st enemy (closest to the exit)
-
-    // TODO: if increase the # of enemies shooting, simply increase the # of notified enemies
+int Subject::notifyObservers(Tower * tower) {
+    int dmg = 0;
     if(observers.size() > 0) {
         try {
             Observer* val = observers.at(0);
-            val->notify(tower);
+            dmg = val->notify(tower);
         }  catch (out_of_range& err) {
             cout << "out of range! cannot shoot this enemy" << endl;
         }
     }
+
+    return dmg;
 }

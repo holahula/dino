@@ -26,7 +26,7 @@ class Enemy : public Observer {
 
         virtual char getType() const = 0;
         virtual void nextState() = 0;
-        virtual void notify(Tower*) override;
+        virtual int notify(Tower*) override;
         void observeTowers(std::vector<Tower*>);
         void removeTowers();
         bool isTargetable();
