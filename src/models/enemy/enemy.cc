@@ -23,8 +23,8 @@ int Enemy::notify(Tower * tower){
     pair<char, int> type = tower->getType();
     if(type.first == 'D') {
         int prevHP = hp;
-        hp -= type.second;
-        return min(prevHP, type.second);
+        hp = max(hp - type.second, 0);
+        return prevHP-hp;
     }
     else if (type.first == 'F') {
         if (!isFrozen) {
