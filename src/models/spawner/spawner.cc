@@ -45,8 +45,8 @@ void Spawner::playerUpdate(int hpLost){
         spawnMultiplier -= 0.08;
         goldMultiplier += 0.07;
     } else {
-        statusMultiplier += 0.07;
-        spawnMultiplier += 0.05;
+        statusMultiplier += 0.05;
+        spawnMultiplier += 0.03;
         goldMultiplier -= 0.05;
         status += 1;
         spawn += 1;
@@ -75,9 +75,9 @@ void Spawner::enemyUpdate(double enemyHP){
         goldMultiplier += 0.02;
         difficulty -= 2;
     } else {
-        statusMultiplier += 0.06;
-        spawnMultiplier += 0.05;
-        goldMultiplier -= 0.04;
+        statusMultiplier += 0.05;
+        spawnMultiplier += 0.03;
+        goldMultiplier -= 0.03;
         difficulty += 4;
     }
 }
@@ -93,7 +93,7 @@ void Spawner::updatePoints(){
 }
 
 void Spawner::updateHealth(){
-    health = max(1.0, min(numeric_limits<double>::max(), health * status + (MAXHP_RATIO * difficulty/100)));
+    health = max(1.0, min(numeric_limits<double>::max(), health * status / MAXHP_RATIO  + (20 * difficulty/100)));
 }
 
 void Spawner::updateArmor(){
@@ -149,6 +149,7 @@ void Spawner::updateState(int round, int hpLost, double enemyHP){
     enemyUpdate(enemyHP);
     updatePoints();
     updateEnemies();
+
     if(training && round % 2 == 0) {
         updateTraining(round);
     }
@@ -222,7 +223,7 @@ vector<Enemy*> Spawner::generateEnemies(int round){
     uniform_int_distribution<> uniformDist = generateUniformDistribution(1, 4);
 
     for(int i = 0; i < size; i++){
-        Enemy* e = generateEnemy(max(1, maxHP-round_(logDist(gen))), round, bernoulliDist(gen), uniformDist(gen));
+        Enemy* e = generateEnemy(max(1, (int)(maxHP-floor(logDist(gen)))), round, bernoulliDist(gen), uniformDist(gen));
         enemies.push_back(e);
     }
 
