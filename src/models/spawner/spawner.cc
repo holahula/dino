@@ -4,6 +4,7 @@
 #include "./../enemy/regenerative/regenerative.h"
 #include "spawner.h"
 
+#include <limits>
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -92,11 +93,11 @@ void Spawner::updatePoints(){
 }
 
 void Spawner::updateHealth(){
-    health = max(1.0, health * status + (20 * difficulty/100));
+    health = max(1.0, min(numeric_limits<double>::max(), health * status + (MAXHP_RATIO * difficulty/100)));
 }
 
 void Spawner::updateArmor(){
-    armor = max(1.0, armor * (status / 4) + (20 * difficulty/100));
+    armor = max(1.0, min(numeric_limits<double>::max(), armor * (status / 4) + (20 * difficulty/100)));
 }
 
 void Spawner::updateEnemyType(){
@@ -118,6 +119,7 @@ void Spawner::updateTraining(int round){
         training = !training;
     }
 }
+
 void Spawner::printStats(){
     cout << "Difficulty: " << difficulty << endl;
 
@@ -140,8 +142,8 @@ void Spawner::printStats(){
 }
 
 void Spawner::updateState(int round, int hpLost, double enemyHP){
-    // cout << "\n PRE-STATE UPDATE " << endl;
-    // printStats();
+    cout << "\nPREV ROUND" << endl;
+    printStats();
 
     playerUpdate(hpLost);
     enemyUpdate(enemyHP);
@@ -151,7 +153,7 @@ void Spawner::updateState(int round, int hpLost, double enemyHP){
         updateTraining(round);
     }
 
-    cout << "\nNEXT ROUND UPDATE " << endl;
+    cout << "\nNEXT ROUND" << endl;
     printStats();
 }
 
@@ -164,7 +166,7 @@ int Spawner::hordeSize() {
 }
 
 lognormal_distribution<> Spawner::generateLogDistribution(double max, double min) {
-    lognormal_distribution<> d(max, min);
+    lognormal_distribution<> d(min, max);
     return d;
 }
 
@@ -179,8 +181,7 @@ uniform_int_distribution<> Spawner::generateUniformDistribution(int min, int max
 }
 
 Enemy* Spawner::generateEnemy(int hp, int round, bool invis, int regenerative){
-    // cout << round << " "<< hp << " " << invis << " " << regenerative << endl;
-    // cout << regen << invisible << endl;
+    cout << "creating enemy w/ HP: " << hp << endl;
     if(!regen && !invisible){
         return new BasicEnemy(hp);
     } else if (!regen) {
@@ -229,6 +230,6 @@ vector<Enemy*> Spawner::generateEnemies(int round){
 }
 
 int Spawner::getBonusGold(){
-    return (int)max(0.0, (50.0 * (double)difficulty/100.0) + (double)gold);
+    return (int)max(0.0, (50.0 * (double)difficulty/100.0) + (double)gold * 2);
 }
 
