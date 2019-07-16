@@ -321,8 +321,7 @@ pair<string, string> View::getTowerFullType(char type, bool isCapitalized) {
 void View::startRound() {
     frame = 1;
     size = game->constructEnemies();
-	hp = game->hp;
-    hpStartRound = hp;
+    hpStartRound = game->hp;
     totalEnemyHP = game->totalHP(game->enemies);
 	roundDone = false;
 }
@@ -331,7 +330,7 @@ void View::nextStep() {
 	update_view();
 	if(roundDone) {
 		displayEnemies();
-    	updateState(hp, hpStartRound - hp, (double)(hpStartRound - hp)/(double)totalEnemyHP);
+    	updateState(hpStartRound - game->hp, (double)(hpStartRound - game->hp)/(double)totalEnemyHP);
 		m_button_round.set_sensitive();
 		m_button_buy_damage_tower.set_sensitive();
 		m_button_buy_freeze_tower.set_sensitive();
@@ -359,23 +358,31 @@ void View::nextStep() {
 	}
 }
 
-void View::updateState(int hp, int hpLost, double remainingEnemyHP) {
-    if(hp <= 0) {
+void View::updateState(int hpLost, double remainingEnemyHP) {
+    if(game->hp <= 0) {
         Gtk::MessageDialog dialog(*this, "Game Over", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
 		dialog.set_secondary_text("You lost!");
 		dialog.run();
-		// Gtk::Main::quit();
+		close();
         return;
     } else if(game->round == game->MAX_ROUND){
         Gtk::MessageDialog dialog(*this, "Game Finished", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
 		dialog.set_secondary_text("You won! There are no more rounds left.");
 		dialog.run();
+		close();
         return;
+    }
+
+	if(game->round % 5 == 0){
+		Gtk::MessageDialog dialog(*this, "Boss Level Passed!", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
+		dialog.set_secondary_text("You gained 5 HP for killing the boss level!");
+		dialog.run();
+        game->hp = min(100, game->hp+5);
     }
 
     game->getRoundIncome();
     // spawner interactions
-    game->spawner->updateState(game->round, hpLost,remainingEnemyHP);
+    game->spawner->updateState(game->round, hpLost, remainingEnemyHP);
 
 	update_view();
     

@@ -195,7 +195,7 @@ void State::updateState(int hp, int hpLost, double remainingEnemyHP){
     // if(hpLost == 0 && round % 5 == 0){
     if(round % 5 == 0){
         cout << "You gained 5 HP for killing the boss level!" << endl;
-        hp = max(100, hp+5);
+        hp = min(100, hp+5);
     }
 
     getRoundIncome();

@@ -24,7 +24,6 @@ class View : public Gtk::Window {
 	int frame;
     bool status;
     int size;
-	int hp;
     int hpStartRound;
     int totalEnemyHP;
 	bool roundDone;
@@ -71,7 +70,7 @@ class View : public Gtk::Window {
 
 	void startRound();
 	void nextStep();
-	void updateState(int, int, double);
+	void updateState(int, double);
 	void startNewGame();
 	void displayEnemies();
 	Tower* getTower(char);
