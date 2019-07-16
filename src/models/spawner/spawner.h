@@ -17,7 +17,7 @@ class Spawner {
     private:
         static const int INVISIBLE_THRESHOLD = 10;
         static const int REGENERATIVE_THRESHOLD = 20;
-
+        static const int MAXHP_RATIO = 10;
         // types of mobs you can spawn
         bool regen, invisible;
 

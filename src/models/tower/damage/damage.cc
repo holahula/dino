@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <string>
+#include <cmath>
 
 using namespace std;
 
@@ -27,8 +28,8 @@ string DamageTower::getDescription() const {
 
 void DamageTower::upgrade() {
     totalValue += upCost;
-    dmg += 1;
-    upCost = dmg*dmg;
+    dmg *= 2;
+    upCost *= 4;
     ++range;
 }
 
