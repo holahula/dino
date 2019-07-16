@@ -22,9 +22,10 @@ int Enemy::getFrozen() const {
 int Enemy::notify(Tower * tower){
     pair<char, int> type = tower->getType();
     if(type.first == 'D') {
+        int ret = 0;
         int prevHP = hp;
         hp -= type.second;
-        return min(prevHP, type.second);
+        return max(0, min(prevHP, type.second));
     }
     else if (type.first == 'F') {
         if (!isFrozen) {

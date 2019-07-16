@@ -42,6 +42,8 @@ class Spawner {
         void updateHealth();
         void updateArmor();
 
+        void printStats();
+
         void updateTraining(int);
 
         bool isBossLevel(int);
