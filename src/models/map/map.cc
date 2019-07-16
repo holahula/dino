@@ -264,7 +264,7 @@ bool Map::isTower(int x, int y) {
 }
 
 Tower* Map::getTower(int x, int y) {
-    if (!isTower(x,y)) {
+    if (inMap(x,y) && !isTower(x,y)) {
         throw NoTowerException("There is no tower at this location");
     }
     for (size_t i=0; i<p->land.size(); ++i) {
@@ -282,6 +282,22 @@ LandTile* Map::getLandTile(int x, int y) {
         }
     }
     return nullptr;
+}
+
+PathTile* Map::getPathTile(int x, int y) {
+    for (size_t i=0; i<p->path.size(); ++i) {
+        if (p->path[i]->location().first == x && p->path[i]->location().second == y) {
+            return p->path[i];
+        }
+    }
+    return nullptr;
+}
+
+Tile* Map::getTile(int x, int y) {
+    if(inMap(x, y)) {
+		return p->map[x][y];
+	}
+	return nullptr;
 }
 
 void Map::insertTower(Tower* tower, int x, int y) {

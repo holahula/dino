@@ -2,6 +2,7 @@
 #include "damage.h"
 
 #include <utility>
+#include <string>
 
 using namespace std;
 
@@ -18,6 +19,10 @@ std::pair<char, int> DamageTower::getType() const {
 
 int DamageTower::getCost() const {
     return cost;
+}
+
+string DamageTower::getDescription() const {
+	return "Attacks enemies \nwith a certain \ndamage";
 }
 
 void DamageTower::upgrade() {

@@ -1,5 +1,7 @@
 .vscode
-src/td
+td
+vgdump
+gtk.suppression
 # Prerequisites
 *.d
 
@@ -32,3 +34,4 @@ src/td
 *.exe
 *.out
 *.app
+td

@@ -13,6 +13,7 @@ class FreezeTower : public Tower {
         ~FreezeTower();
 
         int getCost() const override;
+		std::string getDescription() const override;
         int getUpgradeCost() const override;
         std::pair<char, int> getType() const override;
 

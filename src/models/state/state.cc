@@ -107,7 +107,7 @@ int State::constructEnemies() {
     for(auto e : generatedEnemies){
         addEnemy(e);
     }
-    cout << "TOTAL ENEMIES GENERATED: " << generatedEnemies.size() << endl;
+    // cout << "TOTAL ENEMIES GENERATED: " << generatedEnemies.size() << endl;
     return generatedEnemies.size();
 }
 
@@ -149,11 +149,7 @@ bool State::preFrame(int frame, int size){
 void State::processFrame(){
     // shoot enemies
     for(Tower* tower : towers){
-        pair<int, int> type = tower->getType();
-        if(type.first == 'D'){
-            incrementMoney(type.second);
-        }
-        tower->notifyObservers(tower);
+        incrementMoney(tower->notifyObservers(tower));
     }
 
     vector<Enemy*> dead =  map->removeDeadEnemies();

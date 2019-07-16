@@ -3,6 +3,8 @@
 
 #include "./../tower.h"
 
+#include <string>
+
 class DamageTower : public Tower {
     private:
         int dmg, upCost;
@@ -15,6 +17,7 @@ class DamageTower : public Tower {
 
         int getUpgradeCost() const override;
         int getCost() const override;
+        std::string getDescription() const override;
         
         std::pair<char, int> getType() const override;
 

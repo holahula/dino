@@ -14,6 +14,7 @@ class MoneyTower : public Tower {
         ~MoneyTower();
 
         int getCost() const override;
+		std::string getDescription() const override;
         int getUpgradeCost() const override;
         std::pair<char, int> getType() const override;
         
