@@ -35,6 +35,9 @@ class View : public Gtk::Window {
 	Gtk::ButtonBox box_round;
 	Gtk::ButtonBox box_shop;
 	Gtk::ButtonBox box_info;
+	Gtk::Frame frame_menu;
+	Gtk::Frame frame_shop;
+	Gtk::Frame frame_info;
 	Gtk::Button m_button_new_game;
 	Gtk::Button m_button_round;
 	Gtk::Button m_button_next;

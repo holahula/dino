@@ -29,7 +29,10 @@
 }
 
 .box {
+}
+
+.frame {
 	background-color: rgba(160, 142, 119, 0.479);
-	font-weight:bold;
-	font-size: 10px;
+	/* background-color: rgb(214, 201, 184);
+	color: rgb(214, 201, 184); */
 }
