@@ -22,7 +22,8 @@ TODO: money management functions,
 class State {
 	friend class View;
     private:
-        int hp, money, round;
+        long long money;
+        int hp, round;
 
         Shop * shop;
         Map * map;
@@ -77,7 +78,7 @@ class State {
         void startRound();
 
         int getHp();
-        int getMoney();
+        long long getMoney();
         int getRound();
 		Map* getMap();
 };

@@ -30,7 +30,7 @@ MoneyTower* Shop::getMoneyTower(){
     return inv->moneyTower;
 }
 
-bool Shop::buy(int money, char type) {
+bool Shop::buy(long long money, char type) {
     if ((type == 'D' && money >= DamageTower::cost)
     || (type == 'F' && money >= FreezeTower::cost)
     || (type == 'M' && money >= MoneyTower::cost)
@@ -41,7 +41,7 @@ bool Shop::buy(int money, char type) {
     return false;
 }
 
-Tower* Shop::newTower(int& money, char type){
+Tower* Shop::newTower(long long& money, char type){
     Tower* t = nullptr;
 
     if(type == 'D'){
@@ -58,10 +58,10 @@ Tower* Shop::newTower(int& money, char type){
     return t;
 }
 
-void Shop::sell(int& money, Tower* tower) {
+void Shop::sell(long long& money, Tower* tower) {
     money += 0.75*tower->getTotalValue();
 }
 
-void Shop::upgradeTower(int& money, int cost){
+void Shop::upgradeTower(long long& money, int cost){
     money -= cost;
 }
