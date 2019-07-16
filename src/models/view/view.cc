@@ -22,6 +22,9 @@ View::View() : selected_tileView(nullptr),
 				box_round(Gtk::ORIENTATION_VERTICAL),
 				box_shop(Gtk::ORIENTATION_VERTICAL),
 				box_info(Gtk::ORIENTATION_VERTICAL),
+				frame_menu("Menu"),
+				frame_shop("Shop"),
+				frame_info("Information"),
 				m_button_new_game("Start a new Game"),
 				m_button_round("Go"),
 				m_button_next("Next"),
@@ -56,6 +59,10 @@ View::View() : selected_tileView(nullptr),
 	box_info.set_layout(Gtk::BUTTONBOX_SPREAD);
 	box_info.set_spacing(10);
 
+	frame_menu.set_border_width(10);
+	frame_shop.set_border_width(10);
+	frame_info.set_border_width(10);
+
 	tiles.set_border_width(10);
 	tiles.set_row_spacing(0);
 	tiles.set_column_spacing(0);
@@ -63,6 +70,10 @@ View::View() : selected_tileView(nullptr),
 	box_menu.get_style_context()->add_class("box");
 	box_shop.get_style_context()->add_class("box");
 	box_info.get_style_context()->add_class("box");
+
+	frame_menu.get_style_context()->add_class("frame");
+	frame_shop.get_style_context()->add_class("frame");
+	frame_info.get_style_context()->add_class("frame");
 
 	m_grid.set_column_spacing(0);
 	m_grid.set_row_spacing(0);
@@ -118,10 +129,14 @@ View::View() : selected_tileView(nullptr),
 	box_info.add(m_button_upgrade_tower);
 	box_info.add(m_button_sell_tower);
 
-	m_grid.attach(box_info, 1, 3, 1, 9);
+	frame_menu.add(box_menu);
+	frame_shop.add(box_shop);
+	frame_info.add(box_info);
+
+	m_grid.attach(frame_info, 1, 3, 1, 9);
 	m_grid.attach(tiles, 0, 0, 1, 12);
-	m_grid.attach(box_shop, 2, 0, 1, 12);
-	m_grid.attach(box_menu, 1, 0, 1, 3);
+	m_grid.attach(frame_shop, 2, 0, 1, 12);
+	m_grid.attach(frame_menu, 1, 0, 1, 3);
 
 	add(m_grid);
 

@@ -5,7 +5,7 @@ using namespace std;
 
 LandTile::LandTile(int x, int y): Tile(x,y), tower(nullptr) {}
 
-LandTile::~LandTile(){}
+LandTile::~LandTile() {}
 
 char LandTile::getType() const {
     if (isOccupied()) {
