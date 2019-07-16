@@ -24,7 +24,6 @@ class View : public Gtk::Window {
 	int frame;
     bool status;
     int size;
-	int hp;
     int hpStartRound;
     int totalEnemyHP;
 	bool roundDone;
@@ -32,10 +31,8 @@ class View : public Gtk::Window {
  protected:
 	Gtk::Grid m_grid;
 	Gtk::Grid tiles;
-	Gtk::Frame panel_menu;
-	Gtk::Frame panel_shop;
-	Gtk::Frame panel_info;
 	Gtk::ButtonBox box_menu;
+	Gtk::ButtonBox box_round;
 	Gtk::ButtonBox box_shop;
 	Gtk::ButtonBox box_info;
 	Gtk::Button m_button_new_game;
@@ -73,7 +70,7 @@ class View : public Gtk::Window {
 
 	void startRound();
 	void nextStep();
-	void updateState(int, int, double);
+	void updateState(int, double);
 	void startNewGame();
 	void displayEnemies();
 	Tower* getTower(char);

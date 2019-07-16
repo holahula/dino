@@ -23,3 +23,13 @@
 .path_tile_print {
 	background-image: url("../assets/path_tile_print.png");
 }
+
+.window {
+	background-color: rgb(214, 201, 184);
+}
+
+.box {
+	background-color: rgba(160, 142, 119, 0.479);
+	font-weight:bold;
+	font-size: 10px;
+}
