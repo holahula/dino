@@ -306,7 +306,7 @@ void View::update_info() {
 	} else {
 		pair<char, int> t = selected_tower->getType();
 		pair<string, string> type = getTowerFullType(t.first, true);
-		m_label_tower_spec.set_text(type.first + " Tower\n\nDescription:\n" + getTower(t.first)->getDescription() + "\n\nRange: " + to_string(selected_tower->getRange()) + "\nUpgrade Cost: $" + to_string(selected_tower->getUpgradeCost()) + "\n" + type.second + ": " + to_string(t.second));
+		m_label_tower_spec.set_text(type.first + " Tower\n\nDescription:\n" + getTower(t.first)->getDescription()  + "\n\n" + type.second + ": " + to_string(t.second) + "\nRange: " + to_string(selected_tower->getRange()) + "\nUpgrade Cost: $" + to_string(selected_tower->getUpgradeCost()));
 		m_button_upgrade_tower.show();
 		m_button_sell_tower.show();
 	}
