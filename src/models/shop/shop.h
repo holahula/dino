@@ -25,12 +25,12 @@ class Shop {
         Shop();
         ~Shop();
 
-        bool buy(int, char);
-        void sell(int &, Tower *);
+        bool buy(long long, char);
+        void sell(long long&, Tower *);
 
-        Tower* newTower(int&, char);
+        Tower* newTower(long long&, char);
 
-        void upgradeTower(int&, int);
+        void upgradeTower(long long&, int);
 
         FreezeTower* getFreezeTower();
         DamageTower* getDamageTower();

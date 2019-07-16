@@ -10,7 +10,7 @@
 
 using namespace std;
 
-State::State(): hp(100), money(10), round(1), shop(new Shop()), map(new Map()), spawner(new Spawner()){}
+State::State(): hp(1000), money(10), round(1), shop(new Shop()), map(new Map()), spawner(new Spawner()){}
 
 State::~State() {
     for(Tower* tower : towers) delete tower;
@@ -236,7 +236,7 @@ int State::getHp() {
 	return hp;
 }
 
-int State::getMoney() {
+long long State::getMoney() {
 	return money;
 }
 
