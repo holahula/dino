@@ -28,6 +28,6 @@ string MoneyTower::getDescription() const {
 void MoneyTower::upgrade() {
     totalValue += upCost;
     income += 5;
-    upCost += 5;
+    upCost = 5*(income/5)*(income/5);
 }
 

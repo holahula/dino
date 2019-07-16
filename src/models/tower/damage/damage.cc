@@ -27,8 +27,8 @@ string DamageTower::getDescription() const {
 
 void DamageTower::upgrade() {
     totalValue += upCost;
-    dmg *= 2;
-    upCost *= 2;
-    range++;
+    dmg += 1;
+    upCost = dmg*dmg;
+    ++range;
 }
 
