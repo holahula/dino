@@ -118,13 +118,31 @@ void Spawner::updateTraining(int round){
         training = !training;
     }
 }
+void Spawner::printStats(){
+    cout << "Difficulty: " << difficulty << endl;
+
+    cout << "Max HP: " << health << endl;
+    cout << "Armor: " << armor << endl;
+    cout << "Enemies: Basic, ";
+    if(invisible) cout << "Invisible, ";
+    if(regen) cout << "Regenerative";
+    cout << endl;
+
+    cout << "--Base Stats--" << endl;
+    cout << "Status: " << difficulty << endl;
+    cout << "Gold: " << gold << endl;
+    cout << "Spawn: " << spawn << endl;
+
+    cout << "--Multipliers--" << endl;
+    cout << "Status Multiplier: " << statusMultiplier << endl;
+    cout << "Gold Multiplier: " << goldMultiplier << endl;
+    cout << "Spawn Multiplier: " << spawnMultiplier << endl;
+}
 
 void Spawner::updateState(int round, int hpLost, double enemyHP){
-    // cout << "state being updated!" << endl;
-    // cout << round << " " << hpLost << " " << enemyHP << endl;
-    // cout << difficulty << " " << status << " " << gold << " " << spawn << endl;
-    // cout << statusMultiplier << " " << goldMultiplier << " " << spawnMultiplier << endl;
-    
+    // cout << "\n PRE-STATE UPDATE " << endl;
+    // printStats();
+
     playerUpdate(hpLost);
     enemyUpdate(enemyHP);
     updatePoints();
@@ -133,8 +151,8 @@ void Spawner::updateState(int round, int hpLost, double enemyHP){
         updateTraining(round);
     }
 
-    // cout << difficulty << " " << status << " " << gold << " " << spawn << endl;
-    // cout << statusMultiplier << " " << goldMultiplier << " " << spawnMultiplier << endl;
+    cout << "\nNEXT ROUND UPDATE " << endl;
+    printStats();
 }
 
 bool Spawner::isBossLevel(int round) {
@@ -169,7 +187,7 @@ Enemy* Spawner::generateEnemy(int hp, int round, bool invis, int regenerative){
         if(invis) return new InvisibleEnemy(hp);
         else return new BasicEnemy(hp);   
     } else {
-        if(regenerative >= 3) return new RegenerativeEnemy(hp, 1);
+        if(regenerative >= 3) return new RegenerativeEnemy(hp, int(hp/8));
         else if (regenerative == 2) return new InvisibleEnemy(hp);
         else return new BasicEnemy(hp);
     }
