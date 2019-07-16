@@ -6,7 +6,7 @@
 
 using namespace std;
 
-MoneyTower::MoneyTower() : Tower(MoneyTower::cost), income(5), upCost(5){};
+MoneyTower::MoneyTower() : Tower(MoneyTower::cost), income(10), upCost(10){};
 MoneyTower::~MoneyTower() {}
 
 int MoneyTower::getUpgradeCost() const {
@@ -27,7 +27,7 @@ string MoneyTower::getDescription() const {
 
 void MoneyTower::upgrade() {
     totalValue += upCost;
-    income += 5;
-    upCost = 5*(income/5)*(income/5);
+    income *= 4;
+    upCost *= 2;
 }
 

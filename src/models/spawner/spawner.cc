@@ -93,7 +93,7 @@ void Spawner::updatePoints(){
 }
 
 void Spawner::updateHealth(){
-    health = max(1.0, min(numeric_limits<double>::max(), health * status / MAXHP_RATIO  + (20 * difficulty/100)));
+    health = max(1.0, min(numeric_limits<double>::max(), sqrt(health * status)  + (MAXHP_RATIO * difficulty/100)));
 }
 
 void Spawner::updateArmor(){
