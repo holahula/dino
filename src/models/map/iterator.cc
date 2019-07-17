@@ -19,7 +19,7 @@ Map::Iterator& Map::Iterator::operator++() {
 }
 
 bool Map::Iterator::operator!=(const Map::Iterator &other) {
-	return  m != other.m || row != other.row || col != other.col;
+	return row != other.row || col != other.col;
 }
 
 Map::Iterator Map::begin() {
