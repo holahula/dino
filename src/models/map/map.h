@@ -59,8 +59,8 @@ class Map {
                 Iterator& operator++();
                 bool operator!=(const Iterator&);
         };
-		Iterator begin();
-		Iterator end();
+        Iterator begin();
+        Iterator end();
 
         std::vector<Enemy*> nextFrame();
         std::vector<Enemy*> removeDeadEnemies();
@@ -72,7 +72,7 @@ class Map {
         Tower *getTower(int x, int y);
         LandTile* getLandTile(int x, int y);
         PathTile* getPathTile(int x, int y);
-		Tile* getTile(int x, int y);
+        Tile* getTile(int x, int y);
         void insertTower(Tower*, int x, int y);
         bool sellTower(int x, int y);
         void increaseTowerRange(Tower*, int x, int y);
