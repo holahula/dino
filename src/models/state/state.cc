@@ -10,7 +10,7 @@
 
 using namespace std;
 
-StateImpl::StateImpl(int hp, bool customPath, bool adaptive) : money(10), hp(hp), round(1), shop(new Shop()), map(new Map(customPath)), spawner(new Spawner(adaptive)){}
+StateImpl::StateImpl(int hp, bool adaptive, bool map) : money(10), hp(hp), round(1), shop(new Shop()), map(new Map(customPath)), spawner(new Spawner(adaptive)){}
 
 StateImpl::~StateImpl() {
     for(Tower* tower : towers) delete tower;
