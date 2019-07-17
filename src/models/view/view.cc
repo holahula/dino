@@ -168,7 +168,7 @@ void View::startNewGame() {
 	Map* map = game->getMap();
 	cout << *map << endl;
 	for (Tile* t: *map) {
-		TileView *tileView = new TileView(row, col, t->getType());
+		TileView *tileView = new TileView(t->location().second, t->location().first, t->getType());
 		if (tileView->type == '.') {
 			tileView->drag_dest_set(listTargets);
 		} else {
