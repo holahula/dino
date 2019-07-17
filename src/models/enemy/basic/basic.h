@@ -6,13 +6,10 @@
 class BasicEnemy : public Enemy {
         char getType_() const override;
         void nextState_() override;
-        
+
     public:
         BasicEnemy(int);
-
-
-
-        ~BasicEnemy();
+        virtual ~BasicEnemy();
 };
 
 #endif 

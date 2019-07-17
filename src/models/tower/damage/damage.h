@@ -13,7 +13,7 @@ class DamageTower : public Tower {
         static const int cost = 10;
 
         DamageTower();
-        ~DamageTower();
+        virtual ~DamageTower();
 
         int getUpgradeCost() const override;
         int getCost() const override;

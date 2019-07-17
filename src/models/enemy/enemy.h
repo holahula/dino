@@ -23,6 +23,7 @@ class Enemy : public Observer {
 
     public:
         Enemy(int);
+        virtual ~Enemy();
 
         int getHP() const;
         
@@ -38,7 +39,6 @@ class Enemy : public Observer {
         void removeTowers();
         bool isTargetable() const;
 
-        virtual ~Enemy();
         friend std::ostream& operator<<(std::ostream&, Enemy&);
 };
 
