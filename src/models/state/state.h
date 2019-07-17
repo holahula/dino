@@ -23,9 +23,9 @@ struct StateImpl {
     std::vector<Tower *> towers;
     std::vector<Enemy *> enemies;
     std::stack<Enemy *> pendingEnemies;
-    
+
     public:
-        StateImpl();
+        StateImpl(int, bool, bool);
         ~StateImpl();
 };
 
@@ -34,6 +34,11 @@ class State {
 
     private:
         StateImpl* p;
+
+        static const int MAX_ROUND = 50;
+        static const int MAX_LIVES = 100;
+        static const int MIN_LIVES = 0;
+        static const int MAX_HP = 1000;
 
         bool surviveDmg(int);
         void incrementMoney(int);
@@ -60,13 +65,9 @@ class State {
         void updateState(int, int, double);
 
     public:
-        static const int MAX_ROUND = 50;
-        static const int MAX_LIVES = 100;
-        static const int MIN_LIVES = 0;
-
         bool sellTower(int, int);
 
-        State();
+        State(bool, bool);
         ~State();
 
         void displayMap();

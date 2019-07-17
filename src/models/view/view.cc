@@ -16,7 +16,7 @@
 
 using namespace std;
 
-View::View() : selected_tileView(nullptr),
+View::View(bool adaptive, bool map) : selected_tileView(nullptr),
 				selected_tower(nullptr),
 				box_menu(Gtk::ORIENTATION_HORIZONTAL),
 				box_round(Gtk::ORIENTATION_VERTICAL),
@@ -140,7 +140,7 @@ View::View() : selected_tileView(nullptr),
 
 	add(m_grid);
 
-	startNewGame();
+	startNewGame(adaptive, map);
 
 	show_all();
 	m_button_upgrade_tower.hide();
@@ -154,9 +154,9 @@ View::~View() {
 	tileViewPath.clear();
 }
 
-void View::startNewGame() {
+void View::startNewGame(bool adaptive, bool map_) {
 	// Start a new game
-	game = unique_ptr<State>(new State);
+	game = unique_ptr<State>(new State(adaptive, map_));
 	
 	// Initialize widgets
 	update_view();
@@ -185,9 +185,7 @@ void View::startNewGame() {
 	}
 }
 
-void View::on_button_new_game_clicked() {
-	startNewGame();
-}
+void View::on_button_new_game_clicked() {}
 
 void View::on_button_round_clicked() {
 	m_button_round.set_sensitive(false);
@@ -383,7 +381,8 @@ void View::updateState(int hpLost, double remainingEnemyHP) {
 		Gtk::MessageDialog dialog(*this, "Boss Level Passed!", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
 		dialog.set_secondary_text("You gained 5 HP for killing the boss level!");
 		dialog.run();
-        game->p->hp = min(100, game->p->hp+5);
+		int max_ = State::MAX_HP;
+        game->p->hp = min(max_, game->p->hp+5);
     }
 
     game->getRoundIncome();
