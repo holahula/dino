@@ -30,7 +30,6 @@ Map::Map(bool customPaths): p(new MapImpl()) {
 
     if (customPaths) {
         p->width -= (rand()%2+1);
-    } else {
         p->height -= (rand()%2+1);
     }
 
