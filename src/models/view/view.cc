@@ -167,7 +167,8 @@ void View::startNewGame() {
 	// Build grid of tiles using the map
 	Map* map = game->getMap();
 	cout << *map << endl;
-	for (auto t: map) {
+	for (Map::Iterator m = *map.begin(); m != *map.end(); ++m) {
+		Tile* t = *m;
 		int row = t->location().second;
 		int col = t->location().first;
 		TileView *tileView = new TileView(row, col, t->getType());
