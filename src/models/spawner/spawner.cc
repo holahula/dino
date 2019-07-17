@@ -251,7 +251,7 @@ vector<Enemy*> Spawner::generateEnemies(int round){
             enemies.push_back(e);
         }
     }
-    
+
     return enemies;
 }
 
