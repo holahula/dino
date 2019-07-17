@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
         else if (cmd == "--text") ui = false;
         else {
             cout << "Only acceptable flags are --adaptive, --map, --text" << endl;
-            cout << "   --adaptive -> adds adaptive level generation" << endl;
+            cout << "   --adaptive  -> adds adaptive level generation" << endl;
             cout << "   --map       -> adds unique path generation" << endl;
             cout << "   --text      -> utilizes the text interface" << endl;
             exit(1);
