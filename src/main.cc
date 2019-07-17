@@ -142,14 +142,14 @@ int main(int argc, char *argv[]) {
     for(int i=1; i<argc; ++i) {
         string cmd = string(argv[i]);
         
-        if(cmd == "--difficult") adaptive = true;
+        if(cmd == "--extras") adaptive = true;
         else if (cmd == "--map") map = true;
         else if (cmd == "--text") ui = false;
         else {
-            cout << "Only acceptable flags are --difficult, --map, --text" << endl;
-            cout << "   --difficult -> adds adaptive level generation" << endl;
-            cout << "   --map -> adds unique path generation" << endl;
-            cout << "   --text -> utilizes the text interface" << endl;
+            cout << "Only acceptable flags are --extras, --map, --text" << endl;
+            cout << "   --extras -> adds adaptive level generation" << endl;
+            cout << "   --map       -> adds unique path generation" << endl;
+            cout << "   --text      -> utilizes the text interface" << endl;
             exit(1);
         }
     }
