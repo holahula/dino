@@ -314,8 +314,7 @@ pair<string, string> View::getTowerFullType(char type, bool isCapitalized) {
 void View::startRound() {
     frame = 1;
     size = game->p->constructEnemies();
-	hp = game->p->hp;
-    hpStartRound = hp;
+    hpStartRound = game->p->hp;
     totalEnemyHP = game->p->totalHP(game->p->enemies);
 	roundDone = false;
 }
