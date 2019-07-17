@@ -10,11 +10,11 @@ void RegenerativeEnemy::heal(){
     hp = min(maxHP, hp+regen);
 }
 
-void RegenerativeEnemy::nextState() {
+void RegenerativeEnemy::nextState_() {
     heal();
 }
 
-char RegenerativeEnemy::getType() const {
+char RegenerativeEnemy::getType_() const {
     return 'R';
 }
 

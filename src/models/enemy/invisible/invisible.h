@@ -5,14 +5,16 @@
 
 class Tower;
 class InvisibleEnemy : public Enemy {
+
+        char getType_() const override;
+        void nextState_() override;
+    
     public:
         InvisibleEnemy(int);
 
         void updateVisibility();
         
-        char getType() const override;
-
-        virtual void nextState() override;
+ 
 
         ~InvisibleEnemy();
 };

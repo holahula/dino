@@ -4,12 +4,13 @@
 #include "./../enemy.h"
 
 class BasicEnemy : public Enemy {
+        char getType_() const override;
+        void nextState_() override;
+        
     public:
         BasicEnemy(int);
 
-        char getType() const override;
 
-        void nextState() override;
 
         ~BasicEnemy();
 };

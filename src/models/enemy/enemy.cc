@@ -19,7 +19,20 @@ int Enemy::getFrozen() const {
     return isFrozen;
 }
 
-int Enemy::notify(Tower * tower){
+char Enemy::getType() {
+    return getType_();
+}
+
+void Enemy::nextState() {
+    nextState_();
+}
+
+int Enemy::notify(Tower * tower) {
+    return notify_(tower);
+}
+
+
+int Enemy::notify_(Tower * tower){
     pair<char, int> type = tower->getType();
     if(type.first == 'D') {
         int prevHP = hp;
@@ -47,7 +60,7 @@ void Enemy::removeTowers(){
     subjects.clear();
 }
 
-bool Enemy::isTargetable() {
+bool Enemy::isTargetable() const {
     return targetable;
 }
 
