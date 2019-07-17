@@ -167,7 +167,7 @@ void View::startNewGame() {
 	// Build grid of tiles using the map
 	Map* map = game->getMap();
 	cout << *map << endl;
-	for (Tile* t: map) {
+	for (Tile* t: *map) {
 		TileView *tileView = new TileView(row, col, t->getType());
 		if (tileView->type == '.') {
 			tileView->drag_dest_set(listTargets);
