@@ -60,6 +60,8 @@ class Map {
         Map();
         ~Map();
 
+        friend class Iterator;
+
 		Iterator begin();
 		Iterator end();
 
