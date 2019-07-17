@@ -166,7 +166,6 @@ void View::startNewGame() {
 	
 	// Build grid of tiles using the map
 	Map* map = game->getMap();
-	cout << *map << endl;
 	for (Tile* t: *map) {
 		int row = t->location().second;
 		int col = t->location().first;
@@ -174,7 +173,6 @@ void View::startNewGame() {
 		if (tileView->type == '.') {
 			tileView->drag_dest_set(listTargets);
 		} else {
-			// tileView->label.set_markup("");
 			tileViewPath.emplace_back(tileView);
 		}
 		tileView->set_events(Gdk::BUTTON_PRESS_MASK);
@@ -183,23 +181,6 @@ void View::startNewGame() {
 		tileView->get_style_context()->add_class(tileView->type == '.' ? "land_tile" : "path_tile");
 		tiles.attach(*tileView, col, map->getHeight()-row-1, 1, 1);
 	}
-	// for(int row = map->getHeight() - 1; row >= 0; --row) {
-	// 	for(int col = 0; col < map->getWidth(); ++col) {
-	// 		TileView *tileView = new TileView(row, col, map->getTile(col, row)->getType());
-	// 		// tileViewGrid.at(col).at(row) = tileView;
-	// 		if (tileView->type == '.') {
-	// 			tileView->drag_dest_set(listTargets);
-	// 		} else {
-	// 			// tileView->label.set_markup("");
-	// 			tileViewPath.emplace_back(tileView);
-	// 		}
-	// 		tileView->set_events(Gdk::BUTTON_PRESS_MASK);
-	// 		tileView->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*this, &View::on_tile_clicked), tileView));
-	// 		tileView->signal_drag_data_received().connect(sigc::bind(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received), tileView));
-	// 		tileView->get_style_context()->add_class(tileView->type == '.' ? "land_tile" : "path_tile");
-	// 		tiles.attach(*tileView, col, row, 1, 1);			
-	// 	}
-	// }
 }
 
 void View::on_button_new_game_clicked() {
