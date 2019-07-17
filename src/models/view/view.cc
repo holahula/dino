@@ -182,7 +182,7 @@ void View::startNewGame() {
 		tileView->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*this, &View::on_tile_clicked), tileView));
 		tileView->signal_drag_data_received().connect(sigc::bind(sigc::mem_fun(*this, &View::on_label_drop_drag_data_received), tileView));
 		tileView->get_style_context()->add_class(tileView->type == '.' ? "land_tile" : "path_tile");
-		tiles.attach(*tileView, row, col, 1, 1);
+		tiles.attach(*tileView, col, map->p->height-row-1, 1, 1);
 	}
 	// for(int row = map->getHeight() - 1; row >= 0; --row) {
 	// 	for(int col = 0; col < map->getWidth(); ++col) {
