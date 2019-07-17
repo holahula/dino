@@ -40,12 +40,28 @@ class Map {
         std::pair<int,int> to,
         std::vector<std::pair<int,int> >& path
     );
+    void initPath();
+    void initMap();
 
-        void initPath();
-        void initMap();
     public:
         Map();
         ~Map();
+
+        class Iterator {
+            int col, row, nc, nr;
+            Map* m;
+
+            Iterator(int, int, int, int, Map*);
+            friend class Map;
+
+            public:
+                Tile* operator*();
+                Iterator& operator++();
+                bool operator!=(const Iterator&);
+        };
+        Iterator begin();
+        Iterator end();
+
         std::vector<Enemy*> nextFrame();
         std::vector<Enemy*> removeDeadEnemies();
         void attachAllEnemies();
@@ -56,7 +72,7 @@ class Map {
         Tower *getTower(int x, int y);
         LandTile* getLandTile(int x, int y);
         PathTile* getPathTile(int x, int y);
-		Tile* getTile(int x, int y);
+        Tile* getTile(int x, int y);
         void insertTower(Tower*, int x, int y);
         bool sellTower(int x, int y);
         void increaseTowerRange(Tower*, int x, int y);
