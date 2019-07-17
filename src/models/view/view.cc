@@ -170,7 +170,6 @@ void View::startNewGame() {
 	for (Tile* t: *map) {
 		int row = t->location().second;
 		int col = t->location().first;
-		cout << row << " " << col << endl;
 		TileView *tileView = new TileView(row, col, t->getType());
 		if (tileView->type == '.') {
 			tileView->drag_dest_set(listTargets);
