@@ -154,9 +154,9 @@ View::~View() {
 	tileViewPath.clear();
 }
 
-void View::startNewGame(bool adaptive, bool map_) {
+void View::startNewGame(bool adaptive, bool customPath) {
 	// Start a new game
-	game = unique_ptr<State>(new State(adaptive, map_));
+	game = unique_ptr<State>(new State(adaptive, customPath));
 	
 	// Initialize widgets
 	update_view();
