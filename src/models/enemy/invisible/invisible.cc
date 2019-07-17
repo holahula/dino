@@ -11,11 +11,11 @@ void InvisibleEnemy::updateVisibility(){
     targetable = !targetable;
 }
 
-char InvisibleEnemy::getType() const {
+char InvisibleEnemy::getType_() const {
     return 'I';
 }
 
-void InvisibleEnemy::nextState() { 
+void InvisibleEnemy::nextState_() { 
     updateVisibility();
 }
 

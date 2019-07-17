@@ -11,11 +11,16 @@
 class Enemy : public Observer {        
     private:
         std::vector<Tower*> subjects;
-        // private b/c movement is controlled by game state
         int isFrozen;
+
+        virtual char getType_() const = 0;
+        virtual void nextState_() = 0;
+        virtual int notify_(Tower*); 
+
     protected:
         int hp;
         bool targetable;
+
     public:
         Enemy(int);
 
@@ -24,12 +29,15 @@ class Enemy : public Observer {
         void decFrozen();
         int getFrozen() const;
 
-        virtual char getType() const = 0;
-        virtual void nextState() = 0;
-        virtual int notify(Tower*) override;
+        char getType();
+        void nextState();
+        int notify(Tower*) override; 
+
         void observeTowers(std::vector<Tower*>);
+
         void removeTowers();
-        bool isTargetable();
+        bool isTargetable() const;
+
         virtual ~Enemy();
         friend std::ostream& operator<<(std::ostream&, Enemy&);
 };

@@ -4,10 +4,10 @@ using namespace std;
 
 BasicEnemy::BasicEnemy(int hp): Enemy(hp) {}
 
-char BasicEnemy::getType() const {
+char BasicEnemy::getType_() const {
     return 'B';
 }
 
-void BasicEnemy::nextState() {}
+void BasicEnemy::nextState_() {}
 
 BasicEnemy::~BasicEnemy(){}

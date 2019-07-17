@@ -7,13 +7,14 @@ class RegenerativeEnemy : public Enemy {
     private:
         int maxHP, regen;
 
+        char getType_() const override;
+        void nextState_() override;
+
     public:
         RegenerativeEnemy(int, int);
         void heal();
 
-        char getType() const override;
         
-        void nextState() override;
 
         ~RegenerativeEnemy();
 };
