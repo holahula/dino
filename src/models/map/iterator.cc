@@ -9,12 +9,12 @@ Tile* Map::Iterator::operator*() {
 }
 
 Map::Iterator& Map::Iterator::operator++() {
-	if (col < nc - 1) {
+	if (col < nc) {
       ++col;
     } else {
-      --row;
-      col = 0;
-	}
+        col = 0;
+        --row;
+    }
 	return *this;
 }
 
