@@ -21,11 +21,3 @@ Map::Iterator& Map::Iterator::operator++() {
 bool Map::Iterator::operator!=(const Map::Iterator &other) {
 	return row != other.row || col != other.col;
 }
-
-Map::Iterator Map::begin() {
-	return Iterator(0, p->height-1, p->width, p->height, this);
-}
-
-Map::Iterator Map::end() {
-	return Iterator(0, -1, p->width, p->height, this);
-} 
