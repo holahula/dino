@@ -11,14 +11,6 @@
 #include <stack>
 #include <vector>
 
-/*
-TODO: money management functions,
-    creating towers + enemies
-    detach and attach enemies every frame?
-
- game functionality is done?
- */
-
 class State {
 	friend class View;
     private:
