@@ -44,7 +44,7 @@ class Map {
     void initMap();
 
     public:
-        Map();
+        Map(bool);
         ~Map();
 
         class Iterator {

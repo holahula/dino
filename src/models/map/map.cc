@@ -23,10 +23,15 @@ MapImpl::~MapImpl() {
     }
 }
 
-Map::Map(): p(new MapImpl()) {
+Map::Map(bool customPaths): p(new MapImpl()) {
     srand(chrono::system_clock::now().time_since_epoch().count());
-    p->width = rand()%4 + 8;
-    p->height = rand()%4 + 8;
+    p->width = 10;
+    p->height = 10;
+
+    if (customPaths) {
+        p->width -= (rand()%2+1);
+        p->height -= (rand()%2+1);
+    }
 
     p->map = vector<vector<Tile*> >(p->width, vector<Tile*>(p->height, nullptr));
     initPath();
