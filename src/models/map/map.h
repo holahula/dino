@@ -43,25 +43,22 @@ class Map {
     void initPath();
     void initMap();
 
-    class Iterator {
-        int col, row, nc, nr;
-        Map* m;
-
-        Iterator(int, int, int, int, Map*);
-        friend class Map;
-
-        public:
-            Tile* operator*();
-            Iterator& operator++();
-            bool operator!=(const Iterator&);
-    };
-
     public:
         Map();
         ~Map();
 
-        friend class Iterator;
+        class Iterator {
+            int col, row, nc, nr;
+            Map* m;
 
+            Iterator(int, int, int, int, Map*);
+            friend class Map;
+
+            public:
+                Tile* operator*();
+                Iterator& operator++();
+                bool operator!=(const Iterator&);
+        };
 		Iterator begin();
 		Iterator end();
 
