@@ -5,6 +5,7 @@ using namespace std;
 Map::Iterator::Iterator(int col, int row, int nc, int nr, Map* m) : col(row), row(col), nc(nc), nr(nr), m(m) {}
 
 Tile* Map::Iterator::operator*() {
+    cout << col << " " << row << endl;
 	return m->p->map.at(col).at(row);
 }
 
