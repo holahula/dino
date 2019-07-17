@@ -40,12 +40,30 @@ class Map {
         std::pair<int,int> to,
         std::vector<std::pair<int,int> >& path
     );
+    void initPath();
+    void initMap();
 
-        void initPath();
-        void initMap();
+    class Iterator {
+        int col, row, nc, nr;
+        Map* m;
+
+        Iterator(int, int, int, int, Map*);
+        friend class Map;
+
+        public:
+            Tile* operator*();
+            Iterator& operator++();
+            bool operator!=(const Iterator&);
+    };
+
     public:
         Map();
         ~Map();
+
+        friend class Map::Iterator;
+		Iterator begin();
+		Iterator end();
+
         std::vector<Enemy*> nextFrame();
         std::vector<Enemy*> removeDeadEnemies();
         void attachAllEnemies();
