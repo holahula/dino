@@ -10,9 +10,10 @@
 
 using namespace std;
 
-State::State(): money(10), hp(1000), round(1), shop(new Shop()), map(new Map()), spawner(new Spawner()){}
 
-State::~State() {
+StateImpl::StateImpl() : money(10), hp(1000), round(1), shop(new Shop()), map(new Map()), spawner(new Spawner()){}
+
+StateImpl::~StateImpl() {
     for(Tower* tower : towers) delete tower;
     for(Enemy* enemy : enemies) delete enemy;
     delete shop;
@@ -20,39 +21,45 @@ State::~State() {
     delete spawner;
 }  
 
+State::State() : p(new StateImpl()){}
+
+State::~State(){
+    delete p;
+}
+
 void State::displayMap(){
-    cout << *map << endl;
+    cout << *p->map << endl;
 }
 
 void State::incrementMoney(int amount) {
-    money += amount;
+    p->money += amount;
 }
 
 bool State::surviveDmg(int damage) {
-    hp -= damage;
+    p->hp -= damage;
 
-    if(hp <= 0) return false;
+    if(p->hp <= 0) return false;
 
     return true;
 }
 
 void State::addTower(Tower* t) {
-    towers.push_back(t);
+    p->towers.push_back(t);
 }
 
 void State::addEnemy(Enemy* e){
-    pendingEnemies.push(e);
-    enemies.push_back(e);
+    p->pendingEnemies.push(e);
+    p->enemies.push_back(e);
 }
 
 void State::removeEnemy(Enemy* enemy){
-    enemies.erase(remove(enemies.begin(), enemies.end(), enemy), enemies.end());
+    p->enemies.erase(remove(p->enemies.begin(), p->enemies.end(), enemy), p->enemies.end());
     delete enemy;
 }
 
 
 void State::removeTower(Tower* tower){
-    towers.erase(remove(towers.begin(), towers.end(), tower), towers.end());
+    p->towers.erase(remove(p->towers.begin(), p->towers.end(), tower), p->towers.end());
     delete tower;
 }
 
@@ -61,40 +68,39 @@ void State::removeTower(Tower* tower){
 ******************************/
 
 bool State::buyTower(char type, int x, int y){
-    if (!map->inMap(x, y) || map->isOccupied(x, y) || !shop->buy(money, type)) {
+    if (!p->map->inMap(x, y) || p->map->isOccupied(x, y) || !p->shop->buy(p->money, type)) {
         return false;
     }
     
-    Tower* t = shop->newTower(money, type);
+    Tower* t = p->shop->newTower(p->money, type);
     addTower(t);
 
-    map->insertTower(t, x, y);
+    p->map->insertTower(t, x, y);
 
     return true;
 }
 
 bool State::upgradeTower(int x, int y){
-    if (!map->inMap(x, y) || !map->isTower(x, y) || money < map->getTower(x, y)->getUpgradeCost()) {
+    if (!p->map->inMap(x, y) || !p->map->isTower(x, y) || p->money < p->map->getTower(x, y)->getUpgradeCost()) {
         return false;
     }
 
-    Tower* t = map->getTower(x, y);
-    int upgradeCost = t->getUpgradeCost();
+    Tower* t = p->map->getTower(x, y);
 
-    shop->upgradeTower(money, upgradeCost);
+    p->shop->upgradeTower(p->money, t->getUpgradeCost());
     t->upgrade();
-    map->increaseTowerRange(t, x, y);
+    p->map->increaseTowerRange(t, x, y);
 
     return true;
 }
 
 bool State::sellTower(int x, int y) {
-    if (!map->inMap(x,y) || !map->isTower(x,y)) {
+    if (!p->map->inMap(x,y) || !p->map->isTower(x,y)) {
         return false;
     }
-    Tower* t = map->getTower(x,y);
-    shop->sell(money, t);
-    map->sellTower(x,y);
+    Tower* t = p->map->getTower(x,y);
+    p->shop->sell(p->money, t);
+    p->map->sellTower(x, y);
     removeTower(t);
     return true;
 }
@@ -103,11 +109,10 @@ bool State::sellTower(int x, int y) {
 *****************************/
 
 int State::constructEnemies() {
-    vector<Enemy*> generatedEnemies = spawner->generateEnemies(round);
+    vector<Enemy*> generatedEnemies = p->spawner->generateEnemies(p->round);
     for(auto e : generatedEnemies){
         addEnemy(e);
     }
-    // cout << "TOTAL ENEMIES GENERATED: " << generatedEnemies.size() << endl;
     return generatedEnemies.size();
 }
 
@@ -120,7 +125,7 @@ int State::totalHP(vector<Enemy*> enemies){
 }
 
 bool State::moveEnemies(int frame, int size){
-    vector<Enemy*> escaped = map->nextFrame();
+    vector<Enemy*> escaped = p->map->nextFrame();
 
     if(!surviveDmg(totalHP(escaped))){
         return false;
@@ -130,9 +135,9 @@ bool State::moveEnemies(int frame, int size){
         removeEnemy(enemy);
     }
 
-    if (!pendingEnemies.empty()){
-        map->insertEnemy(pendingEnemies.top());
-        pendingEnemies.pop();
+    if (!p->pendingEnemies.empty()){
+        p->map->insertEnemy(p->pendingEnemies.top());
+        p->pendingEnemies.pop();
     }
 
     return true;
@@ -142,17 +147,17 @@ bool State::preFrame(int frame, int size){
     if(!moveEnemies(frame, size)){ 
         return false;
     }
-    map->attachAllEnemies();
+    p->map->attachAllEnemies();
     return true;
 }
 
 void State::processFrame(){
     // shoot enemies
-    for(Tower* tower : towers){
+    for(Tower* tower : p->towers){
         incrementMoney(tower->notifyObservers(tower));
     }
 
-    vector<Enemy*> dead =  map->removeDeadEnemies();
+    vector<Enemy*> dead =  p->map->removeDeadEnemies();
     for (auto enemy : dead) {
         removeEnemy(enemy);
     }
@@ -161,60 +166,60 @@ void State::processFrame(){
 // prepares for the next frame, detachs all the enemies from their respective towers
 void State::postFrame(){
     displayMap();
-    map->detachAllEnemies();
+    p->map->detachAllEnemies();
 }
 
 void State::getMoneyTowerIncome(){
-    for(Tower* tower : towers){
+    for(Tower* tower : p->towers){
         pair<int, int> type = tower->getType();
         if(type.first == 'M'){
-            money += type.second;
+            p->money += type.second;
         }
     }
 }
 
 void State::getRoundIncome(){
     getMoneyTowerIncome();
-    money += spawner->getBonusGold();
+    p->money += p->spawner->getBonusGold();
 }
 
 void State::updateState(int hp, int hpLost, double remainingEnemyHP){
     if(hp <= 0) {
         // TODO: handle death, clean up everything
-        cout << "dead on round " << round << endl;
+        cout << "dead on round " << p->round << endl;
         return;
-    } else if(round == MAX_ROUND){
+    } else if(p->round == MAX_ROUND){
         cout << "winner winner chicken dinner" << endl;
         return;
     }
 
     // if(hpLost == 0 && round % 5 == 0){
-    if(round % 5 == 0){
+    if(p->round % 5 == 0){
         cout << "You gained 5 HP for killing the boss level!" << endl;
-        hp = min(100, hp+5);
+        p->hp = min(100, p->hp+5);
     }
 
     getRoundIncome();
     // spawner interactions
-    spawner->updateState(round, hpLost, remainingEnemyHP);
+    p->spawner->updateState(p->round, hpLost, remainingEnemyHP);
 
 
-    cout << "You have " << hp << " HP" << endl;
-    cout << "You have $" << money << endl;
+    cout << "You have " << p->hp << " HP" << endl;
+    cout << "You have $" << p->money << endl;
     
-    round++;
+    p->round++;
 }
 
 void State::startRound(){
-    cout << "Round " << round << ":" << endl;
+    cout << "Round " << p->round << ":" << endl;
 
     int frame = 1;
     bool status;
     int size = constructEnemies();
-    int hpStartRound = hp;
-    int totalEnemyHP = totalHP(enemies);
+    int hpStartRound = p->hp;
+    int totalEnemyHP = totalHP(p->enemies);
     // round while loop 
-    while(enemies.size() != 0){
+    while(p->enemies.size() != 0){
         cout << "Frame: " << frame << endl;
         status = preFrame(frame, size);
         if(!status) break;
@@ -225,7 +230,7 @@ void State::startRound(){
         frame++;
     }
 
-    updateState(hp, hpStartRound - hp, (double)(hpStartRound - hp)/(double)totalEnemyHP);
+    updateState(p->hp, hpStartRound - p->hp, (double)(hpStartRound - p->hp)/(double)totalEnemyHP);
 }
 
 /*****************************
@@ -233,17 +238,17 @@ void State::startRound(){
 *****************************/
 
 int State::getHp() {
-	return hp;
+	return p->hp;
 }
 
 long long State::getMoney() {
-	return money;
+	return p->money;
 }
 
 int State::getRound() {
-	return round;
+	return p->round;
 }
 
 Map* State::getMap() {
-	return map;
+	return p->map;
 }

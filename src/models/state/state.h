@@ -11,27 +11,29 @@
 #include <stack>
 #include <vector>
 
-/*
-TODO: money management functions,
-    creating towers + enemies
-    detach and attach enemies every frame?
 
- game functionality is done?
- */
+struct StateImpl {
+    long long money;
+    int hp, round;
+
+    Shop* shop;
+    Map* map;
+    Spawner* spawner;
+
+    std::vector<Tower *> towers;
+    std::vector<Enemy *> enemies;
+    std::stack<Enemy *> pendingEnemies;
+    
+    public:
+        StateImpl();
+        ~StateImpl();
+};
 
 class State {
 	friend class View;
+
     private:
-        long long money;
-        int hp, round;
-
-        Shop * shop;
-        Map * map;
-        Spawner * spawner;
-
-        std::vector<Tower *> towers;
-        std::vector<Enemy *> enemies;
-        std::stack<Enemy *> pendingEnemies;
+        StateImpl* p;
 
         bool surviveDmg(int);
         void incrementMoney(int);
@@ -59,14 +61,10 @@ class State {
 
     public:
         static const int MAX_ROUND = 50;
-
         static const int MAX_LIVES = 100;
         static const int MIN_LIVES = 0;
 
-
-
         bool sellTower(int, int);
-
 
         State();
         ~State();

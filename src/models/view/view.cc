@@ -151,21 +151,12 @@ View::View() : selected_tileView(nullptr),
 }
 
 View::~View() {
-	// for (size_t i=0; i<tileViewGrid.size(); ++i) {
-    //     for (size_t j=0; j<tileViewGrid[i].size(); ++j) {
-	// 		delete tileViewGrid[i][j];
-    //     }
-	// 	tileViewGrid[i].clear();
-    // }
-	// tileViewGrid.clear();
 	tileViewPath.clear();
 }
 
 void View::startNewGame() {
 	// Start a new game
 	game = unique_ptr<State>(new State);
-	// vector<vector<TileView *> > temp = vector<vector<TileView*> >(game->getMap()->getHeight(), vector<TileView*>(game->getMap()->getWidth(), nullptr));
-	// tileViewGrid = temp;
 	
 	// Initialize widgets
 	update_view();
@@ -336,8 +327,8 @@ pair<string, string> View::getTowerFullType(char type, bool isCapitalized) {
 void View::startRound() {
     frame = 1;
     size = game->constructEnemies();
-    hpStartRound = game->hp;
-    totalEnemyHP = game->totalHP(game->enemies);
+    hpStartRound = game->p->hp;
+    totalEnemyHP = game->totalHP(game->p->enemies);
 	roundDone = false;
 }
 
@@ -345,7 +336,7 @@ void View::nextStep() {
 	update_view();
 	if(roundDone) {
 		displayEnemies();
-    	updateState(hpStartRound - game->hp, (double)(hpStartRound - game->hp)/(double)totalEnemyHP);
+    	updateState(hpStartRound - game->p->hp, (double)(hpStartRound - game->p->hp)/(double)totalEnemyHP);
 		m_button_round.set_sensitive();
 		m_button_buy_damage_tower.set_sensitive();
 		m_button_buy_freeze_tower.set_sensitive();
@@ -364,23 +355,23 @@ void View::nextStep() {
 
         game->processFrame();
 		
-    	game->map->detachAllEnemies();
+    	game->p->map->detachAllEnemies();
 
         frame++;
 	}
-	if(game->enemies.size() <= 0) {
+	if(game->p->enemies.size() <= 0) {
 		roundDone = true;
 	}
 }
 
 void View::updateState(int hpLost, double remainingEnemyHP) {
-    if(game->hp <= 0) {
+    if(game->p->hp <= 0) {
         Gtk::MessageDialog dialog(*this, "Game Over", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
 		dialog.set_secondary_text("You lost!");
 		dialog.run();
 		close();
         return;
-    } else if(game->round == game->MAX_ROUND){
+    } else if(game->p->round == game->MAX_ROUND){
         Gtk::MessageDialog dialog(*this, "Game Finished", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
 		dialog.set_secondary_text("You won! There are no more rounds left.");
 		dialog.run();
@@ -388,20 +379,20 @@ void View::updateState(int hpLost, double remainingEnemyHP) {
         return;
     }
 
-	if(game->round % 5 == 0){
+	if(game->p->round % 5 == 0){
 		Gtk::MessageDialog dialog(*this, "Boss Level Passed!", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
 		dialog.set_secondary_text("You gained 5 HP for killing the boss level!");
 		dialog.run();
-        game->hp = min(100, game->hp+5);
+        game->p->hp = min(100, game->p->hp+5);
     }
 
     game->getRoundIncome();
     // spawner interactions
-    game->spawner->updateState(game->round, hpLost, remainingEnemyHP);
+    game->p->spawner->updateState(game->p->round, hpLost, remainingEnemyHP);
 
 	update_view();
     
-    game->round++;
+    game->p->round++;
 }
 
 void View::displayEnemies() {
@@ -444,10 +435,10 @@ void View::displayEnemies() {
 Tower* View::getTower(char type) {
 	switch(type) {
 		case 'D':
-			return game->shop->getDamageTower();
+			return game->p->shop->getDamageTower();
 		case 'F':
-			return game->shop->getFreezeTower();
+			return game->p->shop->getFreezeTower();
 		default:
-			return game->shop->getMoneyTower();
+			return game->p->shop->getMoneyTower();
 	}
 }
