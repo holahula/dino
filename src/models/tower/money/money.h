@@ -11,7 +11,7 @@ class MoneyTower : public Tower {
         static const int cost = 30;
 
         MoneyTower();
-        ~MoneyTower();
+        virtual ~MoneyTower();
 
         int getCost() const override;
 		std::string getDescription() const override;

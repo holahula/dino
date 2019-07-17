@@ -74,12 +74,12 @@ class View : public Gtk::Window {
 	void startRound();
 	void nextStep();
 	void updateState(int, double);
-	void startNewGame();
+	void startNewGame(bool, bool);
 	void displayEnemies();
 	Tower* getTower(char);
 
  public:
-	View();
+	View(bool, bool);
 	virtual ~View();
 };
 

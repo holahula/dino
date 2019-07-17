@@ -11,12 +11,9 @@ class InvisibleEnemy : public Enemy {
     
     public:
         InvisibleEnemy(int);
+        virtual ~InvisibleEnemy();
 
         void updateVisibility();
-        
- 
-
-        ~InvisibleEnemy();
 };
 
 #endif

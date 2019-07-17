@@ -12,11 +12,9 @@ class RegenerativeEnemy : public Enemy {
 
     public:
         RegenerativeEnemy(int, int);
+        virtual ~RegenerativeEnemy();
+
         void heal();
-
-        
-
-        ~RegenerativeEnemy();
 };
 
 #endif

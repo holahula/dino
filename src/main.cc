@@ -12,9 +12,9 @@
 
 using namespace std;
 
-int graphical_interface(int argc, char *argv[]) {
+int graphical_interface(int argc, char *argv[], bool adaptive, bool map) {
+    argc = 1;
     auto app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
-
 
 	// Setup styling
     Glib::ustring cssFile = "resources/css/style.css";
@@ -27,14 +27,14 @@ int graphical_interface(int argc, char *argv[]) {
     }
 
     // Instantiate window
-    View view;
+    View view{adaptive, map};
 
     return app->run(view);
 }
 
-int text_interface() {
+int text_interface(bool adaptive, bool map) {
     stringstream ss;
-    unique_ptr<State> game(new State());
+    unique_ptr<State> game(new State(adaptive, map));
 
     char cmd, cmd2;
     int x, y;
@@ -46,7 +46,7 @@ int text_interface() {
         switch (cmd) {
             // Start a new game
             case 'n': {
-                game = unique_ptr<State>(new State());
+                game = unique_ptr<State>(new State(adaptive, map));
                 cout << "game created" << endl;
                 break;
             }
@@ -137,8 +137,25 @@ int text_interface() {
 }
 
 int main(int argc, char *argv[]) {
-    if(argv[1] == nullptr) {
-        return graphical_interface(argc, argv);
+    bool ui = true, adaptive = false, map = false;
+
+    for(int i=1; i<argc; ++i) {
+        string cmd = string(argv[i]);
+        
+        if(cmd == "--difficult") adaptive = true;
+        else if (cmd == "--map") map = true;
+        else if (cmd == "--text") ui = false;
+        else {
+            cout << "Only acceptable flags are --difficult, --map, --text" << endl;
+            cout << "   --difficult -> adds adaptive level generation" << endl;
+            cout << "   --map -> adds unique path generation" << endl;
+            cout << "   --text -> utilizes the text interface" << endl;
+            exit(1);
+        }
     }
-    return text_interface();
+
+    if(ui) return graphical_interface(argc, argv, adaptive, map);
+    return text_interface(adaptive, map);
 }
+
+// possible flags: 

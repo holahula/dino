@@ -10,7 +10,7 @@ class FreezeTower : public Tower {
         static const int cost = 20;
 
         FreezeTower();
-        ~FreezeTower();
+        virtual ~FreezeTower();
 
         int getCost() const override;
 		std::string getDescription() const override;

@@ -10,8 +10,7 @@
 
 using namespace std;
 
-
-StateImpl::StateImpl() : money(10), hp(1000), round(1), shop(new Shop()), map(new Map()), spawner(new Spawner()){}
+StateImpl::StateImpl(int hp, bool customPath, bool adaptive) : money(10), hp(hp), round(1), shop(new Shop()), map(new Map()), spawner(new Spawner(adaptive)){}
 
 StateImpl::~StateImpl() {
     for(Tower* tower : towers) delete tower;
@@ -21,7 +20,7 @@ StateImpl::~StateImpl() {
     delete spawner;
 }  
 
-State::State() : p(new StateImpl()){}
+State::State(bool adaptive, bool map) : p(new StateImpl(MAX_HP, adaptive, map)){}
 
 State::~State(){
     delete p;
@@ -185,18 +184,18 @@ void State::getRoundIncome(){
 
 void State::updateState(int hp, int hpLost, double remainingEnemyHP){
     if(hp <= 0) {
-        // TODO: handle death, clean up everything
         cout << "dead on round " << p->round << endl;
         return;
-    } else if(p->round == MAX_ROUND){
+    } else if(p->round == State::MAX_ROUND){
         cout << "winner winner chicken dinner" << endl;
         return;
     }
 
     // if(hpLost == 0 && round % 5 == 0){
     if(p->round % 5 == 0){
+        int max = MAX_HP;
         cout << "You gained 5 HP for killing the boss level!" << endl;
-        p->hp = min(100, p->hp+5);
+        p->hp = min(max, p->hp+5);
     }
 
     getRoundIncome();

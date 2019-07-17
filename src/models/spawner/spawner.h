@@ -13,25 +13,33 @@
 #include <random>
 #include <utility>
 
+struct SpawnerImpl {
+    // adaptive level generation | types of mobs you can spawn
+    bool adaptive, regen, invisible;
+    /*
+    to gauge the skill of the user,
+    there is a training mode until the game becomes hard enough
+    */
+    bool training;
+    // points
+    double difficulty, status, gold, spawn;
+    //mutipliers
+    double statusMultiplier, goldMultiplier, spawnMultiplier;
+    // enemy traits
+    double health, armor;
+
+    const int INVISIBLE_THRESHOLD = 10;
+    const int REGENERATIVE_THRESHOLD = 20;
+    const int MAXHP_RATIO = 10;
+
+    public: 
+        SpawnerImpl(bool);
+        ~SpawnerImpl();
+};
+
 class Spawner {
     private:
-        static const int INVISIBLE_THRESHOLD = 10;
-        static const int REGENERATIVE_THRESHOLD = 20;
-        static const int MAXHP_RATIO = 10;
-        // types of mobs you can spawn
-        bool regen, invisible;
-
-        /*
-        to gauge the skill of the user,
-        there is a training mode until the game becomes hard enough
-         */
-        bool training;
-        // points
-        double difficulty, status, gold, spawn;
-        //mutipliers
-        double statusMultiplier, goldMultiplier, spawnMultiplier;
-        // enemy traits
-        double health, armor;
+        SpawnerImpl* p;
 
         // state update f(n)s
         void playerUpdate(int);
@@ -53,14 +61,14 @@ class Spawner {
         void updateEnemyType();
 
         Enemy* generateEnemy(int, int, bool, int);
-
+        Enemy* generateEasyEnemy(int, bool, int);
 
         // enemy generation
         std::lognormal_distribution<> generateLogDistribution(double, double);
         std::bernoulli_distribution generateBernoulliDistribution(double);
         std::uniform_int_distribution<> generateUniformDistribution(int, int);
     public:
-        Spawner();
+        Spawner(bool);
         ~Spawner();
 
         void updateState(int, int, double);

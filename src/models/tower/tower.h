@@ -11,7 +11,7 @@ class Tower : public Subject {
         int totalValue;
     public:
         Tower(int);
-        ~Tower();
+        virtual ~Tower();
 
         virtual std::pair<char, int> getType() const = 0;
         virtual int getCost() const = 0;
