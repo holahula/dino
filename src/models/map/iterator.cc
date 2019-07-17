@@ -23,7 +23,7 @@ bool Map::Iterator::operator!=(const Map::Iterator &other) {
 }
 
 Map::Iterator Map::begin() {
-	return Iterator(0, p->height-1, p->width, p->height, this);
+	return Iterator(0, 5, p->width, p->height, this);
 }
 
 Map::Iterator Map::end() {
