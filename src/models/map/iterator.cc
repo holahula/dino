@@ -9,7 +9,7 @@ Tile* Map::Iterator::operator*() {
 }
 
 Map::Iterator& Map::Iterator::operator++() {
-	if (col < nc) {
+	if (col < nc - 1) {
       ++col;
     } else {
         col = 0;
