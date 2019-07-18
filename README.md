@@ -1,4 +1,4 @@
-# Dino Tower Defense
+# Dino Tower Defense 🦖
 
 Dino Tower Defense is a spinoff from Bloons Tower Defense.
 
