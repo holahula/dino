@@ -27,11 +27,6 @@ void Enemy::nextState() {
     nextState_();
 }
 
-int Enemy::notify(Tower * tower) {
-    return notify_(tower);
-}
-
-
 int Enemy::notify_(Tower * tower){
     pair<char, int> type = tower->getType();
     if(type.first == 'D') {

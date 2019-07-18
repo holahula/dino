@@ -32,7 +32,7 @@ void PathTile::moveEnemies() {
     enemies = frozen;
 }
 
-char PathTile::getType() const {
+char PathTile::getType_() const {
     if (next.empty()) {
         return 'E';
     } else if (prev.empty()) {
@@ -57,6 +57,6 @@ ostream& operator<<(ostream& out, PathTile& pathTile) {
     return out;
 }
 
-bool PathTile::isOccupied() const {
+bool PathTile::isOccupied_() const {
     return true;
 }

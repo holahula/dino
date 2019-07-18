@@ -4,8 +4,9 @@
 class Tower;
 
 class Observer {
+    virtual int notify_(Tower*) = 0;
     public:
-        virtual int notify(Tower*) = 0;
+        int notify(Tower*);
         virtual ~Observer();
 };
 

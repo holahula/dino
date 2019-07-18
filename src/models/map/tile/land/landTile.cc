@@ -7,14 +7,14 @@ LandTile::LandTile(int x, int y): Tile(x,y), tower(nullptr) {}
 
 LandTile::~LandTile() {}
 
-char LandTile::getType() const {
+char LandTile::getType_() const {
     if (isOccupied()) {
         return tower->getType().first;
     }
     return '.';
 }
 
-bool LandTile::isOccupied() const {
+bool LandTile::isOccupied_() const {
     return tower ? true : false;
 }
 
