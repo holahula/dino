@@ -1,3 +1,10 @@
+/*
+    Dynamic Difficulty Adjustment is a modified version of the algorithm proposed in the research paper below:
+    
+    https://www.sciencedirect.com/science/article/pii/S187705091502092X
+ */
+
+
 #include "./../enemy/enemy.h"
 #include "./../enemy/basic/basic.h"
 #include "./../enemy/invisible/invisible.h"
