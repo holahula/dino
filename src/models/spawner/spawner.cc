@@ -21,7 +21,9 @@ using namespace std;
 SpawnerImpl::SpawnerImpl(bool adaptive): adaptive(adaptive), regen(false), invisible(false), training(true), difficulty(10), status(1), gold(1), spawn(1), statusMultiplier(1), goldMultiplier(1), spawnMultiplier(1), health(1), armor(1) {}
 
 Spawner::Spawner(bool adaptive): p(new SpawnerImpl(adaptive)) {}
-Spawner::~Spawner() {}
+Spawner::~Spawner() {
+    delete p;
+}
 
 void Spawner::playerUpdate(int hpLost){
     if(hpLost > 10) {
