@@ -8,7 +8,7 @@
 class DamageTower : public Tower {
     private:
         int dmg, upCost;
-		int getUpgradeCost_() const override;
+        int getUpgradeCost_() const override;
         int getCost_() const override;
         std::string getDescription_() const override;
         

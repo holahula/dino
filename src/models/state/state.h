@@ -30,7 +30,7 @@ struct StateImpl {
 };
 
 class State {
-	friend class View;
+    friend class View;
 
     private:
         StateImpl* p;
@@ -79,7 +79,7 @@ class State {
         int getHp();
         long long getMoney();
         int getRound();
-		Map* getMap();
+        Map* getMap();
 };
 
 #endif

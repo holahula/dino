@@ -7,8 +7,8 @@ class Tower;
 
 class LandTile : public Tile {
     Tower * tower;
-	char getType_() const override;
-	bool isOccupied_() const override;
+    char getType_() const override;
+    bool isOccupied_() const override;
     public:
         LandTile(int, int);
         ~LandTile();

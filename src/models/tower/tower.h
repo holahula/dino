@@ -6,8 +6,8 @@
 #include <string>
 
 class Tower : public Subject {
-	private:
-		virtual std::pair<char, int> getType_() const = 0;
+    private:
+        virtual std::pair<char, int> getType_() const = 0;
         virtual int getCost_() const = 0;
         virtual std::string getDescription_() const = 0;
         virtual int getUpgradeCost_() const = 0;

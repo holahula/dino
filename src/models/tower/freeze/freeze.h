@@ -6,8 +6,8 @@
 class FreezeTower : public Tower {
     private:
         int duration, upCost;
-		int getCost_() const override;
-		std::string getDescription_() const override;
+        int getCost_() const override;
+        std::string getDescription_() const override;
         int getUpgradeCost_() const override;
         std::pair<char, int> getType_() const override;
 

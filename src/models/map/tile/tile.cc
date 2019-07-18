@@ -10,11 +10,11 @@ pair<int,int> Tile::location() const {
 }
 
 bool Tile::isOccupied() const {
-	return isOccupied_();
+    return isOccupied_();
 }
 
 char Tile::getType() const {
-	return getType_();
+    return getType_();
 }
 
 Tile::~Tile(){}

@@ -23,7 +23,7 @@ int DamageTower::getCost_() const {
 }
 
 string DamageTower::getDescription_() const {
-	return "Attacks enemies \nwith a certain \ndamage";
+    return "Attacks enemies \nwith a certain \ndamage";
 }
 
 void DamageTower::upgrade_() {

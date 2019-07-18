@@ -237,17 +237,17 @@ void State::startRound(){
 *****************************/
 
 int State::getHp() {
-	return p->hp;
+    return p->hp;
 }
 
 long long State::getMoney() {
-	return p->money;
+    return p->money;
 }
 
 int State::getRound() {
-	return p->round;
+    return p->round;
 }
 
 Map* State::getMap() {
-	return p->map;
+    return p->map;
 }

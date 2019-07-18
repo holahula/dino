@@ -300,9 +300,9 @@ PathTile* Map::getPathTile(int x, int y) {
 
 Tile* Map::getTile(int x, int y) {
     if(inMap(x, y)) {
-		return p->map[x][y];
-	}
-	return nullptr;
+        return p->map[x][y];
+    }
+    return nullptr;
 }
 
 void Map::insertTower(Tower* tower, int x, int y) {

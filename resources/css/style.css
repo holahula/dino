@@ -1,38 +1,38 @@
 .land_tile {
-	background-image: url("../assets/land_tile.png");
+    background-image: url("../assets/land_tile.png");
 }
 
 .damage_tower_tile {
-	background-image: url("../assets/land_tile_damage_tower.png");
+    background-image: url("../assets/land_tile_damage_tower.png");
 }
 
 .freeze_tower_tile {
-	background-image: url("../assets/land_tile_freeze_tower.png");
+    background-image: url("../assets/land_tile_freeze_tower.png");
 }
 
 .money_tower_tile {
-	background-image: url("../assets/land_tile_money_tower.png");
+    background-image: url("../assets/land_tile_money_tower.png");
 }
 
 .path_tile {
-	font-size:8px;
-	font-weight: bolder;
-	background-image: url("../assets/path_tile.png");
+    font-size:8px;
+    font-weight: bolder;
+    background-image: url("../assets/path_tile.png");
 }
 
 .path_tile_print {
-	background-image: url("../assets/path_tile_print.png");
+    background-image: url("../assets/path_tile_print.png");
 }
 
 .window {
-	background-color: rgb(214, 201, 184);
+    background-color: rgb(214, 201, 184);
 }
 
 .box {
 }
 
 .frame {
-	background-color: rgba(160, 142, 119, 0.479);
-	/* background-color: rgb(214, 201, 184);
-	color: rgb(214, 201, 184); */
+    background-color: rgba(160, 142, 119, 0.479);
+    /* background-color: rgb(214, 201, 184);
+    color: rgb(214, 201, 184); */
 }
