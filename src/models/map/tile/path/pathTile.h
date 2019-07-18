@@ -8,7 +8,9 @@
 
 class PathTile : public Tile {
     std::vector<Enemy*> enemies;
-    
+    char getType_() const override;
+    bool isOccupied_() const override;
+
     public:
         std::vector<PathTile*> next;
         std::vector<PathTile*> prev;
@@ -18,8 +20,6 @@ class PathTile : public Tile {
         bool endOfPath() const;
         void moveEnemies();
         void insertEnemy(Enemy *);
-        char getType() const override;
-        bool isOccupied() const override;
         std::vector<Enemy*> & getEnemies();
         friend std::ostream& operator<<(std::ostream&, PathTile&);
 };

@@ -22,7 +22,7 @@ int MoneyTower::getCost_() const {
 }
 
 string MoneyTower::getDescription_() const {
-	return "Generates money \nwith a certain \nincome";
+    return "Generates money \nwith a certain \nincome";
 }
 
 void MoneyTower::upgrade_() {

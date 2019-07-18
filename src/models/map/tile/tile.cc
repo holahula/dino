@@ -9,4 +9,12 @@ pair<int,int> Tile::location() const {
     return make_pair(x,y);
 }
 
+bool Tile::isOccupied() const {
+    return isOccupied_();
+}
+
+char Tile::getType() const {
+    return getType_();
+}
+
 Tile::~Tile(){}

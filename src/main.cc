@@ -16,7 +16,7 @@ int graphical_interface(int argc, char *argv[], bool adaptive, bool map) {
     argc = 1;
     auto app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 
-	// Setup styling
+    // Setup styling
     Glib::ustring cssFile = "resources/css/style.css";
     Glib::RefPtr<Gtk::CssProvider> css_provider = Gtk::CssProvider::create();
     Glib::RefPtr<Gtk::StyleContext> style_context = Gtk::StyleContext::create();

@@ -15,7 +15,7 @@ class Enemy : public Observer {
 
         virtual char getType_() const = 0;
         virtual void nextState_() = 0;
-        virtual int notify_(Tower*); 
+        virtual int notify_(Tower*) override; 
 
     protected:
         int hp;
@@ -26,13 +26,12 @@ class Enemy : public Observer {
         virtual ~Enemy();
 
         int getHP() const;
-        
+
         void decFrozen();
         int getFrozen() const;
 
         char getType();
         void nextState();
-        int notify(Tower*) override; 
 
         void observeTowers(std::vector<Tower*>);
 

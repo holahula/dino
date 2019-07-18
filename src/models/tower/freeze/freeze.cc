@@ -23,7 +23,7 @@ int FreezeTower::getCost_() const {
 }
 
 string FreezeTower::getDescription_() const {
-	return "Slows down \nenemies for a \ncertain duration \nof time";
+    return "Slows down \nenemies for a \ncertain duration \nof time";
 }
 
 void FreezeTower::upgrade_() {
