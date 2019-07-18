@@ -6,19 +6,18 @@
 class MoneyTower : public Tower {
     private:
         int income, upCost;
+		int getCost_() const override;
+		std::string getDescription_() const override;
+        int getUpgradeCost_() const override;
+        std::pair<char, int> getType_() const override;
+        
+        void upgrade_() override;
 
     public:
         static const int cost = 30;
 
         MoneyTower();
         virtual ~MoneyTower();
-
-        int getCost() const override;
-		std::string getDescription() const override;
-        int getUpgradeCost() const override;
-        std::pair<char, int> getType() const override;
-        
-        void upgrade() override;
 };
 
 #endif
