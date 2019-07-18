@@ -77,9 +77,16 @@ class State {
         void startRound();
 
         int getHp();
+        void setHp(int hp);
         long long getMoney();
         int getRound();
+        void setRound(int round);
         Map* getMap();
+        Tower* getTower(int, int);
+        Tower* getTowerFromShop(char);
+        Spawner* getSpawner();
+        PathTile* getPathTile(int, int);
+        std::vector<Enemy *> getEnemies();
 };
 
 #endif

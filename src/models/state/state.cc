@@ -240,6 +240,10 @@ int State::getHp() {
     return p->hp;
 }
 
+void State::setHp(int hp) {
+    p->hp = hp;
+}
+
 long long State::getMoney() {
     return p->money;
 }
@@ -248,6 +252,37 @@ int State::getRound() {
     return p->round;
 }
 
+void State::setRound(int round) {
+    p->round = round;
+}
+
 Map* State::getMap() {
     return p->map;
+}
+
+Tower* State::getTower(int x, int y) {
+    return p->map->getTower(x, y);
+}
+
+PathTile* State::getPathTile(int x, int y) {
+    return p->map->getPathTile(x, y);
+}
+
+Tower* State::getTowerFromShop(char tower) {
+    switch(tower) {
+        case 'D':
+            return p->shop->getDamageTower();
+        case 'F':
+            return p->shop->getFreezeTower();
+        default:
+            return p->shop->getMoneyTower();
+    }
+}
+
+Spawner* State::getSpawner() {
+    return p->spawner;
+}
+
+vector<Enemy *> State::getEnemies() {
+    return p->enemies;
 }

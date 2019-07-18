@@ -37,7 +37,6 @@ class View : public Gtk::Window {
     Gtk::Frame frame_menu;
     Gtk::Frame frame_shop;
     Gtk::Frame frame_info;
-    Gtk::Button m_button_new_game;
     Gtk::Button m_button_round;
     Gtk::Button m_button_next;
     Gtk::Button m_button_skip;
@@ -52,7 +51,6 @@ class View : public Gtk::Window {
     Gtk::Label m_label_user_spec;
     Gtk::Label m_label_tower_spec;
     
-    void on_button_new_game_clicked();
     void on_button_round_clicked();
     void on_button_next_clicked();
     void on_button_skip_clicked();
@@ -75,7 +73,7 @@ class View : public Gtk::Window {
     void updateState(int, double);
     void startNewGame(bool, bool);
     void displayEnemies();
-    Tower* getTower(char);
+    void displayPopup(std::string, std::string, bool);
 
  public:
     View(bool, bool);
