@@ -6,19 +6,28 @@
 #include <string>
 
 class Tower : public Subject {
+	private:
+		virtual std::pair<char, int> getType_() const = 0;
+        virtual int getCost_() const = 0;
+        virtual std::string getDescription_() const = 0;
+        virtual int getUpgradeCost_() const = 0;
+        virtual void upgrade_() = 0;
+
     protected:
         int range;
         int totalValue;
+
     public:
         Tower(int);
         virtual ~Tower();
 
-        virtual std::pair<char, int> getType() const = 0;
-        virtual int getCost() const = 0;
-        virtual std::string getDescription() const = 0;
-        virtual int getUpgradeCost() const = 0;
+        std::pair<char, int> getType() const;
+        int getCost() const;
+        std::string getDescription() const;
+        int getUpgradeCost() const;
+        void upgrade();
+
         int getTotalValue() const;
-        virtual void upgrade() = 0;
 
         int getRange() const;
         void attack();
