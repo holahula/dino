@@ -77,10 +77,10 @@ class State {
         void startRound();
 
         int getHp();
-        int setHp(int hp);
+        void setHp(int hp);
         long long getMoney();
         int getRound();
-        int setRound(int round);
+        void setRound(int round);
         Map* getMap();
         Tower* getTower(int, int);
         Tower* getTowerFromShop(char);

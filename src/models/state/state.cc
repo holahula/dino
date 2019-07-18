@@ -240,8 +240,8 @@ int State::getHp() {
     return p->hp;
 }
 
-int State::setHp(int hp) {
-    return p->hp = hp;
+void State::setHp(int hp) {
+    p->hp = hp;
 }
 
 long long State::getMoney() {
@@ -252,8 +252,8 @@ int State::getRound() {
     return p->round;
 }
 
-int State::setRound(int round) {
-    return p->round = round;
+void State::setRound(int round) {
+    p->round = round;
 }
 
 Map* State::getMap() {

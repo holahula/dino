@@ -25,7 +25,6 @@ View::View(bool adaptive, bool map) : selected_tileView(nullptr),
                 frame_menu("Menu"),
                 frame_shop("Shop"),
                 frame_info("Information"),
-                m_button_new_game("Start a new Game"),
                 m_button_round("Go"),
                 m_button_next("Next"),
                 m_button_skip("Skip"),
@@ -102,7 +101,6 @@ View::View(bool adaptive, bool map) : selected_tileView(nullptr),
     m_button_buy_freeze_tower.signal_drag_data_get().connect(sigc::bind(sigc::mem_fun(*this, &View::on_button_drag_data_get), 'F'));
     m_button_buy_money_tower.signal_drag_data_get().connect(sigc::bind(sigc::mem_fun(*this, &View::on_button_drag_data_get), 'M'));
     
-    m_button_new_game.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_new_game_clicked));
     m_button_round.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_round_clicked));
     m_button_next.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_next_clicked));
     m_button_skip.signal_clicked().connect(sigc::mem_fun(*this, &View::on_button_skip_clicked));
@@ -116,7 +114,6 @@ View::View(bool adaptive, bool map) : selected_tileView(nullptr),
     box_round.add(m_button_round);
     box_round.add(m_button_next);
     box_round.add(m_button_skip);
-    box_round.add(m_button_new_game);
 
     box_shop.add(m_button_buy_damage_tower);
     box_shop.add(m_label_damage_tower);
@@ -145,14 +142,11 @@ View::View(bool adaptive, bool map) : selected_tileView(nullptr),
     show_all();
     m_button_upgrade_tower.hide();
     m_button_sell_tower.hide();
-    m_button_new_game.hide();
     m_button_next.set_sensitive(false);
     m_button_skip.set_sensitive(false);
 }
 
-View::~View() {
-    tileViewPath.clear();
-}
+View::~View() {}
 
 void View::startNewGame(bool adaptive, bool customPath) {
     // Start a new game
@@ -183,8 +177,6 @@ void View::startNewGame(bool adaptive, bool customPath) {
     }
 }
 
-void View::on_button_new_game_clicked() {}
-
 void View::on_button_round_clicked() {
     m_button_round.set_sensitive(false);
     m_button_buy_damage_tower.set_sensitive(false);
@@ -214,9 +206,7 @@ void View::on_button_upgrade_tower_clicked() {
     char t = selected_tileView->type;
     if (!game->upgradeTower(col, row)) {
         string tower = getTowerFullType(t, true).first;
-        Gtk::MessageDialog dialog(*this, "Invalid Upgrade", false /* use_markup */, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK);
-        dialog.set_secondary_text(tower + " tower @ (" + to_string(col) + ", " + to_string(row) + ") could not be upgraded!");
-        dialog.run();
+        displayPopup("Invalid Upgrade", tower + " tower @ (" + to_string(col) + ", " + to_string(row) + ") could not be upgraded!", true);
     } else {
         update_info();
         update_tooltip();
@@ -231,9 +221,7 @@ void View::on_button_sell_tower_clicked() {
     string tower = getTowerFullType(selected_tower->getType().first, false).first;
     if (!game->sellTower(col, row)) {
         string tower = getTowerFullType(t, true).first;
-        Gtk::MessageDialog dialog(*this, "Invalid Sale", false /* use_markup */, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK);
-        dialog.set_secondary_text(tower + " tower @ (" + to_string(col) + ", " + to_string(row) + ") could not be sold!");
-        dialog.run();
+        displayPopup("Invalid Sale", tower + " tower @ (" + to_string(col) + ", " + to_string(row) + ") could not be sold!", true);
     } else {
         selected_tileView->get_style_context()->remove_class(tower + "_tower_tile");
         update_selected_tower();
@@ -262,9 +250,7 @@ void View::on_label_drop_drag_data_received(const Glib::RefPtr<Gdk::DragContext>
         string tower;
         if (!game->buyTower(t, col, row)) {
             tower = getTowerFullType(t, true).first;
-            Gtk::MessageDialog dialog(*this, "Invalid Purchase", false /* use_markup */, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK);
-            dialog.set_secondary_text(tower + " tower @ (" + to_string(col) + ", " + to_string(row) + ") could not be bought!");
-            dialog.run();
+            displayPopup("Invalid Purchase", tower + " tower @ (" + to_string(col) + ", " + to_string(row) + ") could not be bought!", true);
         } else {
             tower = getTowerFullType(t, false).first;
             tileView->get_style_context()->add_class(tower + "_tower_tile");
@@ -341,20 +327,16 @@ void View::nextStep() {
         m_button_sell_tower.set_sensitive();
         m_button_next.set_sensitive(false);
         m_button_skip.set_sensitive(false);
-    } else {
-        status = game->preFrame(frame, size);
-        if(!status) {
-            roundDone = true;
-        }
-
-        displayEnemies();
-
-        game->processFrame();
-        
-        game->getMap()->detachAllEnemies();
-
-        frame++;
+        return;
     }
+    status = game->preFrame(frame, size);
+    if(!status) {
+        roundDone = true;
+    }
+    displayEnemies();
+    game->processFrame();
+    game->getMap()->detachAllEnemies();
+    frame++;
     if(game->getEnemies().size() <= 0) {
         roundDone = true;
     }
@@ -362,23 +344,17 @@ void View::nextStep() {
 
 void View::updateState(int hpLost, double remainingEnemyHP) {
     if(game->getHp() <= 0) {
-        Gtk::MessageDialog dialog(*this, "Game Over", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
-        dialog.set_secondary_text("You lost!");
-        dialog.run();
+        displayPopup("Game Over", "You lost! You lost all your HP.", false);
         close();
         return;
     } else if(game->getRound() == game->MAX_ROUND){
-        Gtk::MessageDialog dialog(*this, "Game Finished", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
-        dialog.set_secondary_text("You won! There are no more rounds left.");
-        dialog.run();
+        displayPopup("Game Finished", "You won! There are no more rounds left.", false);
         close();
         return;
     }
 
     if(game->getRound() % 5 == 0){
-        Gtk::MessageDialog dialog(*this, "Boss Level Passed!", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
-        dialog.set_secondary_text("You gained 5 HP for killing the boss level!");
-        dialog.run();
+        displayPopup("Boss Level Passed!", "You gained 5 HP for killing the boss level!", false);
         int max_ = State::MAX_HP;
         game->setHp(min(max_, game->getHp()+5));
     }
@@ -425,4 +401,10 @@ void View::displayEnemies() {
             tileView->get_style_context()->add_class("path_tile_print");
         }
     }        
+}
+
+void View::displayPopup(string title, string secondary, bool isError) {
+    Gtk::MessageDialog dialog(*this, title, false, isError ? Gtk::MESSAGE_ERROR : Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
+    dialog.set_secondary_text(secondary);
+    dialog.run();
 }
