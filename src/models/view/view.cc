@@ -160,9 +160,9 @@ void View::startNewGame(bool adaptive, bool customPath) {
     
     // Initialize widgets
     update_view();
-    m_label_damage_tower.set_text("Cost: $" + to_string(getTower('D')->getCost()) + "\nDescription:\n" + getTower('D')->getDescription());
-    m_label_freeze_tower.set_text("Cost: $" + to_string(getTower('F')->getCost()) + "\nDescription:\n" + getTower('F')->getDescription());
-    m_label_money_tower.set_text("Cost: $" + to_string(getTower('M')->getCost()) + "\nDescription:\n" + getTower('M')->getDescription());
+    m_label_damage_tower.set_text("Cost: $" + to_string(game->getTowerFromShop('D')->getCost()) + "\nDescription:\n" + game->getTowerFromShop('D')->getDescription());
+    m_label_freeze_tower.set_text("Cost: $" + to_string(game->getTowerFromShop('F')->getCost()) + "\nDescription:\n" + game->getTowerFromShop('F')->getDescription());
+    m_label_money_tower.set_text("Cost: $" + to_string(game->getTowerFromShop('M')->getCost()) + "\nDescription:\n" + game->getTowerFromShop('M')->getDescription());
     
     // Build grid of tiles using the map
     Map* map = game->getMap();
@@ -293,7 +293,7 @@ void View::update_info() {
     } else {
         pair<char, int> t = selected_tower->getType();
         pair<string, string> type = getTowerFullType(t.first, true);
-        m_label_tower_spec.set_text(type.first + " Tower\n\nDescription:\n" + getTower(t.first)->getDescription()  + "\n\n" + type.second + ": " + to_string(t.second) + "\nRange: " + to_string(selected_tower->getRange()) + "\nUpgrade Cost: $" + to_string(selected_tower->getUpgradeCost()));
+        m_label_tower_spec.set_text(type.first + " Tower\n\nDescription:\n" + game->getTowerFromShop(t.first)->getDescription()  + "\n\n" + type.second + ": " + to_string(t.second) + "\nRange: " + to_string(selected_tower->getRange()) + "\nUpgrade Cost: $" + to_string(selected_tower->getUpgradeCost()));
         m_button_upgrade_tower.show();
         m_button_sell_tower.show();
     }
@@ -306,7 +306,7 @@ void View::update_selected_tileView(TileView *tileView) {
 
 void View::update_selected_tower() {
     try {
-        selected_tower = game->getMap()->getTower(selected_tileView->col, selected_tileView->row);
+        selected_tower = game->getTower(selected_tileView->col, selected_tileView->row);
     } catch(NoTowerException e) {
         selected_tower = nullptr;
         return;
@@ -323,8 +323,8 @@ pair<string, string> View::getTowerFullType(char type, bool isCapitalized) {
 void View::startRound() {
     frame = 1;
     size = game->constructEnemies();
-    hpStartRound = game->p->hp;
-    totalEnemyHP = game->totalHP(game->p->enemies);
+    hpStartRound = game->getHp();
+    totalEnemyHP = game->totalHP(game->getEnemies());
     roundDone = false;
 }
 
@@ -332,7 +332,7 @@ void View::nextStep() {
     update_view();
     if(roundDone) {
         displayEnemies();
-        updateState(hpStartRound - game->p->hp, (double)(hpStartRound - game->p->hp)/(double)totalEnemyHP);
+        updateState(hpStartRound - game->getHp(), (double)(hpStartRound - game->getHp())/(double)totalEnemyHP);
         m_button_round.set_sensitive();
         m_button_buy_damage_tower.set_sensitive();
         m_button_buy_freeze_tower.set_sensitive();
@@ -351,23 +351,23 @@ void View::nextStep() {
 
         game->processFrame();
         
-        game->p->map->detachAllEnemies();
+        game->getMap()->detachAllEnemies();
 
         frame++;
     }
-    if(game->p->enemies.size() <= 0) {
+    if(game->getEnemies().size() <= 0) {
         roundDone = true;
     }
 }
 
 void View::updateState(int hpLost, double remainingEnemyHP) {
-    if(game->p->hp <= 0) {
+    if(game->getHp() <= 0) {
         Gtk::MessageDialog dialog(*this, "Game Over", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
         dialog.set_secondary_text("You lost!");
         dialog.run();
         close();
         return;
-    } else if(game->p->round == game->MAX_ROUND){
+    } else if(game->getRound() == game->MAX_ROUND){
         Gtk::MessageDialog dialog(*this, "Game Finished", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
         dialog.set_secondary_text("You won! There are no more rounds left.");
         dialog.run();
@@ -375,27 +375,26 @@ void View::updateState(int hpLost, double remainingEnemyHP) {
         return;
     }
 
-    if(game->p->round % 5 == 0){
+    if(game->getRound() % 5 == 0){
         Gtk::MessageDialog dialog(*this, "Boss Level Passed!", false /* use_markup */, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
         dialog.set_secondary_text("You gained 5 HP for killing the boss level!");
         dialog.run();
         int max_ = State::MAX_HP;
-        game->p->hp = min(max_, game->p->hp+5);
+        game->setHp(min(max_, game->getHp()+5));
     }
 
     game->getRoundIncome();
-    // spawner interactions
-    game->p->spawner->updateState(game->p->round, hpLost, remainingEnemyHP);
+    game->getSpawner()->updateState(game->getRound(), hpLost, remainingEnemyHP);
 
     update_view();
     
-    game->p->round++;
+    game->setRound(game->getRound() + 1);
 }
 
 void View::displayEnemies() {
     for(size_t i=0; i<tileViewPath.size(); ++i) {
         TileView *tileView = tileViewPath.at(i);
-        PathTile * tile = game->getMap()->getPathTile(tileView->col, tileView->row);
+        PathTile * tile = game->getPathTile(tileView->col, tileView->row);
         string enemyType = "";
         string stats = "";
         int basicCount = 0;
@@ -425,17 +424,5 @@ void View::displayEnemies() {
         if(tile->getEnemies().size() > 0) {
             tileView->get_style_context()->add_class("path_tile_print");
         }
-        // tileView->label.set_markup("<span color=\"white\">" + (tile->getEnemies().size() == 0 ? "" : to_string(tile->getEnemies().size())) + "</span>");
     }        
-}
-
-Tower* View::getTower(char type) {
-    switch(type) {
-        case 'D':
-            return game->p->shop->getDamageTower();
-        case 'F':
-            return game->p->shop->getFreezeTower();
-        default:
-            return game->p->shop->getMoneyTower();
-    }
 }

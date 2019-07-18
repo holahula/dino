@@ -75,7 +75,6 @@ class View : public Gtk::Window {
     void updateState(int, double);
     void startNewGame(bool, bool);
     void displayEnemies();
-    Tower* getTower(char);
 
  public:
     View(bool, bool);
