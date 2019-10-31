@@ -3,7 +3,7 @@
 Dino Tower Defense is a spinoff from Bloons Tower Defense.
 
 ### Installation
-```git clone https://github.com/jiang-austin/dino.git```
+```git clone https://github.com/holahula/dino.git```
 
 ### Compile and run
 ```
